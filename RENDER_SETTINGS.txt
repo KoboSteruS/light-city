@@ -1,0 +1,60 @@
+========================================
+НАСТРОЙКИ ДЛЯ RENDER.COM
+========================================
+
+📦 BUILD COMMAND:
+pip install --upgrade pip && pip install -r requirements.txt
+
+🚀 START COMMAND:
+gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120
+
+⚙️ PRE-DEPLOY COMMAND (опционально):
+python manage.py migrate --noinput && python manage.py collectstatic --noinput
+
+========================================
+ENVIRONMENT VARIABLES (Обязательные)
+========================================
+
+SECRET_KEY=<сгенерируй новый ключ>
+DEBUG=False
+ALLOWED_HOSTS=light-city.onrender.com
+
+DATABASE_URL (устанавливается автоматически Render при создании PostgreSQL)
+
+========================================
+ENVIRONMENT VARIABLES (Опциональные)
+========================================
+
+# Для HTTPS (включи когда настроишь домен)
+CSRF_COOKIE_SECURE=True
+SESSION_COOKIE_SECURE=True
+SECURE_SSL_REDIRECT=True
+
+# Для email
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+DEFAULT_FROM_EMAIL=noreply@yarko-gorod.ru
+
+# Логирование
+LOG_LEVEL=INFO
+LOG_TO_FILE=False  # На Render логи идут в stdout
+
+========================================
+ВАЖНО ПОСЛЕ ПЕРВОГО ДЕПЛОЯ
+========================================
+
+1. Создай PostgreSQL базу данных в Render (если еще не создана)
+2. Подключи DATABASE_URL к Web Service
+3. Запусти через Shell:
+   python manage.py migrate
+   python manage.py createsuperuser
+   python manage.py create_demo_data
+   python manage.py load_catalog_demo
+   python manage.py create_demo_portfolio
+   python manage.py create_demo_testimonials
+
+========================================
+
