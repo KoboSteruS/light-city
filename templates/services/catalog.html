@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Каталог услуг - Яркий Город{% endblock %}
+
+{% block content %}
+<!-- Catalog Header -->
+<section class="catalog-header">
+    <div class="container">
+        <h1 class="catalog-title">Каталог услуг</h1>
+    </div>
+</section>
+
+<!-- Catalog Grid -->
+<section class="catalog-grid">
+    <div class="container">
+        <div class="row g-4">
+            {% for service in services %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="service-card">
+                    {% if service.image %}
+                    <div class="service-card-image">
+                        <img src="{{ service.image.url }}" 
+                             alt="{{ service.name }}"
+                             loading="lazy">
+                    </div>
+                    {% else %}
+                    <div class="service-card-image service-card-no-image">
+                        <div class="no-image-placeholder">
+                            <i class="bi bi-image"></i>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="service-card-content">
+                        <h3 class="service-card-title">{{ service.name }}</h3>
+                        
+                        {% if service.price_from %}
+                        <p class="service-card-price">
+                            от {{ service.price_from|floatformat:0 }} {{ service.price_unit }}
+                        </p>
+                        {% endif %}
+                        
+                        <a href="{% url 'services:detail' service.slug %}" class="btn btn-service">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="no-services">
+                    <p>Услуги не найдены</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Load More Button -->
+        {% if services|length >= 12 %}
+        <div class="catalog-load-more">
+            <button class="btn btn-load-more">Ещё услуги</button>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<section class="catalog-pagination">
+    <div class="container">
+        <nav aria-label="Навигация по страницам">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" 
+                       href="?page={{ page_obj.previous_page_number }}{% if current_category != 'all' %}&category={{ current_category }}{% endif %}">
+                        ← Назад
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" 
+                       href="?page={{ num }}{% if current_category != 'all' %}&category={{ current_category }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" 
+                       href="?page={{ page_obj.next_page_number }}{% if current_category != 'all' %}&category={{ current_category }}{% endif %}">
+                        Вперед →
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+

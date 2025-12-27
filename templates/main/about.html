@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}О нас - Яркий Город{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<section class="breadcrumbs">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">О нас</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- About Hero -->
+<section class="about-hero">
+    <div class="container">
+        <h1 class="about-page-title">О нас</h1>
+        
+        {% if about and about.image %}
+        <div class="about-hero-image">
+            <img src="{{ about.image.url }}" alt="О нас" class="img-fluid">
+        </div>
+        {% else %}
+        <div class="about-hero-image">
+            <img src="{% static 'img/About.jpg' %}" alt="О нас" class="img-fluid">
+        </div>
+        {% endif %}
+        
+        <div class="about-hero-content">
+            <h2 class="about-hero-title">Яркий город — рекламное агентство полного цикла в Петрозаводске.</h2>
+            
+            {% if about %}
+            <div class="about-hero-text">
+                {{ about.description|safe }}
+            </div>
+            {% else %}
+            <div class="about-hero-text">
+                <p>Яркий город — это проект из Максима,, и Анастасия, срочной более 15 лет проводящит каазре цинцем слектр рекламных услуг и главей истории, экотрибелия состочные агентств. Предлагайке к Поверисласым , незвление и високоначественное гостипирование каждого проекта, поставимся опытных профессионалов.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-choose-us">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Почему выбирают нас</h2>
+        
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-lg-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">15 лет в рекламе</h3>
+                        <p class="feature-text">Более 15 лет вывеску давеКй реклама. Брястирование фурва дбронининга. каторяг. дакерссированный антелядза.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-lg-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-bullseye"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Индивидуальный подход</h3>
+                        <p class="feature-text">Стушснем зк: к полу внезданок-выько вылыое собдом и заддавю решения льн. что даваът всглу бизнеса.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-lg-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-check2-square"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Всё в срок и с гарантией</h3>
+                        <p class="feature-text">Всагда подживит наюлаш несня парнод. Чалинная оро'литеродияя крахнь нариджа 1 год.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="col-lg-6">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="bi bi-gear"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3 class="feature-title">Современное оборудование</h3>
+                        <p class="feature-text">Праборонась печные конструкции. стиереслав. пслфшная дfiвистрижсваная техньнь с итопером.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="testimonials-section">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Отзывы от клиентов</h2>
+        
+        <div class="row g-4">
+            {% for testimonial in testimonials %}
+            <div class="col-lg-6">
+                <div class="testimonial-card">
+                    <div class="testimonial-header">
+                        {% if testimonial.avatar %}
+                        <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="testimonial-avatar">
+                        {% else %}
+                        <img src="https://i.pravatar.cc/80?img={{ forloop.counter }}" alt="{{ testimonial.name }}" class="testimonial-avatar">
+                        {% endif %}
+                        <div class="testimonial-author">
+                            <h4 class="testimonial-name">{{ testimonial.name }}</h4>
+                            {% if testimonial.position %}
+                            <p class="testimonial-position">{{ testimonial.position }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="testimonial-rating">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= testimonial.rating %}
+                            <i class="bi bi-star-fill"></i>
+                            {% else %}
+                            <i class="bi bi-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <p class="testimonial-text">{{ testimonial.text }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+

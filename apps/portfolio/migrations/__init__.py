@@ -1,0 +1,5 @@
+"""
+Migrations для приложения portfolio.
+"""
+
+

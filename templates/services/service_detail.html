@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ service.name }} - Яркий Город{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<section class="breadcrumbs">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Главная</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'services:catalog' %}">Каталог</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ service.name }}</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Service Detail -->
+<section class="service-detail">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Left Column: Image -->
+            <div class="col-lg-7">
+                <!-- Service Image -->
+                {% if service.image %}
+                <div class="service-detail-image">
+                    <img src="{{ service.image.url }}" 
+                         alt="{{ service.name }}"
+                         class="img-fluid">
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Right Column: Info and Order -->
+            <div class="col-lg-5">
+                <div class="service-detail-sidebar">
+                    <!-- Service Header -->
+                    <div class="service-detail-header">
+                        <h1 class="service-detail-title">{{ service.name }}</h1>
+                        {% if service.price_from %}
+                        <p class="service-detail-price">
+                            от {{ service.price_from|floatformat:0 }} {{ service.price_unit }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Service Info -->
+                    <div class="service-detail-info">
+                        <h3 class="info-title">Подробнее об услуге</h3>
+                        
+                        <!-- Service Description -->
+                        <div class="service-description-content">
+                            {{ service.description|safe }}
+                        </div>
+                        
+                        <div class="service-materials">
+                            <h4><i class="bi bi-tools"></i> Материалы:</h4>
+                            <p>влагоустойчивый пластик, алюминиевый профиль для каркаса, яркие светодиоды для подсветки.</p>
+                        </div>
+                        
+                        <div class="service-timeline">
+                            <h4><i class="bi bi-clock"></i> Сроки выполнения:</h4>
+                            <p>от 5 рабочих дней</p>
+                        </div>
+                        
+                        <div class="service-notes">
+                            <h4><i class="bi bi-star"></i> Привлекательная подсветка, надежная конструкция, любые формы. и размеры</h4>
+                        </div>
+                    </div>
+                    
+                    <!-- Order Button -->
+                    <div class="service-detail-action">
+                        <a href="#contact-form" class="btn btn-primary btn-lg w-100">
+                            Оставить заявку
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Examples -->
+{% if portfolio_items %}
+<section class="service-portfolio">
+    <div class="container">
+        <h2 class="section-title">Примеры работ</h2>
+        
+        <div class="portfolio-grid">
+            <div class="row g-4">
+                {% for item in portfolio_items %}
+                <div class="col-12 col-sm-6 col-md-4">
+                    <div class="portfolio-card">
+                        {% if item.image %}
+                        <div class="portfolio-card-image">
+                            <img src="{{ item.image.url }}" 
+                                 alt="{{ item.title }}"
+                                 loading="lazy">
+                            <div class="portfolio-card-overlay">
+                                <h3 class="portfolio-card-title">{{ item.title }}</h3>
+                                {% if item.price %}
+                                <p class="portfolio-card-price">от {{ item.price|floatformat:0 }} ₽</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'portfolio:list' %}?service={{ service.slug }}" class="btn btn-outline-primary btn-lg">Все работы по этой услуге</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+

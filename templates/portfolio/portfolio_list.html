@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Наши работы - Яркий Город{% endblock %}
+
+{% block content %}
+<!-- Breadcrumbs -->
+<section class="breadcrumbs">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Первая</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Наши работы</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Portfolio Header -->
+<section class="portfolio-page-header">
+    <div class="container">
+        <h1 class="portfolio-page-title">Наши работы</h1>
+        
+        <!-- Service Filter Info -->
+        {% if current_service %}
+        <div class="service-filter-info">
+            <div class="alert alert-info d-flex justify-content-between align-items-center">
+                <span>
+                    <i class="bi bi-filter-circle"></i>
+                    Показаны работы по услуге: <strong>{{ current_service.name }}</strong>
+                </span>
+                <a href="{% url 'portfolio:list' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-x-circle"></i> Показать все работы
+                </a>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Service Filters -->
+        <div class="portfolio-filters">
+            <a href="{% url 'portfolio:list' %}" 
+               class="filter-btn {% if not current_service %}active{% endif %}">
+                Все
+            </a>
+            {% for service in services %}
+            <a href="{% url 'portfolio:list' %}?service={{ service.slug }}" 
+               class="filter-btn {% if current_service and current_service.slug == service.slug %}active{% endif %}">
+                {{ service.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Grid -->
+<section class="portfolio-grid-section">
+    <div class="container">
+        <div class="row g-4">
+            {% for item in portfolio_items %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="portfolio-work-card">
+                    {% if item.image %}
+                    <div class="portfolio-work-image">
+                        <img src="{{ item.image.url }}" 
+                             alt="{{ item.title }}"
+                             loading="lazy">
+                        <div class="portfolio-work-overlay">
+                            <div class="portfolio-work-info">
+                                {% if item.service %}
+                                <span class="portfolio-work-service">{{ item.service.name }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="portfolio-work-content">
+                        <h3 class="portfolio-work-title">{{ item.title }}</h3>
+                        <div class="portfolio-work-description">
+                            {{ item.description|striptags|truncatewords:15 }}
+                        </div>
+                        {% if item.client %}
+                        <div class="portfolio-work-client">
+                            <i class="bi bi-briefcase"></i>
+                            <span>{{ item.client }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="no-portfolio">
+                    <p>Работы не найдены</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Pagination -->
+{% if is_paginated %}
+<section class="portfolio-pagination">
+    <div class="container">
+        <nav aria-label="Навигация по страницам">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" 
+                       href="?page={{ page_obj.previous_page_number }}{% if current_service %}&service={{ current_service.slug }}{% endif %}">
+                        ← Назад
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                    <a class="page-link" 
+                       href="?page={{ num }}{% if current_service %}&service={{ current_service.slug }}{% endif %}">
+                        {{ num }}
+                    </a>
+                </li>
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" 
+                       href="?page={{ page_obj.next_page_number }}{% if current_service %}&service={{ current_service.slug }}{% endif %}">
+                        Вперед →
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+

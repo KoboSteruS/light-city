@@ -1,0 +1,37 @@
+# Core Django
+Django==4.2.8
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+
+# Database
+psycopg2-binary==2.9.9
+dj-database-url==2.1.0
+
+# Images & Media
+Pillow==10.1.0
+sorl-thumbnail==12.10.0
+
+# Rich Text Editor
+django-ckeditor==6.7.0
+
+# Security & Authentication
+PyJWT==2.8.0
+django-ratelimit==4.1.0
+django-axes==6.1.1
+
+# Logging
+loguru==0.7.2
+
+# Environment
+python-decouple==3.8
+
+# Development
+django-debug-toolbar==4.2.0
+
+# Production
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Utils
+python-slugify==8.0.1
+
