@@ -15,15 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security Settings
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-production')
 DEBUG = config('DEBUG', default=False, cast=bool)
-
-# ALLOWED_HOSTS - автоматически добавляем домен Render если он доступен
-default_hosts = 'localhost,127.0.0.1'
-# На Render переменная RENDER_EXTERNAL_HOSTNAME содержит домен
-render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')
-if render_hostname:
-    default_hosts = f'{default_hosts},{render_hostname}'
-
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=default_hosts, cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
 # Application definition
 INSTALLED_APPS = [
@@ -87,15 +79,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
-# Используем PostgreSQL если доступен DATABASE_URL (например, на Render),
-# иначе SQLite для разработки
-import dj_database_url
 DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 # Password validation
@@ -203,38 +191,34 @@ LOG_LEVEL = config('LOG_LEVEL', default='INFO')
 # Настройка loguru
 logger.remove()  # Удаляем стандартный обработчик
 
-# Создаем папку для логов если её нет
-logs_dir = BASE_DIR / 'logs'
-logs_dir.mkdir(exist_ok=True)
-
-# Логи в файл (только если не в production или разрешено через env)
-if config('LOG_TO_FILE', default=True, cast=bool):
-    logger.add(
-        logs_dir / 'yarko_gorod.log',
-        rotation='10 MB',
-        retention='30 days',
-        level=LOG_LEVEL,
-        format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}',
-        encoding='utf-8',
-    )
-    
-    # Логи ошибок отдельно
-    logger.add(
-        logs_dir / 'errors.log',
-        rotation='10 MB',
-        retention='90 days',
-        level='ERROR',
-        format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}',
-        encoding='utf-8',
-    )
-
-# Консольный вывод (важно для Render, логи идут в stdout)
+# Логи в файл
 logger.add(
-    lambda msg: print(msg, end=''),
+    BASE_DIR / 'logs' / 'yarko_gorod.log',
+    rotation='10 MB',
+    retention='30 days',
     level=LOG_LEVEL,
     format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}',
-    colorize=DEBUG,  # Цветной вывод только в режиме разработки
+    encoding='utf-8',
 )
+
+# Логи ошибок отдельно
+logger.add(
+    BASE_DIR / 'logs' / 'errors.log',
+    rotation='10 MB',
+    retention='90 days',
+    level='ERROR',
+    format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}',
+    encoding='utf-8',
+)
+
+# Консольный вывод в режиме разработки
+if DEBUG:
+    logger.add(
+        lambda msg: print(msg, end=''),
+        level='DEBUG',
+        format='<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> | <level>{message}</level>',
+        colorize=True,
+    )
 
 logger.info('Яркий Город - приложение запущено')
 

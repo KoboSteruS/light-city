@@ -1,34 +1,37 @@
 # Core Django
-Django>=4.2,<5.0
-djangorestframework>=3.14
-django-cors-headers>=4.3
+Django==4.2.8
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
 
-# Database (для PostgreSQL на Render)
-psycopg2-binary>=2.9.9
-dj-database-url>=2.1.0
+# Database
+psycopg2-binary==2.9.9
+dj-database-url==2.1.0
 
-# Images & Media (обновлено для Python 3.13)
-Pillow>=10.4.0
-sorl-thumbnail>=12.10
+# Images & Media
+Pillow==10.1.0
+sorl-thumbnail==12.10.0
 
 # Rich Text Editor
-django-ckeditor>=6.7
+django-ckeditor==6.7.0
 
 # Security & Authentication
-PyJWT>=2.8
-django-ratelimit>=4.1
-django-axes>=6.1
+PyJWT==2.8.0
+django-ratelimit==4.1.0
+django-axes==6.1.1
 
 # Logging
-loguru>=0.7
+loguru==0.7.2
 
 # Environment
-python-decouple>=3.8
+python-decouple==3.8
+
+# Development
+django-debug-toolbar==4.2.0
 
 # Production
-gunicorn>=21.2
-whitenoise>=6.6
+gunicorn==21.2.0
+whitenoise==6.6.0
 
 # Utils
-python-slugify>=8.0
+python-slugify==8.0.1
 
