@@ -17,9 +17,13 @@ ENVIRONMENT VARIABLES (Обязательные)
 
 SECRET_KEY=<сгенерируй новый ключ>
 DEBUG=False
-ALLOWED_HOSTS=light-city.onrender.com
+ALLOWED_HOSTS=light-city.onrender.com,*.onrender.com
 
 DATABASE_URL (устанавливается автоматически Render при создании PostgreSQL)
+
+⚠️ ВАЖНО: ALLOWED_HOSTS должен содержать домен БЕЗ https://
+   Правильно: light-city.onrender.com
+   Неправильно: https://light-city.onrender.com
 
 ========================================
 ENVIRONMENT VARIABLES (Опциональные)

@@ -15,7 +15,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security Settings
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-production')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+
+# ALLOWED_HOSTS - автоматически добавляем домен Render если он доступен
+default_hosts = 'localhost,127.0.0.1'
+# На Render переменная RENDER_EXTERNAL_HOSTNAME содержит домен
+render_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')
+if render_hostname:
+    default_hosts = f'{default_hosts},{render_hostname}'
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=default_hosts, cast=Csv())
 
 # Application definition
 INSTALLED_APPS = [
