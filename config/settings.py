@@ -187,38 +187,78 @@ CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:
 
 # Logging with Loguru
 LOG_LEVEL = config('LOG_LEVEL', default='INFO')
+LOG_TO_FILE = config('LOG_TO_FILE', default=True, cast=bool)
+LOG_TO_CONSOLE = config('LOG_TO_CONSOLE', default=True, cast=bool)
+LOG_FILE_MAX_SIZE = config('LOG_FILE_MAX_SIZE', default='10 MB')
+LOG_RETENTION_DAYS = config('LOG_RETENTION_DAYS', default=30, cast=int)
+LOG_ERROR_RETENTION_DAYS = config('LOG_ERROR_RETENTION_DAYS', default=90, cast=int)
 
 # Настройка loguru
 logger.remove()  # Удаляем стандартный обработчик
 
-# Логи в файл
-logger.add(
-    BASE_DIR / 'logs' / 'yarko_gorod.log',
-    rotation='10 MB',
-    retention='30 days',
-    level=LOG_LEVEL,
-    format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}',
-    encoding='utf-8',
-)
+# Создаем папку для логов, если её нет
+LOGS_DIR = BASE_DIR / 'logs'
+try:
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
+except Exception as e:
+    print(f'⚠️  Не удалось создать папку logs: {e}')
 
-# Логи ошибок отдельно
-logger.add(
-    BASE_DIR / 'logs' / 'errors.log',
-    rotation='10 MB',
-    retention='90 days',
-    level='ERROR',
-    format='{time:YYYY-MM-DD HH:mm:ss} | {level} | {name}:{function}:{line} | {message}',
-    encoding='utf-8',
-)
+# Логи в файл (все уровни)
+if LOG_TO_FILE:
+    try:
+        logger.add(
+            LOGS_DIR / 'yarko_gorod.log',
+            rotation=LOG_FILE_MAX_SIZE,
+            retention=f'{LOG_RETENTION_DAYS} days',
+            level=LOG_LEVEL,
+            format='{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} | {message}',
+            encoding='utf-8',
+            enqueue=True,  # Асинхронная запись для производительности
+            backtrace=True,  # Полный стек вызовов при ошибках
+            diagnose=True,  # Детальная диагностика
+        )
+    except Exception as e:
+        print(f'⚠️  Не удалось настроить логирование в файл yarko_gorod.log: {e}')
 
-# Консольный вывод в режиме разработки
-if DEBUG:
-    logger.add(
-        lambda msg: print(msg, end=''),
-        level='DEBUG',
-        format='<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> | <level>{message}</level>',
-        colorize=True,
-    )
+    # Логи ошибок отдельно
+    try:
+        logger.add(
+            LOGS_DIR / 'errors.log',
+            rotation=LOG_FILE_MAX_SIZE,
+            retention=f'{LOG_ERROR_RETENTION_DAYS} days',
+            level='ERROR',
+            format='{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} | {message}',
+            encoding='utf-8',
+            enqueue=True,
+            backtrace=True,
+            diagnose=True,
+        )
+    except Exception as e:
+        print(f'⚠️  Не удалось настроить логирование в файл errors.log: {e}')
+
+# Консольный вывод (для systemd/journald)
+if LOG_TO_CONSOLE:
+    try:
+        import sys
+        # В production без цветов, в development с цветами
+        if DEBUG:
+            logger.add(
+                sys.stderr,
+                level=LOG_LEVEL,
+                format='<green>{time:HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan> | <level>{message}</level>',
+                colorize=True,
+            )
+        else:
+            # Production: простой формат для systemd
+            logger.add(
+                sys.stderr,
+                level=LOG_LEVEL,
+                format='{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} | {message}',
+                colorize=False,
+            )
+    except Exception as e:
+        print(f'⚠️  Не удалось настроить консольное логирование: {e}')
 
 logger.info('Яркий Город - приложение запущено')
+logger.info(f'DEBUG={DEBUG}, LOG_LEVEL={LOG_LEVEL}, LOG_TO_FILE={LOG_TO_FILE}, LOG_TO_CONSOLE={LOG_TO_CONSOLE}')
 
