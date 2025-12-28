@@ -31,8 +31,12 @@ urlpatterns = [
 # Статика и медиа файлы
 if settings.DEBUG:
     # В режиме разработки Django раздаёт сам
+    # Медиа из MEDIA_ROOT
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # Статика из STATICFILES_DIRS (папка static/), не из STATIC_ROOT
+    # Django сам найдёт файлы из STATICFILES_DIRS, но можно явно указать
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += staticfiles_urlpatterns()
 else:
     # В production медиа раздаём через Django (или лучше через Nginx)
     urlpatterns += [
