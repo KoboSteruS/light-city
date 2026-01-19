@@ -68,3 +68,4 @@ class Command(BaseCommand):
             logger.error(f'Ошибка при обновлении изображений: {e}')
 
 
+

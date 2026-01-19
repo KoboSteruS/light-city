@@ -3,12 +3,11 @@ Django==4.2.8
 djangorestframework==3.14.0
 django-cors-headers==4.3.1
 
-# Database
-# psycopg2-binary==2.9.9
+# Database (без PostgreSQL для локальной разработки)
 dj-database-url==2.1.0
 
 # Images & Media
-# Pillow==10.1.0
+Pillow>=10.1.0
 sorl-thumbnail==12.10.0
 
 # Rich Text Editor

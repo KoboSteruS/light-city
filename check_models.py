@@ -59,3 +59,4 @@ print("python manage.py makemigrations")
 print("python manage.py migrate")
 
 
+

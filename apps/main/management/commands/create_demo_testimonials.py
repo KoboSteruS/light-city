@@ -71,3 +71,4 @@ class Command(BaseCommand):
             logger.error(f'Ошибка при создании демо-отзывов: {e}')
 
 
+

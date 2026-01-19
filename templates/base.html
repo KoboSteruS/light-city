@@ -177,10 +177,40 @@
         </div>
     </footer>
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookieConsent" class="cookie-consent">
+        <div class="cookie-consent-content">
+            <p class="cookie-consent-text">
+                Этот сайт использует файлы cookies и сервисы сбора технических данных посетителей. Продолжая использовать наш сайт, вы автоматически соглашаетесь с использованием данных технологий. 
+                <a href="#" class="cookie-policy-link">Политика конфиденциальности</a>
+            </p>
+            <button id="acceptCookies" class="btn btn-primary cookie-consent-btn">СОГЛАСИТЬСЯ</button>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    
+    <!-- Cookie Consent Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cookieConsent = document.getElementById('cookieConsent');
+            const acceptButton = document.getElementById('acceptCookies');
+            
+            // Проверяем, согласился ли пользователь ранее
+            if (!localStorage.getItem('cookiesAccepted')) {
+                cookieConsent.classList.add('show');
+            }
+            
+            // Обработчик клика на кнопку
+            acceptButton.addEventListener('click', function() {
+                localStorage.setItem('cookiesAccepted', 'true');
+                cookieConsent.classList.remove('show');
+            });
+        });
+    </script>
     
     {% block extra_js %}{% endblock %}
 </body>

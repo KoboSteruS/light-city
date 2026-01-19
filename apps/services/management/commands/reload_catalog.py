@@ -171,3 +171,4 @@ class Command(BaseCommand):
                 self.stdout.write(f'  [!] Создана услуга без изображения: {service.name}')
 
 
+

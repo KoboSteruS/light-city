@@ -17,33 +17,37 @@
         <div class="row g-4">
             {% for service in services %}
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="service-card">
-                    {% if service.image %}
-                    <div class="service-card-image">
-                        <img src="{{ service.image.url }}" 
-                             alt="{{ service.name }}"
-                             loading="lazy">
-                    </div>
-                    {% else %}
-                    <div class="service-card-image service-card-no-image">
-                        <div class="no-image-placeholder">
-                            <i class="bi bi-image"></i>
+                <a href="{% url 'services:detail' service.slug %}" class="service-card-link">
+                    <div class="service-card">
+                        {% if service.image %}
+                        <div class="service-card-image">
+                            <img src="{{ service.image.url }}" 
+                                 alt="{{ service.name }}"
+                                 loading="lazy">
                         </div>
-                    </div>
-                    {% endif %}
-                    
-                    <div class="service-card-content">
-                        <h3 class="service-card-title">{{ service.name }}</h3>
-                        
-                        {% if service.price_from %}
-                        <p class="service-card-price">
-                            от {{ service.price_from|floatformat:0 }} {{ service.price_unit }}
-                        </p>
+                        {% else %}
+                        <div class="service-card-image service-card-no-image">
+                            <div class="no-image-placeholder">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        </div>
                         {% endif %}
                         
-                        <a href="{% url 'services:detail' service.slug %}" class="btn btn-service">Подробнее</a>
+                        <div class="service-card-content">
+                            <h3 class="service-card-title">{{ service.name }}</h3>
+                            
+                            {% if service.price_from %}
+                            <p class="service-card-price">
+                                от {{ service.price_from|floatformat:0 }} {{ service.price_unit }}
+                            </p>
+                            {% endif %}
+                            
+                            <span class="service-card-link-text">
+                                Подробнее <i class="bi bi-arrow-right"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% empty %}
             <div class="col-12">

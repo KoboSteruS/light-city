@@ -151,8 +151,23 @@ SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
 AXES_ENABLED = True
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = 1  # час
-AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]  # Новая настройка вместо AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP
+AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 AXES_RESET_ON_SUCCESS = True
+# Отключаем access log, чтобы избежать проблем с session_hash
+AXES_DISABLE_ACCESS_LOG = True
+# Используем только IP для логирования
+AXES_IPWARE_META_PRECEDENCE_ORDER = (
+    'HTTP_X_FORWARDED_FOR',
+    'X_FORWARDED_FOR',
+    'HTTP_CLIENT_IP',
+    'HTTP_X_REAL_IP',
+    'HTTP_X_FORWARDED',
+    'HTTP_X_CLUSTER_CLIENT_IP',
+    'HTTP_FORWARDED_FOR',
+    'HTTP_FORWARDED',
+    'HTTP_VIA',
+    'REMOTE_ADDR',
+)
 
 # Authentication backends
 AUTHENTICATION_BACKENDS = [

@@ -21,6 +21,21 @@ class ContactFormView(CreateView):
     template_name = 'contacts/contact_form.html'
     success_url = reverse_lazy('main:home')
     
+    def post(self, request, *args, **kwargs):
+        """Обработка POST запроса с проверкой чекбокса политики."""
+        # Проверяем чекбокс политики конфиденциальности
+        privacy_policy = request.POST.get('privacy_policy')
+        if not privacy_policy:
+            messages.error(
+                request,
+                'Необходимо согласиться с политикой конфиденциальности.'
+            )
+            # Перенаправляем обратно на главную
+            from django.shortcuts import redirect
+            return redirect('main:home')
+        
+        return super().post(request, *args, **kwargs)
+    
     def form_valid(self, form):
         """Обработка валидной формы."""
         response = super().form_valid(form)

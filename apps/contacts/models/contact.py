@@ -94,3 +94,4 @@ class ContactMessage(BaseModel):
         self.save(update_fields=['is_read', 'updated_at'])
 
 
+

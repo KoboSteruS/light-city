@@ -16,92 +16,212 @@
     </div>
 </section>
 
-<!-- About Hero -->
-<section class="about-hero">
+<!-- About Hero Modern -->
+<section class="about-hero-modern">
     <div class="container">
-        <h1 class="about-page-title">О нас</h1>
-        
-        {% if about and about.image %}
-        <div class="about-hero-image">
-            <img src="{{ about.image.url }}" alt="О нас" class="img-fluid">
-        </div>
-        {% else %}
-        <div class="about-hero-image">
-            <img src="{% static 'img/About.jpg' %}" alt="О нас" class="img-fluid">
-        </div>
-        {% endif %}
-        
-        <div class="about-hero-content">
-            <h2 class="about-hero-title">Яркий город — рекламное агентство полного цикла в Петрозаводске.</h2>
+        <div class="row align-items-center g-5">
+            <!-- Левая колонка: Текст -->
+            <div class="col-lg-6">
+                <div class="about-content-modern">
+                    <span class="about-label">🎨 Рекламное агентство</span>
+                    <h1 class="about-title-modern">Яркий город</h1>
+                    <p class="about-tagline">Делаем ваш бизнес заметным в Петрозаводске</p>
+                    
+                    {% if about %}
+                    <div class="about-text-modern">
+                        {{ about.description|safe }}
+                    </div>
+                    {% else %}
+                    <div class="about-text-modern">
+                        <p>Мы — команда профессионалов, которая превращает идеи в яркую реальность. Специализируемся на производстве наружной рекламы, вывесок, неоновых конструкций и брендировании автомобилей.</p>
+                        <p>Наше производство оснащено современным оборудованием, а опыт команды позволяет реализовывать проекты любой сложности — от визитки до полного брендирования бизнеса.</p>
+                    </div>
+                    {% endif %}
+                    
+                    <a href="#why-us" class="btn btn-primary btn-lg mt-3">
+                        Почему мы? <i class="bi bi-arrow-down ms-2"></i>
+                    </a>
+                </div>
+            </div>
             
-            {% if about %}
-            <div class="about-hero-text">
-                {{ about.description|safe }}
+            <!-- Правая колонка: Фото -->
+            <div class="col-lg-6">
+                <div class="about-image-modern">
+                    {% if about and about.image %}
+                    <img src="{{ about.image.url }}" alt="Яркий город - наш цех" class="img-fluid">
+                    {% else %}
+                    <img src="{% static 'img/About.jpg' %}" alt="Яркий город - наш цех" class="img-fluid">
+                    {% endif %}
+                    <div class="about-image-badge">
+                        <div class="badge-content">
+                            <div class="badge-number">15+</div>
+                            <div class="badge-text">лет опыта</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            {% else %}
-            <div class="about-hero-text">
-                <p>Яркий город — это проект из Максима,, и Анастасия, срочной более 15 лет проводящит каазре цинцем слектр рекламных услуг и главей истории, экотрибелия состочные агентств. Предлагайке к Поверисласым , незвление и високоначественное гостипирование каждого проекта, поставимся опытных профессионалов.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <div class="stat-number" data-target="1500">0</div>
+                    <div class="stat-label">Проектов реализовано</div>
+                </div>
             </div>
-            {% endif %}
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-people-fill"></i>
+                    </div>
+                    <div class="stat-number" data-target="800">0</div>
+                    <div class="stat-label">Довольных клиентов</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-award-fill"></i>
+                    </div>
+                    <div class="stat-number" data-target="15">0</div>
+                    <div class="stat-label">Лет на рынке</div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                    </div>
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">% в срок</div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 <!-- Why Choose Us -->
-<section class="why-choose-us">
+<section class="why-us-modern" id="why-us">
     <div class="container">
-        <h2 class="section-title text-center mb-5">Почему выбирают нас</h2>
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">Почему выбирают нас</h2>
+            <p class="section-subtitle">Качество, скорость и профессионализм в каждом проекте</p>
+        </div>
         
         <div class="row g-4">
             <!-- Feature 1 -->
-            <div class="col-lg-6">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-lightbulb"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="why-card">
+                    <div class="why-card-number">01</div>
+                    <div class="why-card-icon">
+                        <i class="bi bi-lightning-charge-fill"></i>
                     </div>
-                    <div class="feature-content">
-                        <h3 class="feature-title">15 лет в рекламе</h3>
-                        <p class="feature-text">Более 15 лет вывеску давеКй реклама. Брястирование фурва дбронининга. каторяг. дакерссированный антелядза.</p>
-                    </div>
+                    <h3 class="why-card-title">Быстро</h3>
+                    <p class="why-card-text">Производим вывески за 3-5 дней. Срочные заказы — за 24 часа</p>
                 </div>
             </div>
             
             <!-- Feature 2 -->
-            <div class="col-lg-6">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-bullseye"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="why-card">
+                    <div class="why-card-number">02</div>
+                    <div class="why-card-icon">
+                        <i class="bi bi-gem"></i>
                     </div>
-                    <div class="feature-content">
-                        <h3 class="feature-title">Индивидуальный подход</h3>
-                        <p class="feature-text">Стушснем зк: к полу внезданок-выько вылыое собдом и заддавю решения льн. что даваът всглу бизнеса.</p>
-                    </div>
+                    <h3 class="why-card-title">Качественно</h3>
+                    <p class="why-card-text">Используем премиальные материалы и даем гарантию на все работы</p>
                 </div>
             </div>
             
             <!-- Feature 3 -->
-            <div class="col-lg-6">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-check2-square"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="why-card">
+                    <div class="why-card-number">03</div>
+                    <div class="why-card-icon">
+                        <i class="bi bi-tools"></i>
                     </div>
-                    <div class="feature-content">
-                        <h3 class="feature-title">Всё в срок и с гарантией</h3>
-                        <p class="feature-text">Всагда подживит наюлаш несня парнод. Чалинная оро'литеродияя крахнь нариджа 1 год.</p>
-                    </div>
+                    <h3 class="why-card-title">Технологично</h3>
+                    <p class="why-card-text">Современное оборудование для печати, резки и монтажа</p>
                 </div>
             </div>
             
             <!-- Feature 4 -->
-            <div class="col-lg-6">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="bi bi-gear"></i>
+            <div class="col-lg-3 col-md-6">
+                <div class="why-card">
+                    <div class="why-card-number">04</div>
+                    <div class="why-card-icon">
+                        <i class="bi bi-headset"></i>
                     </div>
-                    <div class="feature-content">
-                        <h3 class="feature-title">Современное оборудование</h3>
-                        <p class="feature-text">Праборонась печные конструкции. стиереслав. пслфшная дfiвистрижсваная техньнь с итопером.</p>
+                    <h3 class="why-card-title">Удобно</h3>
+                    <p class="why-card-text">Полный цикл: от дизайна до монтажа. Один исполнитель — одна ответственность</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How We Work -->
+<section class="process-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">Как мы работаем</h2>
+            <p class="section-subtitle">Простой и понятный процесс от заявки до монтажа</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Step 1 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <div class="process-icon">
+                        <i class="bi bi-chat-dots-fill"></i>
                     </div>
+                    <h3 class="process-title">Консультация</h3>
+                    <p class="process-text">Обсуждаем ваши задачи и предлагаем оптимальное решение</p>
+                </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <div class="process-icon">
+                        <i class="bi bi-palette-fill"></i>
+                    </div>
+                    <h3 class="process-title">Дизайн</h3>
+                    <p class="process-text">Создаем макет и согласовываем все детали с вами</p>
+                </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <div class="process-icon">
+                        <i class="bi bi-gear-fill"></i>
+                    </div>
+                    <h3 class="process-title">Производство</h3>
+                    <p class="process-text">Изготавливаем рекламу на нашем производстве</p>
+                </div>
+            </div>
+            
+            <!-- Step 4 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <div class="process-icon">
+                        <i class="bi bi-truck"></i>
+                    </div>
+                    <h3 class="process-title">Монтаж</h3>
+                    <p class="process-text">Профессионально монтируем и сдаем работу под ключ</p>
                 </div>
             </div>
         </div>
@@ -110,28 +230,21 @@
 
 <!-- Testimonials -->
 {% if testimonials %}
-<section class="testimonials-section">
+<section class="testimonials-modern">
     <div class="container">
-        <h2 class="section-title text-center mb-5">Отзывы от клиентов</h2>
+        <div class="section-header text-center mb-5">
+            <h2 class="section-title">Отзывы клиентов</h2>
+            <p class="section-subtitle">Что говорят о нас те, кто уже работал с нами</p>
+        </div>
         
         <div class="row g-4">
             {% for testimonial in testimonials %}
             <div class="col-lg-6">
-                <div class="testimonial-card">
-                    <div class="testimonial-header">
-                        {% if testimonial.avatar %}
-                        <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="testimonial-avatar">
-                        {% else %}
-                        <img src="https://i.pravatar.cc/80?img={{ forloop.counter }}" alt="{{ testimonial.name }}" class="testimonial-avatar">
-                        {% endif %}
-                        <div class="testimonial-author">
-                            <h4 class="testimonial-name">{{ testimonial.name }}</h4>
-                            {% if testimonial.position %}
-                            <p class="testimonial-position">{{ testimonial.position }}</p>
-                            {% endif %}
-                        </div>
+                <div class="testimonial-card-modern">
+                    <div class="testimonial-quote">
+                        <i class="bi bi-quote"></i>
                     </div>
-                    <div class="testimonial-rating">
+                    <div class="testimonial-rating-modern">
                         {% for i in "12345" %}
                             {% if forloop.counter <= testimonial.rating %}
                             <i class="bi bi-star-fill"></i>
@@ -140,7 +253,20 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <p class="testimonial-text">{{ testimonial.text }}</p>
+                    <p class="testimonial-text-modern">{{ testimonial.text }}</p>
+                    <div class="testimonial-author-modern">
+                        {% if testimonial.avatar %}
+                        <img src="{{ testimonial.avatar.url }}" alt="{{ testimonial.name }}" class="testimonial-avatar-modern">
+                        {% else %}
+                        <div class="testimonial-avatar-placeholder">{{ testimonial.name|slice:":1"|upper }}</div>
+                        {% endif %}
+                        <div class="testimonial-info">
+                            <h4 class="testimonial-name-modern">{{ testimonial.name }}</h4>
+                            {% if testimonial.position %}
+                            <p class="testimonial-position-modern">{{ testimonial.position }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
             {% endfor %}
@@ -150,3 +276,49 @@
 {% endif %}
 {% endblock %}
 
+{% block extra_js %}
+<script>
+// Animated Counter for Stats
+document.addEventListener('DOMContentLoaded', function() {
+    const stats = document.querySelectorAll('.stat-number');
+    let animated = false;
+
+    function animateStats() {
+        if (animated) return;
+        
+        stats.forEach(stat => {
+            const target = parseInt(stat.getAttribute('data-target'));
+            const duration = 2000; // 2 seconds
+            const increment = target / (duration / 16); // 60fps
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    stat.textContent = target + (stat.parentElement.querySelector('.stat-label').textContent.includes('%') ? '' : '+');
+                    clearInterval(timer);
+                } else {
+                    stat.textContent = Math.floor(current);
+                }
+            }, 16);
+        });
+        
+        animated = true;
+    }
+
+    // Trigger animation when stats section is in view
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateStats();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+});
+</script>
+{% endblock %}

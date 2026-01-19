@@ -29,3 +29,4 @@ class Command(BaseCommand):
             logger.error(f'Ошибка при удалении работ портфолио: {e}')
 
 
+

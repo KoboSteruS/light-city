@@ -50,7 +50,48 @@
         </div>
         
         <div class="row g-4">
-            <!-- Объемные буквы -->
+            {% for service in services %}
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <a href="{% url 'services:detail' service.slug %}" class="service-card-link">
+                    <div class="service-card">
+                        <div class="service-icon">
+                            {% if service.image %}
+                                <img src="{{ service.image.url }}" alt="{{ service.name }}">
+                            {% else %}
+                                <!-- Fallback иконки по названию услуги -->
+                                {% if "Вывески" in service.name or "вывеска" in service.name %}
+                                    <img src="{% static 'img/Illuminated signage.png' %}" alt="{{ service.name }}">
+                                {% elif "Неон" in service.name or "неон" in service.name %}
+                                    <i class="bi bi-lightning-charge-fill" style="font-size: 3rem; color: var(--primary-color);"></i>
+                                {% elif "Объемные буквы" in service.name %}
+                                    <img src="{% static 'img/Three-dimensional letters.png' %}" alt="{{ service.name }}">
+                                {% elif "Короба консоли" in service.name or "Короб" in service.name %}
+                                    <img src="{% static 'img/Console boxes.png' %}" alt="{{ service.name }}">
+                                {% elif "Брендирование" in service.name or "авто" in service.name or "Оклейка" in service.name %}
+                                    <img src="{% static 'img/Car branding.png' %}" alt="{{ service.name }}">
+                                {% elif "Полиграфия" in service.name %}
+                                    <img src="{% static 'img/Polygraphy.png' %}" alt="{{ service.name }}">
+                                {% elif "Наклейки" in service.name or "этикетки" in service.name %}
+                                    <img src="{% static 'img/Stickers.png' %}" alt="{{ service.name }}">
+                                {% elif "Широкоформатная" in service.name %}
+                                    <img src="{% static 'img/Large format printing.png' %}" alt="{{ service.name }}">
+                                {% elif "Стенды" in service.name or "таблички" in service.name %}
+                                    <img src="{% static 'img/Stands.png' %}" alt="{{ service.name }}">
+                                {% elif "одежду" in service.name or "одежда" in service.name or "Нанесение" in service.name %}
+                                    <img src="{% static 'img/Application to clothing.png' %}" alt="{{ service.name }}">
+                                {% elif "Холсты" in service.name or "холст" in service.name or "Оформление мест" in service.name %}
+                                    <i class="bi bi-palette-fill" style="font-size: 3rem; color: var(--primary-color);"></i>
+                                {% else %}
+                                    <i class="bi bi-box-seam" style="font-size: 3rem; color: var(--primary-color);"></i>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <h3 class="service-name">{{ service.name }}</h3>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <!-- Fallback на хардкодные иконки, если услуг нет в БД -->
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="service-card">
                     <div class="service-icon">
@@ -59,76 +100,7 @@
                     <h3 class="service-name">Объемные буквы</h3>
                 </div>
             </div>
-            
-            <!-- Короба консоли -->
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <img src="{% static 'img/Console boxes.png' %}" alt="Короба консоли">
-                    </div>
-                    <h3 class="service-name">Короба консоли</h3>
-                </div>
-            </div>
-            
-            <!-- Брендирование авто -->
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <img src="{% static 'img/Car branding.png' %}" alt="Брендирование авто">
-                    </div>
-                    <h3 class="service-name">Брендирование авто</h3>
-                </div>
-            </div>
-            
-            <!-- Полиграфия -->
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <img src="{% static 'img/Polygraphy.png' %}" alt="Полиграфия">
-                    </div>
-                    <h3 class="service-name">Полиграфия</h3>
-                </div>
-            </div>
-            
-            <!-- Наклейки, этикетки -->
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <img src="{% static 'img/Stickers.png' %}" alt="Наклейки, этикетки">
-                    </div>
-                    <h3 class="service-name">Наклейки, этикетки</h3>
-                </div>
-            </div>
-            
-            <!-- Широкоформатная печать -->
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <img src="{% static 'img/Large format printing.png' %}" alt="Широкоформатная печать">
-                    </div>
-                    <h3 class="service-name">Широкоформатная печать</h3>
-                </div>
-            </div>
-            
-            <!-- Стенды, таблички -->
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <img src="{% static 'img/Stands.png' %}" alt="Стенды, таблички">
-                    </div>
-                    <h3 class="service-name">Стенды, таблички</h3>
-                </div>
-            </div>
-            
-            <!-- Нанесение на одежду -->
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <img src="{% static 'img/Application to clothing.png' %}" alt="Нанесение на одежду">
-                    </div>
-                    <h3 class="service-name">Нанесение на одежду</h3>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
@@ -161,151 +133,124 @@
     <div class="container">
         <div class="section-header text-center">
             <h2 class="section-title">Наши работы</h2>
-            <p class="section-subtitle">Проекты, которыми мы гордимся</p>
+            <p class="section-subtitle">Более 1000 успешно реализованных проектов</p>
         </div>
         
-        <div class="row g-4">
-            {% for work in featured_works %}
-            <div class="col-lg-4 col-md-6">
-                <div class="portfolio-card">
-                    {% if work.image %}
-                    <div class="portfolio-image">
-                        <img src="{{ work.image.url }}" alt="{{ work.title }}" class="img-fluid">
-                        <div class="portfolio-overlay">
-                            <div class="portfolio-info">
-                                <h3 class="portfolio-title">{{ work.title }}</h3>
-                                <p class="portfolio-category">{{ work.category.name }}</p>
+        {% for album in portfolio_albums %}
+        <div class="portfolio-album-block">
+            <div class="row align-items-center g-5">
+                <!-- Левая колонка: Текст -->
+                <div class="col-lg-5">
+                    <div class="portfolio-album-content">
+                        <h3 class="portfolio-album-title">{{ album.title }}</h3>
+                        <p class="portfolio-album-description">{{ album.description }}</p>
+                        <a href="{% url 'portfolio:list' %}?service={{ album.slug }}" class="btn btn-primary btn-lg">
+                            Смотреть все работы
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Правая колонка: Сетка работ -->
+                <div class="col-lg-7">
+                    <div class="portfolio-album-grid">
+                        {% for work in album.works %}
+                        <div class="portfolio-album-item">
+                            {% if work.image %}
+                            <img src="{{ work.image.url }}" alt="{{ work.title }}" class="img-fluid">
+                            {% else %}
+                            <div class="portfolio-album-placeholder-item">
+                                <i class="bi bi-image"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% empty %}
+                        <!-- Заполнители для пустых слотов -->
+                        {% for i in "1234" %}
+                        <div class="portfolio-album-item">
+                            <div class="portfolio-album-placeholder-item">
+                                <i class="bi bi-image"></i>
                             </div>
                         </div>
+                        {% endfor %}
+                        {% endfor %}
                     </div>
-                    {% endif %}
-                    {% if work.client %}
-                    <div class="portfolio-footer">
-                        <span class="portfolio-client">{{ work.client }}</span>
-                    </div>
-                    {% endif %}
                 </div>
             </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center text-muted">Портфолио скоро будет заполнено</p>
-            </div>
-            {% endfor %}
         </div>
-        
-        {% if featured_works %}
-        <div class="text-center mt-5">
-            <a href="{% url 'portfolio:list' %}" class="btn btn-outline-primary btn-lg">Смотреть все работы</a>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center text-muted">Портфолио скоро будет заполнено</p>
         </div>
-        {% endif %}
+        {% endfor %}
     </div>
 </section>
 
 <!-- Contacts Section -->
-<section class="contacts-section" id="contacts">
+<section class="contacts-section-modern" id="contacts">
     <div class="container">
         <div class="section-header text-center mb-5">
-            <h2 class="section-title">Контакты</h2>
-            <p class="section-subtitle">Свяжитесь с нами удобным способом</p>
+            <h2 class="section-title">Свяжитесь с нами</h2>
+            <p class="section-subtitle">Готовы обсудить ваш проект? Мы всегда на связи!</p>
         </div>
         
-        <div class="row g-5">
-            <!-- Contact Info -->
-            <div class="col-lg-6">
-                <div class="contact-info-wrapper">
-                    {% if settings %}
-                    <div class="contact-info-item">
-                        <div class="contact-icon">
-                            <i class="icon-location"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Адрес</h4>
-                            <p>{{ settings.address }}</p>
-                        </div>
+        <div class="row g-4 mb-5">
+            {% if settings %}
+            <!-- Contact Card 1: Address -->
+            <div class="col-lg-4 col-md-6">
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <i class="bi bi-geo-alt-fill"></i>
                     </div>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-icon">
-                            <i class="icon-phone"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Телефон</h4>
-                            <p><a href="tel:{{ settings.phone }}">{{ settings.phone }}</a></p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-icon">
-                            <i class="icon-email"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Email</h4>
-                            <p><a href="mailto:{{ settings.email }}">{{ settings.email }}</a></p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-info-item">
-                        <div class="contact-icon">
-                            <i class="icon-clock"></i>
-                        </div>
-                        <div class="contact-details">
-                            <h4>Часы работы</h4>
-                            <p>{{ settings.working_hours }}</p>
-                        </div>
-                    </div>
-                    {% endif %}
-                    
-                    <!-- Map Placeholder -->
-                    <div class="map-container mt-4">
-                        <iframe 
-                            src="https://yandex.ru/map-widget/v1/?ll=34.347639,61.784961&z=16&l=map&pt=34.347639,61.784961,pm2rdm" 
-                            width="100%" 
-                            height="300" 
-                            frameborder="0"
-                            allowfullscreen
-                            class="rounded">
-                        </iframe>
-                    </div>
+                    <h3 class="contact-card-title">Наш офис</h3>
+                    <p class="contact-card-text">{{ settings.address }}</p>
+                    <a href="https://yandex.ru/maps/?text={{ settings.address|urlencode }}" target="_blank" class="contact-card-link">
+                        Открыть на карте <i class="bi bi-arrow-right"></i>
+                    </a>
                 </div>
             </div>
             
-            <!-- Contact Form -->
-            <div class="col-lg-6">
-                <div class="contact-form-wrapper" id="contact-form">
-                    <h3 class="mb-4">Напишите нам</h3>
-                    
-                    {% if messages %}
-                    <div class="messages">
-                        {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                        {% endfor %}
+            <!-- Contact Card 2: Phone -->
+            <div class="col-lg-4 col-md-6">
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <i class="bi bi-telephone-fill"></i>
                     </div>
-                    {% endif %}
-                    
-                    <form method="post" action="{% url 'contacts:send_message' %}" class="contact-form">
-                        {% csrf_token %}
-                        
-                        <div class="mb-3">
-                            <input type="text" name="name" class="form-control" placeholder="Ваше имя" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <input type="tel" name="phone" class="form-control" placeholder="Телефон" required>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Email (необязательно)">
-                        </div>
-                        
-                        <div class="mb-3">
-                            <textarea name="message" class="form-control" rows="5" placeholder="Сообщение" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary btn-lg w-100">Отправить</button>
-                    </form>
+                    <h3 class="contact-card-title">Позвоните нам</h3>
+                    <p class="contact-card-text">{{ settings.phone }}</p>
+                    <a href="tel:{{ settings.phone }}" class="contact-card-link">
+                        Позвонить сейчас <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Contact Card 3: Email -->
+            <div class="col-lg-4 col-md-6">
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <i class="bi bi-envelope-fill"></i>
+                    </div>
+                    <h3 class="contact-card-title">Напишите нам</h3>
+                    <p class="contact-card-text">{{ settings.email }}</p>
+                    <a href="mailto:{{ settings.email }}" class="contact-card-link">
+                        Отправить письмо <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Map -->
+        <div class="row">
+            <div class="col-12">
+                <div class="map-container-modern">
+                    <iframe 
+                        src="https://yandex.ru/map-widget/v1/?ll=34.347639,61.784961&z=16&l=map&pt=34.347639,61.784961,pm2rdm" 
+                        width="100%" 
+                        height="500" 
+                        frameborder="0"
+                        allowfullscreen
+                        class="rounded-4">
+                    </iframe>
                 </div>
             </div>
         </div>
