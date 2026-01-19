@@ -110,14 +110,41 @@ h6 { font-size: 1rem; }
 }
 
 .btn-outline-primary {
-    background-color: transparent;
-    color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--black);
     border: 2px solid var(--primary-color);
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(248, 209, 44, 0.3);
 }
 
 .btn-outline-primary:hover {
-    background-color: var(--primary-color);
+    background-color: var(--primary-dark);
     color: var(--black);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(248, 209, 44, 0.5);
+}
+
+/* Clear Filter Button */
+.btn-clear-filter {
+    background-color: var(--black) !important;
+    color: var(--white) !important;
+    border-color: var(--black) !important;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn-clear-filter:hover {
+    background-color: #333 !important;
+    color: var(--white) !important;
+    border-color: #333 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.btn-clear-filter i {
+    color: var(--white);
+    font-size: 1.1em;
+    margin-right: 6px;
 }
 
 /* ===== Header ===== */
@@ -1489,28 +1516,33 @@ section {
 }
 
 .filter-btn {
-    padding: 10px 24px;
-    background-color: var(--white);
-    color: var(--text-color);
-    border: 2px solid transparent;
+    padding: 12px 28px;
+    background-color: var(--primary-color);
+    color: var(--black);
+    border: 2px solid var(--primary-color);
     border-radius: 50px;
-    font-weight: 500;
-    font-size: 0.95rem;
+    font-weight: 600;
+    font-size: 1rem;
     transition: var(--transition-base);
     cursor: pointer;
     white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(248, 209, 44, 0.3);
 }
 
 .filter-btn:hover {
-    background-color: var(--primary-color);
+    background-color: var(--primary-dark);
     color: var(--black);
-    border-color: var(--primary-color);
+    border-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(248, 209, 44, 0.5);
 }
 
 .filter-btn.active {
-    background-color: var(--primary-color);
-    color: var(--black);
-    border-color: var(--primary-color);
+    background-color: var(--black);
+    color: var(--primary-color);
+    border-color: var(--black);
+    font-weight: 700;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Catalog Grid */

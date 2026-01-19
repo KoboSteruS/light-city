@@ -202,6 +202,7 @@
                     <form id="callbackForm" class="callback-form" method="post" action="{% url 'contacts:contact_form' %}">
                         {% csrf_token %}
                         <input type="hidden" name="is_callback" value="true">
+                        <input type="hidden" name="service_context" id="serviceContext" value="">
                         
                         <div class="form-group mb-3">
                             <label for="callbackName" class="form-label">Ваше имя *</label>
@@ -370,6 +371,39 @@
                     }
                     
                     e.target.value = formattedValue;
+                });
+            }
+            
+            // Автоматическое заполнение контекста услуги
+            const callbackModal = document.getElementById('callbackModal');
+            const serviceContextInput = document.getElementById('serviceContext');
+            
+            if (callbackModal && serviceContextInput) {
+                callbackModal.addEventListener('show.bs.modal', function(event) {
+                    // Получаем кнопку, которая открыла модалку
+                    const button = event.relatedTarget;
+                    
+                    // Сбрасываем контекст при открытии
+                    serviceContextInput.value = '';
+                    
+                    // Если открыто со страницы услуги, заполняем контекст
+                    // Проверяем наличие заголовка услуги на странице
+                    const serviceTitle = document.querySelector('.service-detail-title');
+                    if (serviceTitle) {
+                        serviceContextInput.value = 'Заявка с услуги: ' + serviceTitle.textContent.trim();
+                    }
+                    
+                    // Обновляем заголовок модалки в зависимости от контекста
+                    const modalTitle = callbackModal.querySelector('.callback-title');
+                    const modalSubtitle = callbackModal.querySelector('.callback-subtitle');
+                    
+                    if (serviceTitle) {
+                        modalTitle.textContent = 'Заказать ' + serviceTitle.textContent.trim();
+                        modalSubtitle.textContent = 'Оставьте свои контакты, и наш менеджер свяжется с вами для уточнения деталей';
+                    } else {
+                        modalTitle.textContent = 'Заказать звонок';
+                        modalSubtitle.textContent = 'Оставьте свой номер телефона и мы свяжемся с вами в ближайшее время';
+                    }
                 });
             }
         });

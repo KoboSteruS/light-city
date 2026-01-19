@@ -45,6 +45,15 @@ class ContactFormView(CreateView):
     
     def form_valid(self, form):
         """Обработка валидной формы."""
+        # Добавляем контекст услуги в сообщение, если он есть
+        service_context = self.request.POST.get('service_context', '').strip()
+        if service_context:
+            current_message = form.cleaned_data.get('message', '')
+            if current_message:
+                form.instance.message = f"{service_context}\n\n{current_message}"
+            else:
+                form.instance.message = service_context
+        
         # Сохраняем сообщение
         self.object = form.save()
         
@@ -52,10 +61,11 @@ class ContactFormView(CreateView):
         is_callback = self.request.POST.get('is_callback') == 'true'
         callback_type = 'заказ звонка' if is_callback else 'сообщение'
         
-        logger.info(
-            f'Новое обращение ({callback_type}) от {form.cleaned_data["name"]}, '
-            f'телефон: {form.cleaned_data["phone"]}'
-        )
+        log_message = f'Новое обращение ({callback_type}) от {form.cleaned_data["name"]}, телефон: {form.cleaned_data["phone"]}'
+        if service_context:
+            log_message += f' | {service_context}'
+        
+        logger.info(log_message)
         
         # Если это AJAX запрос (модалка), возвращаем JSON
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
