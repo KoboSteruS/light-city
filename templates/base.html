@@ -107,7 +107,7 @@
                         <img src="{% static 'img/Logo_lite.png' %}" alt="Яркий Город" class="footer-logo-image">
                     </div>
                     <p class="footer-description">
-                        Мы — небольшое агентство полного цикта, и это наш осознанный выбор. 
+                        Мы — небольшое агентство полного цикла, и это наш осознанный выбор. 
                         Мы ценим душевный подход и внимание к деталям.
                     </p>
                 </div>
@@ -147,8 +147,6 @@
                 <!-- Working Hours & Social -->
                 <div class="col-lg-3 col-md-6">
                     {% if settings %}
-                    <h5 class="footer-title">Часы работы</h5>
-                    <p class="footer-hours">{{ settings.working_hours }}</p>
                     
                     <div class="social-links mt-4">
                         {% if settings.telegram_link %}
