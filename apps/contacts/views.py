@@ -5,6 +5,7 @@ Views для приложения контактов.
 from django.views.generic import CreateView
 from django.contrib import messages
 from django.urls import reverse_lazy
+from django.http import JsonResponse
 from loguru import logger
 from apps.contacts.models import ContactMessage
 
@@ -14,6 +15,7 @@ class ContactFormView(CreateView):
     View для формы обратной связи.
     
     Обрабатывает отправку сообщений от клиентов.
+    Поддерживает как обычные, так и AJAX запросы.
     """
     
     model = ContactMessage
@@ -26,11 +28,16 @@ class ContactFormView(CreateView):
         # Проверяем чекбокс политики конфиденциальности
         privacy_policy = request.POST.get('privacy_policy')
         if not privacy_policy:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Необходимо согласиться с политикой конфиденциальности.'
+                })
+            
             messages.error(
                 request,
                 'Необходимо согласиться с политикой конфиденциальности.'
             )
-            # Перенаправляем обратно на главную
             from django.shortcuts import redirect
             return redirect('main:home')
         
@@ -38,25 +45,45 @@ class ContactFormView(CreateView):
     
     def form_valid(self, form):
         """Обработка валидной формы."""
-        response = super().form_valid(form)
+        # Сохраняем сообщение
+        self.object = form.save()
         
         # Логируем новое обращение
+        is_callback = self.request.POST.get('is_callback') == 'true'
+        callback_type = 'заказ звонка' if is_callback else 'сообщение'
+        
         logger.info(
-            f'Новое обращение от {form.cleaned_data["name"]}, '
+            f'Новое обращение ({callback_type}) от {form.cleaned_data["name"]}, '
             f'телефон: {form.cleaned_data["phone"]}'
         )
         
-        # Добавляем сообщение об успехе
+        # Если это AJAX запрос (модалка), возвращаем JSON
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': 'Спасибо за обращение! Мы свяжемся с вами в ближайшее время.'
+            })
+        
+        # Для обычных форм добавляем сообщение и редиректим
         messages.success(
             self.request,
             'Спасибо за обращение! Мы свяжемся с вами в ближайшее время.'
         )
         
-        return response
+        from django.shortcuts import redirect
+        return redirect(self.success_url)
     
     def form_invalid(self, form):
         """Обработка невалидной формы."""
         logger.warning(f'Невалидная форма обратной связи: {form.errors}')
+        
+        # Если это AJAX запрос, возвращаем JSON с ошибками
+        if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            errors = {field: error[0] for field, error in form.errors.items()}
+            return JsonResponse({
+                'success': False,
+                'errors': errors
+            })
         
         messages.error(
             self.request,

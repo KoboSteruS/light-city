@@ -81,7 +81,9 @@
                             {% endif %}
                             
                             <li class="nav-item ms-lg-3">
-                                <a href="#contact-form" class="btn btn-primary btn-order">Заказать звонок</a>
+                                <button type="button" class="btn btn-primary btn-order" data-bs-toggle="modal" data-bs-target="#callbackModal">
+                                    Заказать звонок
+                                </button>
                             </li>
                         </ul>
                     </div>
@@ -148,20 +150,27 @@
                     <h5 class="footer-title">Часы работы</h5>
                     <p class="footer-hours">{{ settings.working_hours }}</p>
                     
-                    <div class="social-links mt-3">
+                    <div class="social-links mt-4">
                         {% if settings.telegram_link %}
-                        <a href="{{ settings.telegram_link }}" target="_blank" class="social-link" aria-label="Telegram">
-                            <i class="icon-telegram"></i>
+                        <a href="{{ settings.telegram_link }}" target="_blank" class="social-link social-telegram" aria-label="Telegram">
+                            <i class="bi bi-telegram"></i>
                         </a>
                         {% endif %}
                         {% if settings.instagram_link %}
-                        <a href="{{ settings.instagram_link }}" target="_blank" class="social-link" aria-label="Instagram">
-                            <i class="icon-instagram"></i>
+                        <a href="{{ settings.instagram_link }}" target="_blank" class="social-link social-instagram" aria-label="Instagram">
+                            <i class="bi bi-instagram"></i>
                         </a>
                         {% endif %}
                         {% if settings.vk_link %}
-                        <a href="{{ settings.vk_link }}" target="_blank" class="social-link" aria-label="VK">
-                            <i class="icon-vk"></i>
+                        <a href="{{ settings.vk_link }}" target="_blank" class="social-link social-vk" aria-label="VK">
+                            <svg class="social-icon-vk" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.39 14.66h-1.48c-.62 0-.81-.5-1.93-1.62-1-.93-1.43-1.06-1.68-1.06-.35 0-.45.1-.45.57v1.48c0 .4-.13.64-1.18.64-1.75 0-3.69-1.06-5.07-3.04-2.06-2.93-2.63-5.14-2.63-5.6 0-.25.1-.48.57-.48h1.48c.43 0 .6.2.76.65.86 2.43 2.29 4.56 2.88 4.56.22 0 .32-.1.32-.66v-2.56c-.07-1.12-.65-1.21-.65-1.61 0-.2.17-.4.43-.4h2.33c.36 0 .5.2.5.63v3.47c0 .36.16.5.27.5.22 0 .4-.14.82-.56 1.26-1.42 2.17-3.62 2.17-3.62.12-.25.32-.48.75-.48h1.48c.53 0 .65.27.53.63-.19.86-2.07 3.52-2.07 3.52-.18.3-.25.44 0 .77.18.25.79.77 1.2 1.24.74.82 1.31 1.5 1.46 1.98.15.47-.08.71-.56.71z"/>
+                            </svg>
+                        </a>
+                        {% endif %}
+                        {% if settings.whatsapp_link %}
+                        <a href="{{ settings.whatsapp_link }}" target="_blank" class="social-link social-whatsapp" aria-label="WhatsApp">
+                            <i class="bi bi-whatsapp"></i>
                         </a>
                         {% endif %}
                     </div>
@@ -176,6 +185,77 @@
             </div>
         </div>
     </footer>
+
+    <!-- Callback Modal -->
+    <div class="modal fade" id="callbackModal" tabindex="-1" aria-labelledby="callbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content callback-modal">
+                <button type="button" class="btn-close callback-modal-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                
+                <div class="modal-body">
+                    <div class="callback-modal-header">
+                        <div class="callback-icon">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <h2 class="callback-title">Заказать звонок</h2>
+                        <p class="callback-subtitle">Оставьте свой номер телефона и мы свяжемся с вами в ближайшее время</p>
+                    </div>
+                    
+                    <form id="callbackForm" class="callback-form" method="post" action="{% url 'contacts:contact_form' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="is_callback" value="true">
+                        
+                        <div class="form-group mb-3">
+                            <label for="callbackName" class="form-label">Ваше имя *</label>
+                            <div class="input-with-icon">
+                                <i class="bi bi-person-fill"></i>
+                                <input type="text" class="form-control" id="callbackName" name="name" placeholder="Иван Иванов" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-3">
+                            <label for="callbackPhone" class="form-label">Телефон *</label>
+                            <div class="input-with-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                                <input type="tel" class="form-control" id="callbackPhone" name="phone" placeholder="+7 (900) 123-45-67" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group mb-4">
+                            <label for="callbackMessage" class="form-label">Комментарий (необязательно)</label>
+                            <div class="input-with-icon">
+                                <i class="bi bi-chat-dots-fill"></i>
+                                <textarea class="form-control" id="callbackMessage" name="message" rows="3" placeholder="Опишите ваш проект или вопрос"></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="callbackPrivacy" name="privacy_policy" required>
+                            <label class="form-check-label" for="callbackPrivacy">
+                                Я согласен с <a href="#" class="privacy-link">политикой конфиденциальности</a>
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg w-100 callback-submit">
+                            <span class="btn-text">Отправить заявку</span>
+                            <i class="bi bi-arrow-right ms-2"></i>
+                        </button>
+                        
+                        <p class="callback-note">Мы перезвоним вам в течение 15 минут в рабочее время</p>
+                    </form>
+                    
+                    <div id="callbackSuccess" class="callback-success" style="display: none;">
+                        <div class="success-icon">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <h3 class="success-title">Спасибо за обращение!</h3>
+                        <p class="success-text">Ваша заявка принята. Мы свяжемся с вами в ближайшее время.</p>
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Cookie Consent Banner -->
     <div id="cookieConsent" class="cookie-consent">
@@ -209,6 +289,91 @@
                 localStorage.setItem('cookiesAccepted', 'true');
                 cookieConsent.classList.remove('show');
             });
+        });
+    </script>
+    
+    <!-- Callback Modal Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const callbackForm = document.getElementById('callbackForm');
+            const callbackSuccess = document.getElementById('callbackSuccess');
+            
+            if (callbackForm) {
+                callbackForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const formData = new FormData(this);
+                    const submitBtn = this.querySelector('.callback-submit');
+                    const btnText = submitBtn.querySelector('.btn-text');
+                    const originalText = btnText.textContent;
+                    
+                    // Показываем загрузку
+                    submitBtn.disabled = true;
+                    btnText.textContent = 'Отправка...';
+                    
+                    // Отправляем форму
+                    fetch(this.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Скрываем форму и показываем success
+                            callbackForm.style.display = 'none';
+                            callbackSuccess.style.display = 'block';
+                            
+                            // Сбрасываем форму
+                            callbackForm.reset();
+                            
+                            // Через 5 секунд возвращаем форму
+                            setTimeout(() => {
+                                callbackForm.style.display = 'block';
+                                callbackSuccess.style.display = 'none';
+                                submitBtn.disabled = false;
+                                btnText.textContent = originalText;
+                            }, 5000);
+                        } else {
+                            alert('Ошибка отправки формы. Пожалуйста, попробуйте позже.');
+                            submitBtn.disabled = false;
+                            btnText.textContent = originalText;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Ошибка отправки формы. Пожалуйста, попробуйте позже.');
+                        submitBtn.disabled = false;
+                        btnText.textContent = originalText;
+                    });
+                });
+            }
+            
+            // Маска для телефона
+            const phoneInput = document.getElementById('callbackPhone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    
+                    if (value.length > 0) {
+                        if (value[0] === '8') value = '7' + value.slice(1);
+                        if (value[0] !== '7') value = '7' + value;
+                    }
+                    
+                    let formattedValue = '';
+                    if (value.length > 0) {
+                        formattedValue = '+7';
+                        if (value.length > 1) formattedValue += ' (' + value.substring(1, 4);
+                        if (value.length >= 4) formattedValue += ') ' + value.substring(4, 7);
+                        if (value.length >= 7) formattedValue += '-' + value.substring(7, 9);
+                        if (value.length >= 9) formattedValue += '-' + value.substring(9, 11);
+                    }
+                    
+                    e.target.value = formattedValue;
+                });
+            }
         });
     </script>
     

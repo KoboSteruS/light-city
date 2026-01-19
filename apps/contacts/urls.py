@@ -9,5 +9,6 @@ app_name = 'contacts'
 
 urlpatterns = [
     path('send/', ContactFormView.as_view(), name='send_message'),
+    path('callback/', ContactFormView.as_view(), name='contact_form'),  # Для модалки
 ]
 

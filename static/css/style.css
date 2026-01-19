@@ -934,24 +934,89 @@ section {
 .social-links {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .social-link {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     background-color: rgba(255,255,255,0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--white);
-    transition: var(--transition-base);
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--primary-color), #ffd700);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.social-link:hover::before {
+    opacity: 1;
+}
+
+.social-link i,
+.social-link svg {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
 
 .social-link:hover {
-    background-color: var(--primary-color);
     color: var(--black);
-    transform: translateY(-3px);
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 8px 20px rgba(248,209,44,0.4);
+}
+
+.social-link:hover i,
+.social-link:hover svg {
+    transform: scale(1.1);
+}
+
+/* SVG для VK */
+.social-icon-vk {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Специфичные цвета для соцсетей при hover */
+.social-telegram:hover::before {
+    background: linear-gradient(135deg, #0088cc, #0088cc);
+}
+
+.social-instagram:hover::before {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+}
+
+.social-vk:hover::before {
+    background: linear-gradient(135deg, #4680C2, #5181b8);
+}
+
+.social-whatsapp:hover::before {
+    background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.social-telegram:hover,
+.social-instagram:hover,
+.social-vk:hover,
+.social-whatsapp:hover {
+    color: var(--white);
 }
 
 .footer-divider {
@@ -967,6 +1032,214 @@ section {
     color: rgba(255,255,255,0.6);
     font-size: var(--font-size-small);
     margin: 0;
+}
+
+/* ===== Callback Modal ===== */
+.callback-modal {
+    border: none;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.callback-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.callback-modal-close:hover {
+    background: rgba(0,0,0,0.1);
+    transform: rotate(90deg);
+}
+
+.callback-modal .modal-body {
+    padding: 3rem 2.5rem;
+}
+
+.callback-modal-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.callback-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color), #ffd700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: var(--black);
+    box-shadow: 0 8px 20px rgba(248,209,44,0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.callback-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.callback-subtitle {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin: 0;
+}
+
+.callback-form .form-label {
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-light);
+    font-size: 1.1rem;
+    z-index: 1;
+}
+
+.input-with-icon .form-control {
+    padding-left: 3rem;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    height: 50px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-with-icon textarea.form-control {
+    height: auto;
+    padding-top: 1rem;
+    resize: none;
+}
+
+.input-with-icon .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(248,209,44,0.15);
+}
+
+.callback-form .form-check-input {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #dee2e6;
+    cursor: pointer;
+}
+
+.callback-form .form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.callback-form .form-check-label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.callback-form .privacy-link {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.callback-form .privacy-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+.callback-submit {
+    background: linear-gradient(135deg, var(--primary-color), #ffd700);
+    border: none;
+    border-radius: 12px;
+    padding: 16px 32px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--black);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(248,209,44,0.3);
+}
+
+.callback-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(248,209,44,0.4);
+}
+
+.callback-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.callback-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.callback-success {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.success-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 3rem;
+    color: var(--white);
+    animation: successPop 0.5s ease-out;
+}
+
+@keyframes successPop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.success-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.success-text {
+    font-size: 1rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
 }
 
 /* ===== Cookie Consent Banner ===== */
@@ -1097,6 +1370,35 @@ section {
     .cookie-consent-btn {
         width: 100%;
         padding: 14px 24px;
+    }
+    
+    /* Callback Modal Responsive */
+    .callback-modal .modal-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    .callback-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
+    }
+    
+    .callback-title {
+        font-size: 1.5rem;
+    }
+    
+    .callback-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .input-with-icon .form-control {
+        height: 46px;
+        font-size: 0.95rem;
+    }
+    
+    .callback-submit {
+        font-size: 1rem;
+        padding: 14px 28px;
     }
     
     /* Contact Cards Responsive */
