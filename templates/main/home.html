@@ -242,14 +242,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="map-container-modern">
-                    <iframe 
-                        src="https://yandex.ru/map-widget/v1/?ll=34.312838,61.788276&z=17.6&l=map&pt=34.312838,61.788276,pm2rdm" 
-                        width="100%" 
-                        height="500" 
-                        frameborder="0"
-                        allowfullscreen
-                        class="rounded-4">
-                    </iframe>
+                    <div id="yandex-map" style="width: 100%; height: 500px;"></div>
                 </div>
             </div>
         </div>
@@ -258,6 +251,7 @@
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 <script>
 // Initialize Swiper
 const heroSwiper = new Swiper('.hero-swiper', {
@@ -278,6 +272,55 @@ const heroSwiper = new Swiper('.hero-swiper', {
     fadeEffect: {
         crossFade: true
     },
+});
+
+// Initialize Yandex Map with organization marker
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof ymaps !== 'undefined') {
+        ymaps.ready(function() {
+            const mapContainer = document.getElementById('yandex-map');
+            if (!mapContainer) return;
+            
+            const map = new ymaps.Map('yandex-map', {
+                center: [61.788276, 34.312838], // [широта, долгота]
+                zoom: 17,
+                controls: ['zoomControl', 'fullscreenControl', 'typeSelector']
+            });
+
+            // Создаем большую заметную метку организации с желтым цветом
+            const placemark = new ymaps.Placemark(
+                [61.788276, 34.312838],
+                {
+                    balloonContentHeader: '<div style="font-size: 20px; font-weight: bold; color: #000; margin-bottom: 10px;">Яркий Город</div>',
+                    balloonContentBody: '<div style="margin-bottom: 10px; color: #333;">{% if settings %}{{ settings.address|escapejs }}{% endif %}</div>{% if settings %}<div style="margin-bottom: 10px; color: #333;"><strong>Телефон:</strong> <a href="tel:{{ settings.phone|escapejs }}" style="color: #FFD700;">{{ settings.phone|escapejs }}</a></div>{% endif %}',
+                    balloonContentFooter: '<a href="https://yandex.ru/maps/?ll=34.312838%2C61.788276&mode=poi&poi%5Bpoint%5D=34.312838%2C61.788276&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D226637438315&z=17.6" target="_blank" style="color: #FFD700; text-decoration: underline; font-weight: bold;">Открыть на карте →</a>',
+                    hintContent: '<div style="font-weight: bold; color: #000; font-size: 14px;">Яркий Город</div>'
+                },
+                {
+                    // Используем большую растягивающуюся иконку с желтым цветом
+                    preset: 'islands#yellowStretchyIcon',
+                    iconColor: '#FFD700',
+                    iconImageSize: [60, 80],
+                    iconImageOffset: [-30, -80]
+                }
+            );
+
+            // Добавляем метку на карту
+            map.geoObjects.add(placemark);
+            
+            // Автоматически открываем балун при загрузке для выделения организации
+            setTimeout(function() {
+                placemark.balloon.open();
+            }, 500);
+        });
+    } else {
+        console.error('Yandex Maps API не загружен');
+        // Fallback на iframe если API не загрузился
+        const mapContainer = document.getElementById('yandex-map');
+        if (mapContainer) {
+            mapContainer.innerHTML = '<iframe src="https://yandex.ru/map-widget/v1/?ll=34.312838,61.788276&z=17.6&l=map&pt=34.312838,61.788276,pm2org" width="100%" height="500" frameborder="0" allowfullscreen style="border-radius: 24px;"></iframe>';
+        }
+    }
 });
 </script>
 {% endblock %}
