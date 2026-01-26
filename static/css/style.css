@@ -1596,17 +1596,22 @@ section {
     height: 220px;
     overflow: hidden;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-light);
 }
 
 .service-card-image img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: var(--transition-base);
 }
 
 .service-card-link:hover .service-card-image img {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    opacity: 0.9;
 }
 
 .service-card-no-image {
