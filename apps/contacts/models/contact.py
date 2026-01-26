@@ -4,7 +4,23 @@
 
 from django.db import models
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 from apps.core.models import BaseModel
+
+
+def validate_phone_number(value):
+    """
+    Валидатор для номера телефона.
+    Проверяет, что в номере есть минимум 10 цифр, независимо от форматирования.
+    """
+    # Удаляем все нецифровые символы кроме плюса
+    digits = ''.join(filter(str.isdigit, value.replace('+', '')))
+    
+    if len(digits) < 10:
+        raise ValidationError('Номер телефона должен содержать минимум 10 цифр')
+    
+    if len(digits) > 15:
+        raise ValidationError('Номер телефона не должен содержать более 15 цифр')
 
 
 class ContactMessage(BaseModel):
@@ -27,11 +43,6 @@ class ContactMessage(BaseModel):
         COMPLETED = 'completed', 'Завершено'
         CANCELLED = 'cancelled', 'Отменено'
     
-    phone_regex = RegexValidator(
-        regex=r'^\+?1?\d{9,15}$',
-        message="Телефон должен быть в формате: '+999999999'. До 15 цифр."
-    )
-    
     name = models.CharField(
         max_length=100,
         verbose_name='Имя',
@@ -39,10 +50,10 @@ class ContactMessage(BaseModel):
     )
     
     phone = models.CharField(
-        validators=[phone_regex],
-        max_length=17,
+        validators=[validate_phone_number],
+        max_length=20,
         verbose_name='Телефон',
-        help_text='Контактный телефон'
+        help_text='Контактный телефон (формат: +7 (999) 123-45-67)'
     )
     
     email = models.EmailField(

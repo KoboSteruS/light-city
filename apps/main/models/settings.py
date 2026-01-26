@@ -76,6 +76,13 @@ class SiteSettings(BaseModel):
         help_text='Ссылка на Telegram'
     )
     
+    telegram_bot_token = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name='Telegram Bot Token',
+        help_text='Токен Telegram бота для уведомлений'
+    )
+    
     is_active = models.BooleanField(
         default=True,
         verbose_name='Активен',

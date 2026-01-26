@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from loguru import logger
 from apps.contacts.models import ContactMessage
+from apps.main.utils.telegram import send_telegram_message, format_contact_message
 
 
 class ContactFormView(CreateView):
@@ -66,6 +67,19 @@ class ContactFormView(CreateView):
             log_message += f' | {service_context}'
         
         logger.info(log_message)
+        
+        # Отправляем уведомление в Telegram
+        try:
+            telegram_message = format_contact_message(
+                name=form.cleaned_data['name'],
+                phone=form.cleaned_data['phone'],
+                email=form.cleaned_data.get('email', ''),
+                message=form.instance.message,
+                is_callback=is_callback
+            )
+            send_telegram_message(telegram_message)
+        except Exception as e:
+            logger.error(f'Ошибка отправки в Telegram: {e}')
         
         # Если это AJAX запрос (модалка), возвращаем JSON
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':

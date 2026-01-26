@@ -17,6 +17,9 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-produc
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
+# Telegram Bot Settings
+TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN', default='')
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',

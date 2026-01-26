@@ -4,7 +4,7 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
-from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial
+from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial, TelegramChat
 
 
 @admin.register(Slider)
@@ -87,6 +87,11 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             'fields': ('vk_link', 'instagram_link', 'telegram_link'),
             'classes': ('collapse',)
         }),
+        ('Telegram бот', {
+            'fields': ('telegram_bot_token',),
+            'classes': ('collapse',),
+            'description': 'Токен бота для отправки уведомлений о новых заявках'
+        }),
         ('Настройки', {
             'fields': ('is_active',)
         }),
@@ -97,6 +102,34 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         if SiteSettings.objects.filter(is_active=True).exists():
             return False
         return super().has_add_permission(request)
+
+
+@admin.register(TelegramChat)
+class TelegramChatAdmin(admin.ModelAdmin):
+    """Админка для управления Telegram чатами."""
+    
+    list_display = ('chat_id', 'username', 'first_name', 'is_active', 'created_at')
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('chat_id', 'username', 'first_name')
+    list_editable = ('is_active',)
+    readonly_fields = ('chat_id', 'username', 'first_name', 'created_at', 'updated_at')
+    
+    fieldsets = (
+        ('Информация о чате', {
+            'fields': ('chat_id', 'username', 'first_name')
+        }),
+        ('Настройки', {
+            'fields': ('is_active',)
+        }),
+        ('Системная информация', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def has_add_permission(self, request):
+        """Запрещаем создание вручную - только через бота."""
+        return False
 
 
 @admin.register(Testimonial)
@@ -141,4 +174,3 @@ class TestimonialAdmin(admin.ModelAdmin):
         )
     
     rating_display.short_description = 'Рейтинг'
-
