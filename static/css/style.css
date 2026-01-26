@@ -207,11 +207,25 @@ h6 { font-size: 1rem; }
     letter-spacing: 1px;
 }
 
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+}
+
 .nav-link {
     color: var(--text-color);
     font-weight: 500;
     padding: 0.5rem 1rem !important;
     transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -225,6 +239,7 @@ h6 { font-size: 1rem; }
     color: var(--text-color);
     font-size: var(--font-size-small);
     padding: 0.5rem 1rem;
+    white-space: nowrap;
 }
 
 .contact-link:hover {
@@ -234,6 +249,10 @@ h6 { font-size: 1rem; }
 .btn-order {
     font-size: var(--font-size-small);
     padding: 8px 20px;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ===== Hero Slider ===== */

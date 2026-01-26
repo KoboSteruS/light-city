@@ -24,8 +24,8 @@ class MainConfig(AppConfig):
         """Запуск при инициализации приложения."""
         global _bot_thread_started, _bot_thread
         
-        # Запускаем бота только в основном процессе (избегаем двойного запуска при runserver)
-        # runserver создает два процесса: один для перезагрузки, один основной
+        # На production бот запускается через systemd service
+        # Автозапуск только в режиме разработки (runserver)
         if os.environ.get('RUN_MAIN') != 'true':
             return
         
@@ -33,7 +33,7 @@ class MainConfig(AppConfig):
         if _bot_thread is not None and _bot_thread.is_alive():
             return
         
-        # Запускаем бота только один раз
+        # Запускаем бота только один раз (только в режиме разработки)
         with _bot_thread_lock:
             if not _bot_thread_started:
                 _bot_thread_started = True

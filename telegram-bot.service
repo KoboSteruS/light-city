@@ -1,0 +1,17 @@
+[Unit]
+Description=Telegram Bot for Yarkiy Gorod
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/light-city
+Environment="PATH=/root/light-city/venv/bin"
+ExecStart=/root/light-city/venv/bin/python /root/light-city/manage.py telegram_bot
+Restart=always
+RestartSec=10
+StandardOutput=append:/root/light-city/logs/telegram_bot.log
+StandardError=append:/root/light-city/logs/telegram_bot_error.log
+
+[Install]
+WantedBy=multi-user.target

@@ -2,7 +2,21 @@
 
 ## Автоматический запуск
 
-Бот автоматически запускается вместе с Django при старте приложения через `apps.main.apps.MainConfig.ready()`.
+**На production сервере** бот запускается через отдельный systemd service (`telegram-bot.service`).
+
+**В режиме разработки** (runserver) бот запускается автоматически через `apps.main.apps.MainConfig.ready()`.
+
+### Установка на production:
+
+```bash
+# 1. Скопировать service файл
+scp telegram-bot.service root@your-server:/etc/systemd/system/
+
+# 2. На сервере
+sudo systemctl daemon-reload
+sudo systemctl enable telegram-bot.service
+sudo systemctl start telegram-bot.service
+```
 
 ## Токен бота
 
