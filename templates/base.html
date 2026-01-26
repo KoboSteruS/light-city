@@ -114,7 +114,7 @@
                 
                 <!-- Quick Links -->
                 <div class="col-lg-2 col-md-6">
-                    <h5 class="footer-title">Контакты</h5>
+                    <h5 class="footer-title">Навигация</h5>
                     <ul class="footer-menu">
                         <li><a href="{% url 'services:catalog' %}">Каталог</a></li>
                         <li><a href="{% url 'portfolio:list' %}">Наши работы</a></li>
@@ -155,9 +155,7 @@
                         </a>
                         {% endif %}
                         {% if settings.instagram_link %}
-                        <a href="{{ settings.instagram_link }}" target="_blank" class="social-link social-instagram" aria-label="Instagram">
-                            <i class="bi bi-instagram"></i>
-                        </a>
+                        <!-- Instagram removed as requested -->
                         {% endif %}
                         {% if settings.vk_link %}
                         <a href="{{ settings.vk_link }}" target="_blank" class="social-link social-vk" aria-label="VK">
@@ -231,7 +229,7 @@
                         <div class="form-check mb-4">
                             <input class="form-check-input" type="checkbox" id="callbackPrivacy" name="privacy_policy" required>
                             <label class="form-check-label" for="callbackPrivacy">
-                                Я согласен с <a href="#" class="privacy-link">политикой конфиденциальности</a>
+                                Я согласен с <a href="{% url 'main:privacy' %}" target="_blank" class="privacy-link">политикой конфиденциальности</a>
                             </label>
                         </div>
                         
@@ -261,7 +259,7 @@
         <div class="cookie-consent-content">
             <p class="cookie-consent-text">
                 Этот сайт использует файлы cookies и сервисы сбора технических данных посетителей. Продолжая использовать наш сайт, вы автоматически соглашаетесь с использованием данных технологий. 
-                <a href="#" class="cookie-policy-link">Политика конфиденциальности</a>
+                <a href="{% url 'main:privacy' %}" target="_blank" class="cookie-policy-link">Политика конфиденциальности</a>
             </p>
             <button id="acceptCookies" class="btn btn-primary cookie-consent-btn">СОГЛАСИТЬСЯ</button>
         </div>

@@ -133,7 +133,7 @@
     <div class="container">
         <div class="section-header text-center">
             <h2 class="section-title">Наши работы</h2>
-            <p class="section-subtitle">Более 1000 успешно реализованных проектов</p>
+            <p class="section-subtitle">Более 1500 успешно реализованных проектов</p>
         </div>
         
         {% for album in portfolio_albums %}
@@ -143,7 +143,6 @@
                 <div class="col-lg-5">
                     <div class="portfolio-album-content">
                         <h3 class="portfolio-album-title">{{ album.title }}</h3>
-                        <p class="portfolio-album-description">{{ album.description }}</p>
                         <a href="{% url 'portfolio:list' %}?service={{ album.slug }}" class="btn btn-primary btn-lg">
                             Смотреть все работы
                         </a>
@@ -203,7 +202,7 @@
                     </div>
                     <h3 class="contact-card-title">Наш офис</h3>
                     <p class="contact-card-text">{{ settings.address }}</p>
-                    <a href="https://yandex.ru/maps/?text={{ settings.address|urlencode }}" target="_blank" class="contact-card-link">
+                    <a href="https://yandex.ru/maps/?ll=34.312838%2C61.788276&mode=poi&poi%5Bpoint%5D=34.312838%2C61.788276&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D226637438315&z=17.6" target="_blank" class="contact-card-link">
                         Открыть на карте <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
@@ -244,7 +243,7 @@
             <div class="col-12">
                 <div class="map-container-modern">
                     <iframe 
-                        src="https://yandex.ru/map-widget/v1/?ll=34.347639,61.784961&z=16&l=map&pt=34.347639,61.784961,pm2rdm" 
+                        src="https://yandex.ru/map-widget/v1/?ll=34.312838,61.788276&z=17.6&l=map&pt=34.312838,61.788276,pm2rdm" 
                         width="100%" 
                         height="500" 
                         frameborder="0"

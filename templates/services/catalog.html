@@ -26,9 +26,34 @@
                                  loading="lazy">
                         </div>
                         {% else %}
-                        <div class="service-card-image service-card-no-image">
-                            <div class="no-image-placeholder">
-                                <i class="bi bi-image"></i>
+                        <div class="service-card-image">
+                            <div class="service-icon-fallback">
+                                <!-- Fallback иконки по названию услуги -->
+                                {% if "Вывески" in service.name or "вывеска" in service.name %}
+                                    <img src="{% static 'img/Illuminated signage.png' %}" alt="{{ service.name }}">
+                                {% elif "Неон" in service.name or "неон" in service.name %}
+                                    <i class="bi bi-lightning-charge-fill" style="font-size: 4rem; color: var(--primary-color);"></i>
+                                {% elif "Объемные буквы" in service.name %}
+                                    <img src="{% static 'img/Three-dimensional letters.png' %}" alt="{{ service.name }}">
+                                {% elif "Короба консоли" in service.name or "Короб" in service.name %}
+                                    <img src="{% static 'img/Console boxes.png' %}" alt="{{ service.name }}">
+                                {% elif "Брендирование" in service.name or "авто" in service.name or "Оклейка" in service.name %}
+                                    <img src="{% static 'img/Car branding.png' %}" alt="{{ service.name }}">
+                                {% elif "Полиграфия" in service.name %}
+                                    <img src="{% static 'img/Polygraphy.png' %}" alt="{{ service.name }}">
+                                {% elif "Наклейки" in service.name or "этикетки" in service.name or "Стикеры" in service.name %}
+                                    <img src="{% static 'img/Stickers.png' %}" alt="{{ service.name }}">
+                                {% elif "Широкоформатная печать" in service.name or "печать" in service.name or "Холсты" in service.name %}
+                                    <img src="{% static 'img/Large format printing.png' %}" alt="{{ service.name }}">
+                                {% elif "Стенды" in service.name %}
+                                    <img src="{% static 'img/Stands.png' %}" alt="{{ service.name }}">
+                                {% elif "Оформление мест продаж" in service.name or "интерьер" in service.name %}
+                                    <img src="{% static 'img/Application to clothing.png' %}" alt="{{ service.name }}">
+                                {% elif "Нанесение на одежду" in service.name or "одежда" in service.name %}
+                                    <img src="{% static 'img/Application to clothing.png' %}" alt="{{ service.name }}">
+                                {% else %}
+                                    <i class="bi bi-image" style="font-size: 4rem; color: var(--primary-color);"></i>
+                                {% endif %}
                             </div>
                         </div>
                         {% endif %}
