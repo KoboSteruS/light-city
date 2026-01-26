@@ -154,7 +154,7 @@
                     <div class="portfolio-album-grid">
                         {% for work in album.works %}
                         <div class="portfolio-album-item">
-                            {% if work.image %}
+                            {% if work.image and work.image.name %}
                             <img src="{{ work.image.url }}" alt="{{ work.title }}" class="img-fluid">
                             {% else %}
                             <div class="portfolio-album-placeholder-item">

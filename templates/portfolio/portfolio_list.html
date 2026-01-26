@@ -61,7 +61,7 @@
                 <div class="portfolio-work-card" 
                      data-portfolio-id="{{ item.id }}"
                      data-portfolio-index="{{ forloop.counter0 }}">
-                    {% if item.image %}
+                    {% if item.image and item.image.name %}
                     <div class="portfolio-work-image">
                         <img src="{{ item.image.url }}" 
                              alt="{{ item.title }}"
@@ -183,7 +183,7 @@
                 id: {{ item.id }},
                 title: "{{ item.title|escapejs }}",
                 description: "{{ item.description|striptags|escapejs }}",
-                image: "{{ item.image.url|default:'' }}",
+                image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
                 service: "{{ item.service.name|default:''|escapejs }}",
                 client: "{{ item.client|default:''|escapejs }}"
             }{% if not forloop.last %},{% endif %}
