@@ -69,8 +69,8 @@ class HomeView(TemplateView):
                 service=neon_service
             ).select_related('service', 'category')[:4] if neon_service else []
             
-            # Альбом 4: Интерьерные решения (Холсты)
-            interior_service = Service.objects.filter(slug='kholsty', is_active=True).first()
+            # Альбом 4: Интерьерные решения
+            interior_service = Service.objects.filter(slug='interiernye-resheniia', is_active=True).first()
             interior_works = PortfolioItem.objects.filter(
                 is_active=True,
                 service=interior_service
@@ -104,7 +104,7 @@ class HomeView(TemplateView):
                 },
                 {
                     'title': 'Интерьерные решения',
-                    'slug': 'kholsty',
+                    'slug': 'interiernye-resheniia',
                     'description': 'Примеры наших работ в категории "интерьерные решения"',
                     'works': list(interior_works),
                     'count': PortfolioItem.objects.filter(is_active=True, service=interior_service).count() if interior_service else 0,

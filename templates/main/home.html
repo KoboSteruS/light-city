@@ -79,7 +79,7 @@
                                     <img src="{% static 'img/Stands.png' %}" alt="{{ service.name }}">
                                 {% elif "одежду" in service.name or "одежда" in service.name or "Нанесение" in service.name %}
                                     <img src="{% static 'img/Application to clothing.png' %}" alt="{{ service.name }}">
-                                {% elif "Холсты" in service.name or "холст" in service.name or "Оформление мест" in service.name %}
+                                {% elif "Интерьерные" in service.name or "интерьерные" in service.name or "Холсты" in service.name or "холст" in service.name or "Оформление мест" in service.name %}
                                     <i class="bi bi-palette-fill" style="font-size: 3rem; color: var(--primary-color);"></i>
                                 {% else %}
                                     <i class="bi bi-box-seam" style="font-size: 3rem; color: var(--primary-color);"></i>
@@ -194,19 +194,21 @@
         
         <div class="row g-4 mb-5">
             {% if settings %}
-            <!-- Contact Card 1: Address -->
+            <!-- Contact Card 1: Telegram -->
+            {% if settings.telegram_link %}
             <div class="col-lg-4 col-md-6">
                 <div class="contact-card">
                     <div class="contact-card-icon">
-                        <i class="bi bi-geo-alt-fill"></i>
+                        <i class="bi bi-telegram"></i>
                     </div>
-                    <h3 class="contact-card-title">Наш офис</h3>
-                    <p class="contact-card-text">{{ settings.address }}</p>
-                    <a href="https://yandex.ru/maps/?ll=34.312838%2C61.788276&mode=poi&poi%5Bpoint%5D=34.312838%2C61.788276&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D226637438315&z=17.6" target="_blank" class="contact-card-link">
-                        Открыть на карте <i class="bi bi-arrow-right"></i>
+                    <h3 class="contact-card-title">Telegram</h3>
+                    <p class="contact-card-text">Напишите нам в Telegram</p>
+                    <a href="{{ settings.telegram_link }}" target="_blank" class="contact-card-link">
+                        Написать в Telegram <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>
             </div>
+            {% endif %}
             
             <!-- Contact Card 2: Phone -->
             <div class="col-lg-4 col-md-6">
