@@ -4,6 +4,18 @@
 {% block title %}Политика конфиденциальности — Яркий Город{% endblock %}
 
 {% block content %}
+<!-- Breadcrumbs -->
+<section class="breadcrumbs">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Политика конфиденциальности</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
 <section class="privacy-policy-section py-5">
     <div class="container">
         <div class="row justify-content-center">

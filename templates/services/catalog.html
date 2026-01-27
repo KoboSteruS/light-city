@@ -4,6 +4,18 @@
 {% block title %}Каталог услуг - Яркий Город{% endblock %}
 
 {% block content %}
+<!-- Breadcrumbs -->
+<section class="breadcrumbs">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'main:home' %}">Главная</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Каталог услуг</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
 <!-- Catalog Header -->
 <section class="catalog-header">
     <div class="container">

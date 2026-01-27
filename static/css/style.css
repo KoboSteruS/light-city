@@ -49,6 +49,14 @@
 
 html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+body {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
 }
 
 /* Убираем все синие borders и outlines */
@@ -274,11 +282,6 @@ h6 { font-size: 1rem; }
     opacity: 0.8;
 }
 
-.footer-logo-image {
-    height: 85px;
-    width: auto;
-    margin-bottom: 1rem;
-}
 
 .logo {
     display: flex;
@@ -1016,45 +1019,78 @@ section {
     padding: 4rem 0 2rem;
 }
 
-.footer-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-}
-
-/* Выравнивание колонок по вертикали */
+/* Выравнивание колонок по вертикали - все элементы на одной линии */
 .footer .row {
     align-items: flex-start;
 }
 
+.footer .row > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Первая колонка с логотипом - выравнивание по верхнему краю */
+.footer .row > div:first-child {
+    padding-top: 0;
+    margin-top: 0;
+}
+
+/* Логотип - без отступов сверху */
+.footer-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.footer-logo-image {
+    height: 85px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+/* Описание под логотипом */
+.footer-description {
+    margin: 0;
+    padding: 0;
+}
+
+/* Навигация и контакты - выравнивание с логотипом */
 .footer-nav-col,
 .footer-contacts-col {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    margin: 0;
+    padding: 0;
 }
 
-/* Выравнивание меню с логотипом - на уровне лого */
-.footer-nav-col .footer-title {
-    margin-top: 0;
-    padding-top: 0;
-    line-height: 1.2;
+.footer-nav-col .footer-title,
+.footer-contacts-col .footer-title {
+    margin: 0 !important;
+    padding: 0 !important;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.2 !important;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+/* Убираем все отступы у h5 в футере */
+.footer h5 {
+    margin: 0 !important;
+    padding: 0 !important;
+    margin-bottom: 1.5rem !important;
 }
 
 /* Сдвиг "Контакты" правее */
 .footer-contacts-title {
     padding-left: 15px;
-}
-
-/* Центрирование содержимого футера */
-.footer .row > div {
-    display: flex;
-    flex-direction: column;
-}
-
-.footer-logo {
-    margin-bottom: 1.5rem;
 }
 
 .footer .logo-text,
@@ -1073,13 +1109,18 @@ section {
 .footer-description {
     color: rgba(255,255,255,0.8);
     line-height: 1.8;
+    margin-top: 0;
+    padding-top: 0;
 }
 
 .footer-title {
     font-size: 1.2rem;
     font-weight: 700;
+    margin: 0;
+    padding: 0;
     margin-bottom: 1.5rem;
     color: var(--white);
+    line-height: 1.2;
 }
 
 .footer-menu {
@@ -1089,7 +1130,7 @@ section {
 }
 
 .footer-menu li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.9rem;
 }
 
 .footer-menu a {
@@ -1111,7 +1152,7 @@ section {
 .footer-contacts li {
     display: flex;
     gap: 10px;
-    margin-bottom: 1rem;
+    margin-bottom: 1.45rem;
     color: rgba(255,255,255,0.8);
 }
 
@@ -1590,6 +1631,86 @@ section {
         padding: 3rem 0 1.5rem;
     }
     
+    /* Мобильная версия футера - центрирование */
+    .footer .container {
+        max-width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .footer .row {
+        margin: 0;
+        max-width: 100%;
+    }
+    
+    .footer .row > div {
+        margin-bottom: 2rem;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .footer .row > div:last-child {
+        margin-bottom: 0;
+    }
+    
+    .footer-logo {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-bottom: 1rem !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .footer-logo-image {
+        margin: 0 auto !important;
+        padding: 0 !important;
+        margin-bottom: 0.5rem !important;
+    }
+    
+    .footer-description {
+        margin: 0 !important;
+        padding: 0 !important;
+        text-align: center !important;
+    }
+    
+    .footer-nav-col,
+    .footer-contacts-col {
+        margin: 0 !important;
+        padding: 0 !important;
+        align-items: center !important;
+    }
+    
+    .footer-nav-col .footer-title,
+    .footer-contacts-col .footer-title,
+    .footer h5 {
+        margin: 0 auto !important;
+        padding: 0 !important;
+        margin-bottom: 1.5rem !important;
+        text-align: center !important;
+    }
+    
+    .footer-menu {
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .footer-menu li {
+        text-align: center !important;
+    }
+    
+    .footer-contacts {
+        align-items: center !important;
+    }
+    
+    .footer-contacts li {
+        justify-content: center !important;
+        text-align: center !important;
+    }
+    
+    .social-links {
+        justify-content: center !important;
+    }
+    
     .cookie-consent-content {
         flex-direction: column;
         text-align: center;
@@ -1667,6 +1788,50 @@ section {
     .btn {
         padding: 10px 24px;
         font-size: 0.9rem;
+    }
+    
+    /* Футер для очень маленьких экранов - центрирование */
+    .footer {
+        padding: 2.5rem 0 1.5rem;
+    }
+    
+    .footer .row > div {
+        margin-bottom: 2rem !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .footer-logo-image {
+        height: 70px !important;
+        margin: 0 auto 0.5rem !important;
+    }
+    
+    .footer-nav-col .footer-title,
+    .footer-contacts-col .footer-title,
+    .footer h5 {
+        font-size: 1.1rem !important;
+        margin: 0 auto 1.25rem !important;
+        text-align: center !important;
+    }
+    
+    .footer-description {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        text-align: center !important;
+    }
+    
+    .footer-menu {
+        align-items: center !important;
+        text-align: center !important;
+    }
+    
+    .footer-menu li {
+        text-align: center !important;
+    }
+    
+    .footer-contacts li {
+        justify-content: center !important;
+        text-align: center !important;
     }
     
     .service-card {
