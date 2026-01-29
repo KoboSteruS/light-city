@@ -637,7 +637,7 @@ section {
 @media (max-width: 768px) {
     .portfolio-album-grid {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
         gap: 0.75rem;
         min-height: 350px;
     }
@@ -1043,7 +1043,7 @@ section {
     align-items: flex-start;
     margin: 0;
     padding: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .footer-logo-image {
@@ -1151,7 +1151,6 @@ section {
 
 .footer-contacts li {
     display: flex;
-    gap: 10px;
     margin-bottom: 1.45rem;
     color: rgba(255,255,255,0.8);
 }
@@ -2743,21 +2742,6 @@ section {
     overflow: hidden;
 }
 
-.process-section::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 5%;
-    right: 5%;
-    height: 2px;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        var(--primary-color) 25%, 
-        var(--primary-color) 75%, 
-        transparent 100%);
-    z-index: 0;
-}
-
 .process-step {
     text-align: center;
     position: relative;
@@ -3188,9 +3172,6 @@ section {
         font-size: 3rem;
     }
     
-    .process-section::before {
-        display: none;
-    }
     
     .about-main-title {
         font-size: 2.5rem;
