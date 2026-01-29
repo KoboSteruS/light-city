@@ -18,20 +18,41 @@
      * Инициализация модального окна
      */
     function initPortfolioModal() {
-        // Получаем данные из window.portfolioData
-        if (window.portfolioData && window.portfolioData.items) {
+        // Получаем данные из window.portfolioData (приоритет)
+        if (window.portfolioData && window.portfolioData.items && window.portfolioData.items.length > 0) {
             portfolioItems = window.portfolioData.items;
         } else {
             // Если данных нет, собираем их из DOM
+            // Поддерживаем оба формата: обычные карточки и grid-элементы
             portfolioItems = Array.from(document.querySelectorAll('.portfolio-work-card')).map((card, index) => {
-                const img = card.querySelector('.portfolio-work-image img');
-                const title = card.querySelector('.portfolio-work-title')?.textContent.trim() || '';
-                const description = card.querySelector('.portfolio-work-description')?.textContent.trim() || '';
-                const service = card.querySelector('.portfolio-work-service')?.textContent.trim() || '';
-                const client = card.querySelector('.portfolio-work-client span')?.textContent.trim() || '';
+                // Проверяем, это grid-элемент или обычная карточка
+                const isGridItem = card.classList.contains('portfolio-album-item');
+                let img, title, description, service, client;
+                
+                if (isGridItem) {
+                    // Для grid-элементов пытаемся найти данные в window.portfolioData по ID
+                    const portfolioId = parseInt(card.dataset.portfolioId);
+                    if (portfolioId && window.portfolioData && window.portfolioData.items) {
+                        const dataItem = window.portfolioData.items.find(item => item.id === portfolioId);
+                        if (dataItem) {
+                            title = dataItem.title || '';
+                            description = dataItem.description || '';
+                            service = dataItem.service || '';
+                            client = dataItem.client || '';
+                        }
+                    }
+                    img = card.querySelector('img');
+                } else {
+                    // Для обычных карточек берем из DOM
+                    img = card.querySelector('.portfolio-work-image img');
+                    title = card.querySelector('.portfolio-work-title')?.textContent.trim() || '';
+                    description = card.querySelector('.portfolio-work-description')?.textContent.trim() || '';
+                    service = card.querySelector('.portfolio-work-service')?.textContent.trim() || '';
+                    client = card.querySelector('.portfolio-work-client span')?.textContent.trim() || '';
+                }
                 
                 return {
-                    id: card.dataset.portfolioId || index,
+                    id: parseInt(card.dataset.portfolioId) || index,
                     title: title,
                     description: description,
                     image: img ? img.src : '',
@@ -65,7 +86,18 @@
                     return;
                 }
                 
-                currentIndex = parseInt(this.dataset.portfolioIndex) || index;
+                // Находим индекс работы в общем массиве portfolioData
+                const portfolioId = parseInt(this.dataset.portfolioId);
+                if (portfolioId && window.portfolioData && window.portfolioData.items) {
+                    // Ищем по ID в window.portfolioData
+                    currentIndex = window.portfolioData.items.findIndex(item => item.id === portfolioId);
+                    if (currentIndex === -1) {
+                        // Если не нашли по ID, пробуем по индексу
+                        currentIndex = parseInt(this.dataset.portfolioIndex) || index;
+                    }
+                } else {
+                    currentIndex = parseInt(this.dataset.portfolioIndex) || index;
+                }
                 openModal(currentIndex);
             });
         });
@@ -140,18 +172,62 @@
             modalImage.alt = item.title || 'Работа';
         }
 
+        // Формируем понятное название для пользователя
         if (modalTitle) {
-            modalTitle.textContent = item.title || '';
+            let displayTitle = item.title || '';
+            // Если название выглядит как техническое (содержит # или "Пример работы"), заменяем на более понятное
+            if (displayTitle.includes('#') || displayTitle.toLowerCase().includes('пример')) {
+                // Используем название услуги, если есть
+                if (item.service) {
+                    displayTitle = item.service;
+                } else {
+                    // Или просто убираем технические части
+                    displayTitle = displayTitle.replace(/#\d+/g, '').replace(/пример работы:/gi, '').trim();
+                    if (!displayTitle) {
+                        displayTitle = 'Наша работа';
+                    }
+                }
+            }
+            // Если title все еще пустой, используем название услуги или дефолтное значение
+            if (!displayTitle) {
+                displayTitle = item.service || 'Наша работа';
+            }
+            modalTitle.textContent = displayTitle;
         }
 
+        // Очищаем описание от технических комментариев
         if (modalDescription) {
-            modalDescription.textContent = item.description || '';
-            modalDescription.style.display = item.description ? 'block' : 'none';
+            let description = item.description || '';
+            // Убираем HTML теги (если остались после striptags)
+            description = description.replace(/<[^>]*>/g, '');
+            // Убираем технические фразы
+            description = description.replace(/пример работы:.*?[\.\n]/gi, '');
+            description = description.replace(/пример работы.*?[\.\n]/gi, '');
+            description = description.trim();
+            
+            // Нормализуем сравнение - убираем лишние пробелы и приводим к нижнему регистру
+            const normalizedDescription = description.toLowerCase().trim();
+            const normalizedService = (item.service || '').toLowerCase().trim();
+            
+            // Если описание пустое, совпадает с названием услуги или содержит только название услуги, не показываем его
+            if (!description || normalizedDescription === normalizedService || (normalizedDescription.includes(normalizedService) && normalizedDescription.length <= normalizedService.length + 5)) {
+                modalDescription.style.display = 'none';
+            } else {
+                modalDescription.textContent = description;
+                modalDescription.style.display = 'block';
+            }
         }
 
+        // Бейдж услуги - показываем только если название услуги отличается от заголовка
         if (modalService) {
-            modalService.textContent = item.service || '';
-            modalService.style.display = item.service ? 'inline-block' : 'none';
+            const titleText = modalTitle ? modalTitle.textContent : '';
+            // Показываем бейдж только если название услуги отличается от заголовка
+            if (item.service && item.service !== titleText) {
+                modalService.textContent = item.service;
+                modalService.style.display = 'inline-block';
+            } else {
+                modalService.style.display = 'none';
+            }
         }
 
         if (modalClient) {
@@ -225,18 +301,62 @@
             }, 150);
         }
 
+        // Формируем понятное название для пользователя
         if (modalTitle) {
-            modalTitle.textContent = item.title || '';
+            let displayTitle = item.title || '';
+            // Если название выглядит как техническое (содержит # или "Пример работы"), заменяем на более понятное
+            if (displayTitle.includes('#') || displayTitle.toLowerCase().includes('пример')) {
+                // Используем название услуги, если есть
+                if (item.service) {
+                    displayTitle = item.service;
+                } else {
+                    // Или просто убираем технические части
+                    displayTitle = displayTitle.replace(/#\d+/g, '').replace(/пример работы:/gi, '').trim();
+                    if (!displayTitle) {
+                        displayTitle = 'Наша работа';
+                    }
+                }
+            }
+            // Если title все еще пустой, используем название услуги или дефолтное значение
+            if (!displayTitle) {
+                displayTitle = item.service || 'Наша работа';
+            }
+            modalTitle.textContent = displayTitle;
         }
 
+        // Очищаем описание от технических комментариев
         if (modalDescription) {
-            modalDescription.textContent = item.description || '';
-            modalDescription.style.display = item.description ? 'block' : 'none';
+            let description = item.description || '';
+            // Убираем HTML теги (если остались после striptags)
+            description = description.replace(/<[^>]*>/g, '');
+            // Убираем технические фразы
+            description = description.replace(/пример работы:.*?[\.\n]/gi, '');
+            description = description.replace(/пример работы.*?[\.\n]/gi, '');
+            description = description.trim();
+            
+            // Нормализуем сравнение - убираем лишние пробелы и приводим к нижнему регистру
+            const normalizedDescription = description.toLowerCase().trim();
+            const normalizedService = (item.service || '').toLowerCase().trim();
+            
+            // Если описание пустое, совпадает с названием услуги или содержит только название услуги, не показываем его
+            if (!description || normalizedDescription === normalizedService || (normalizedDescription.includes(normalizedService) && normalizedDescription.length <= normalizedService.length + 5)) {
+                modalDescription.style.display = 'none';
+            } else {
+                modalDescription.textContent = description;
+                modalDescription.style.display = 'block';
+            }
         }
 
+        // Бейдж услуги - показываем только если название услуги отличается от заголовка
         if (modalService) {
-            modalService.textContent = item.service || '';
-            modalService.style.display = item.service ? 'inline-block' : 'none';
+            const titleText = modalTitle ? modalTitle.textContent : '';
+            // Показываем бейдж только если название услуги отличается от заголовка
+            if (item.service && item.service !== titleText) {
+                modalService.textContent = item.service;
+                modalService.style.display = 'inline-block';
+            } else {
+                modalService.style.display = 'none';
+            }
         }
 
         if (modalClient) {

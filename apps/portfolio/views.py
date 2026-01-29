@@ -60,5 +60,33 @@ class PortfolioListView(ListView):
         else:
             context['current_service'] = None
         
+        # Группировка работ по услугам (только если нет фильтра)
+        if not context['current_service']:
+            portfolio_albums = []
+            # Берем все активные услуги, у которых есть активные работы (включая без фото)
+            services_with_works = Service.objects.filter(
+                is_active=True,
+                portfolio_works__is_active=True
+            ).distinct().order_by('order', 'name')
+            
+            for service in services_with_works:
+                # Берем все активные работы для услуги, включая те, у которых нет фото
+                works = PortfolioItem.objects.filter(
+                    is_active=True,
+                    service=service
+                ).select_related('service', 'category').order_by('-date_completed', '-created_at')[:6]  # Берем первые 6 работ
+                
+                if works.exists():
+                    portfolio_albums.append({
+                        'title': service.name,
+                        'slug': service.slug,
+                        'description': service.description or f'Примеры наших работ в категории "{service.name}"',
+                        'works': list(works),
+                        'count': PortfolioItem.objects.filter(is_active=True, service=service).count(),
+                        'service': service,
+                    })
+            
+            context['portfolio_albums'] = portfolio_albums
+        
         return context
 

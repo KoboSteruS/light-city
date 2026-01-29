@@ -5,13 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="{% block meta_description %}Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы.{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}реклама, наружная реклама, Петрозаводск, вывески, световые буквы{% endblock %}">
     
+    <!-- Primary Meta Tags -->
     <title>{% block title %}Яркий Город - Рекламное агентство{% endblock %}</title>
+    <meta name="title" content="{% block meta_title %}Яркий Город - Рекламное агентство{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, вывески, световые буквы, оклейка авто.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}реклама, наружная реклама, Петрозаводск, вывески, световые буквы, оклейка авто, неон, интерьерные решения, холсты{% endblock %}">
+    <meta name="author" content="Яркий Город">
+    <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+    <meta name="language" content="Russian">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{% block canonical_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Яркий Город - Рекламное агентство{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, вывески, световые буквы, оклейка авто.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% if settings and settings.logo %}{{ request.scheme }}://{{ request.get_host }}{{ settings.logo.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/Logo.png' %}{% endif %}{% endblock %}">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="Яркий Город">
+    {% if settings %}
+    <meta property="og:phone_number" content="{{ settings.phone }}">
+    {% endif %}
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{% block twitter_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}Яркий Город - Рекламное агентство{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, вывески, световые буквы, оклейка авто.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{% if settings and settings.logo %}{{ request.scheme }}://{{ request.get_host }}{{ settings.logo.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/Logo.png' %}{% endif %}{% endblock %}">
+    
+    <!-- Geo Tags -->
+    {% if settings and settings.address %}
+    <meta name="geo.region" content="RU-KR">
+    <meta name="geo.placename" content="Петрозаводск">
+    {% endif %}
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}"
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+    <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,6 +66,70 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     
     {% block extra_css %}{% endblock %}
+    
+    <!-- Structured Data (Schema.org) -->
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Яркий Город",
+        "description": "Рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, вывески, световые буквы, оклейка авто.",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/Logo.png' %}",
+        {% if settings %}
+        "telephone": "{{ settings.phone }}",
+        "email": "{{ settings.email }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ settings.address }}",
+            "addressLocality": "Петрозаводск",
+            "addressRegion": "Республика Карелия",
+            "addressCountry": "RU"
+        },
+        {% endif %}
+        "priceRange": "$$",
+        "areaServed": {
+            "@type": "City",
+            "name": "Петрозаводск"
+        },
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Услуги рекламного агентства",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Наружная реклама"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Вывески"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Световые буквы"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Оклейка авто"
+                    }
+                }
+            ]
+        }
+    }
+    </script>
+    {% endblock %}
 </head>
 <body>
     <!-- Header -->

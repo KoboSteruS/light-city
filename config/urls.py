@@ -5,18 +5,30 @@ URL конфигурация проекта 'Яркий Город'.
 """
 
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.static import serve
 from decouple import config
+from apps.main.sitemaps import StaticViewSitemap, ServiceSitemap, PortfolioSitemap
 
 # Получаем кастомный URL для админки из настроек
 admin_url = config('ADMIN_URL', default='admin/')
 
+# Sitemaps
+sitemaps = {
+    'static': StaticViewSitemap,
+    'services': ServiceSitemap,
+    'portfolio': PortfolioSitemap,
+}
+
 urlpatterns = [
     # Админка с кастомным URL
     path(admin_url, admin.site.urls),
+    
+    # Sitemap
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     
     # CKEditor
     path('ckeditor/', include('ckeditor_uploader.urls')),

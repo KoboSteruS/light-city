@@ -3,7 +3,9 @@ Views для главной страницы.
 """
 
 from django.views.generic import TemplateView
+from django.http import HttpResponse
 from django.db.models import QuerySet
+from django.template.loader import render_to_string
 from loguru import logger
 from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial
 from apps.services.models import Service
@@ -76,7 +78,14 @@ class HomeView(TemplateView):
                 service=interior_service
             ).select_related('service', 'category')[:4] if interior_service else []
             
-            # Формируем альбомы с работами
+            # Альбом 5: Холсты
+            kholsty_service = Service.objects.filter(slug='kholsty', is_active=True).first()
+            kholsty_works = PortfolioItem.objects.filter(
+                is_active=True,
+                service=kholsty_service
+            ).select_related('service', 'category')[:4] if kholsty_service else []
+            
+            # Формируем список альбомов
             context['portfolio_albums'] = [
                 {
                     'title': 'Вывески',
@@ -123,38 +132,44 @@ class HomeView(TemplateView):
 class AboutView(TemplateView):
     """
     Страница "О нас".
-    
-    Отображает:
-        - Информацию о компании
-        - Преимущества
-        - Отзывы клиентов
     """
-    
     template_name = 'main/about.html'
     
-    def get_context_data(self, **kwargs) -> dict:
-        """Получение контекста для шаблона."""
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        try:
-            # Получаем информацию "О нас"
-            try:
-                context['about'] = AboutUs.objects.filter(
-                    is_active=True
-                ).first()
-            except AboutUs.DoesNotExist:
-                context['about'] = None
-                logger.warning('Блок "О нас" не найден')
-            
-            # Получаем отзывы
-            context['testimonials'] = Testimonial.objects.filter(
-                is_active=True
-            ).order_by('order', '-created_at')[:6]
-            
-            logger.info('Страница "О нас" загружена')
-            
-        except Exception as e:
-            logger.error(f'Ошибка при загрузке страницы "О нас": {e}')
-            
+        context['about'] = AboutUs.objects.filter(is_active=True).first()
         return context
 
+
+class PrivacyView(TemplateView):
+    """
+    Страница политики конфиденциальности.
+    """
+    template_name = 'main/privacy.html'
+
+
+def robots_txt(request):
+    """
+    View для robots.txt
+    """
+    content = """# robots.txt для сайта Яркий Город
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /ckeditor/
+Disallow: /static/admin/
+Disallow: /media/admin/
+
+# Sitemap
+Sitemap: https://yarkiy-gorod.ru/sitemap.xml
+
+# Crawl-delay для некоторых ботов
+User-agent: Yandex
+Crawl-delay: 1
+
+User-agent: Googlebot
+Crawl-delay: 1
+"""
+    return HttpResponse(content, content_type='text/plain')

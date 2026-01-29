@@ -55,54 +55,123 @@
 <!-- Portfolio Grid -->
 <section class="portfolio-grid-section">
     <div class="container">
-        <div class="row g-4">
-            {% for item in portfolio_items %}
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="portfolio-work-card" 
-                     data-portfolio-id="{{ item.id }}"
-                     data-portfolio-index="{{ forloop.counter0 }}">
-                    {% if item.image and item.image.name %}
-                    <div class="portfolio-work-image">
-                        <img src="{{ item.image.url }}" 
-                             alt="{{ item.title }}"
-                             loading="lazy">
-                        <div class="portfolio-work-overlay">
-                            <div class="portfolio-work-info">
-                                {% if item.service %}
-                                <span class="portfolio-work-service">{{ item.service.name }}</span>
-                                {% endif %}
-                            </div>
+        {% if not current_service %}
+            <!-- Показываем работы по категориям - блоки друг за другом -->
+            {% for album in portfolio_albums %}
+            <div class="portfolio-album-block">
+                <div class="row align-items-center g-5">
+                    <!-- Левая колонка: Текст -->
+                    <div class="col-lg-5">
+                        <div class="portfolio-album-content">
+                            <h3 class="portfolio-album-title">{{ album.title }}</h3>
+                            {% if album.description %}
+                            <p class="portfolio-album-description">{{ album.description|striptags|truncatewords:20 }}</p>
+                            {% endif %}
+                            <a href="{% url 'portfolio:list' %}?service={{ album.slug }}" class="btn btn-primary btn-lg">
+                                Смотреть все работы ({{ album.count }})
+                            </a>
                         </div>
                     </div>
-                    {% endif %}
                     
-                    <div class="portfolio-work-content">
-                        <h3 class="portfolio-work-title">{{ item.title }}</h3>
-                        <div class="portfolio-work-description">
-                            {{ item.description|striptags|truncatewords:15 }}
+                    <!-- Правая колонка: Сетка работ -->
+                    <div class="col-lg-7">
+                        <div class="portfolio-album-grid portfolio-list-grid">
+                            {% for work in album.works %}
+                            <div class="portfolio-album-item portfolio-work-card" 
+                                 data-portfolio-id="{{ work.id }}"
+                                 data-portfolio-index="{{ forloop.counter0 }}"
+                                 data-service-slug="{{ album.slug }}">
+                                {% if work.image and work.image.name %}
+                                <img src="{{ work.image.url }}" 
+                                     alt="{{ work.title }}"
+                                     loading="lazy"
+                                     class="img-fluid">
+                                {% else %}
+                                <div class="portfolio-album-placeholder-item">
+                                    <i class="bi bi-image"></i>
+                                    <span class="placeholder-text">{{ work.title|truncatewords:3 }}</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% empty %}
+                            <div class="no-portfolio">
+                                <p>Работы не найдены</p>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% if item.client %}
-                        <div class="portfolio-work-client">
-                            <i class="bi bi-briefcase"></i>
-                            <span>{{ item.client }}</span>
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="col-12">
-                <div class="no-portfolio">
-                    <p>Работы не найдены</p>
-                </div>
+            <div class="no-portfolio">
+                <p>Работы не найдены</p>
             </div>
             {% endfor %}
-        </div>
+        {% else %}
+            <!-- Обычный формат с карточками при фильтре -->
+            <div class="row g-4">
+                {% for item in portfolio_items %}
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="portfolio-work-card" 
+                         data-portfolio-id="{{ item.id }}"
+                         data-portfolio-index="{{ forloop.counter0 }}">
+                        {% if item.image and item.image.name %}
+                        <div class="portfolio-work-image">
+                            <img src="{{ item.image.url }}" 
+                                 alt="{{ item.title }}"
+                                 loading="lazy">
+                            <div class="portfolio-work-overlay">
+                                <div class="portfolio-work-info">
+                                    {% if item.service %}
+                                    <span class="portfolio-work-service">{{ item.service.name }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="portfolio-work-content">
+                            {% if "#" in item.title or "пример" in item.title|lower %}
+                                <h3 class="portfolio-work-title">{% if item.service %}{{ item.service }}{% else %}Наша работа{% endif %}</h3>
+                            {% else %}
+                                <h3 class="portfolio-work-title">{{ item.title }}</h3>
+                            {% endif %}
+                            <div class="portfolio-work-description">
+                                {% with desc=item.description|striptags|truncatewords:15 %}
+                                    {% if "пример работы" in desc|lower %}
+                                        {% if item.service %}
+                                            {{ item.service }}
+                                        {% else %}
+                                            {{ desc|truncatewords:10 }}
+                                        {% endif %}
+                                    {% else %}
+                                        {{ desc }}
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                            {% if item.client %}
+                            <div class="portfolio-work-client">
+                                <i class="bi bi-briefcase"></i>
+                                <span>{{ item.client }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="no-portfolio">
+                        <p>Работы не найдены</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </section>
 
-<!-- Pagination -->
-{% if is_paginated %}
+<!-- Pagination - показываем только при наличии фильтра -->
+{% if is_paginated and current_service %}
 <section class="portfolio-pagination">
     <div class="container">
         <nav aria-label="Навигация по страницам">
@@ -110,7 +179,7 @@
                 {% if page_obj.has_previous %}
                 <li class="page-item">
                     <a class="page-link" 
-                       href="?page={{ page_obj.previous_page_number }}{% if current_service %}&service={{ current_service.slug }}{% endif %}">
+                       href="?page={{ page_obj.previous_page_number }}&service={{ current_service.slug }}">
                         ← Назад
                     </a>
                 </li>
@@ -119,7 +188,7 @@
                 {% for num in page_obj.paginator.page_range %}
                 <li class="page-item {% if page_obj.number == num %}active{% endif %}">
                     <a class="page-link" 
-                       href="?page={{ num }}{% if current_service %}&service={{ current_service.slug }}{% endif %}">
+                       href="?page={{ num }}&service={{ current_service.slug }}">
                         {{ num }}
                     </a>
                 </li>
@@ -128,7 +197,7 @@
                 {% if page_obj.has_next %}
                 <li class="page-item">
                     <a class="page-link" 
-                       href="?page={{ page_obj.next_page_number }}{% if current_service %}&service={{ current_service.slug }}{% endif %}">
+                       href="?page={{ page_obj.next_page_number }}&service={{ current_service.slug }}">
                         Вперед →
                     </a>
                 </li>
@@ -178,16 +247,31 @@
     // Передаем данные о работах в JavaScript
     window.portfolioData = {
         items: [
-            {% for item in portfolio_items %}
-            {
-                id: {{ item.id }},
-                title: "{{ item.title|escapejs }}",
-                description: "{{ item.description|striptags|escapejs }}",
-                image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
-                service: "{{ item.service.name|default:''|escapejs }}",
-                client: "{{ item.client|default:''|escapejs }}"
-            }{% if not forloop.last %},{% endif %}
-            {% endfor %}
+            {% if not current_service %}
+                {% for album in portfolio_albums %}
+                    {% for item in album.works %}
+                    {
+                        id: {{ item.id }},
+                        title: "{{ item.title|escapejs }}",
+                        description: "{{ item.description|striptags|escapejs }}",
+                        image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
+                        service: "{{ item.service.name|default:''|escapejs }}",
+                        client: "{{ item.client|default:''|escapejs }}"
+                    }{% if not forloop.last or not forloop.parentloop.last %},{% endif %}
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                {% for item in portfolio_items %}
+                {
+                    id: {{ item.id }},
+                    title: "{{ item.title|escapejs }}",
+                    description: "{{ item.description|striptags|escapejs }}",
+                    image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
+                    service: "{{ item.service.name|default:''|escapejs }}",
+                    client: "{{ item.client|default:''|escapejs }}"
+                }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            {% endif %}
         ],
         currentIndex: 0
     };

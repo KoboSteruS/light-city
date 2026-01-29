@@ -1,0 +1,20 @@
+# robots.txt для сайта Яркий Город
+# https://www.robotstxt.org/robotstxt.html
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /ckeditor/
+Disallow: /static/admin/
+Disallow: /media/admin/
+
+# Sitemap
+Sitemap: https://yarkiy-gorod.ru/sitemap.xml
+
+# Crawl-delay для некоторых ботов
+User-agent: Yandex
+Crawl-delay: 1
+
+User-agent: Googlebot
+Crawl-delay: 1
+
