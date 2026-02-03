@@ -87,12 +87,16 @@
                 }
             }
             
-            // Валидация сообщения
-            if (messageInput && messageInput.value.trim().length < 10) {
-                showError(messageInput, 'Сообщение должно содержать минимум 10 символов');
-                isValid = false;
-            } else if (messageInput) {
-                clearError(messageInput);
+            // Валидация сообщения (опциональное поле - проверяем только если заполнено)
+            if (messageInput) {
+                const messageValue = messageInput.value.trim();
+                // Если поле заполнено, проверяем минимальную длину
+                if (messageValue.length > 0 && messageValue.length < 10) {
+                    showError(messageInput, 'Сообщение должно содержать минимум 10 символов');
+                    isValid = false;
+                } else {
+                    clearError(messageInput);
+                }
             }
             
             if (!isValid) {

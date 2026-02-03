@@ -64,7 +64,9 @@ class ContactMessage(BaseModel):
     
     message = models.TextField(
         verbose_name='Сообщение',
-        help_text='Текст обращения'
+        help_text='Текст обращения',
+        blank=True,
+        null=True
     )
     
     status = models.CharField(
