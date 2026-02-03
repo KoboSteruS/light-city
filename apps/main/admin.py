@@ -3,6 +3,7 @@
 """
 
 from django.contrib import admin
+from django import forms
 from django.utils.html import format_html
 from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial, TelegramChat
 
@@ -42,17 +43,95 @@ class SliderAdmin(admin.ModelAdmin):
     image_preview.short_description = 'Превью'
 
 
+class DecimalDotWidget(forms.TextInput):
+    """Виджет для DecimalField, который использует точку вместо запятой."""
+    
+    input_type = 'text'
+    
+    def format_value(self, value):
+        """Форматируем значение с точкой."""
+        if value is None or value == '':
+            return ''
+        # Преобразуем Decimal в строку с точкой
+        if hasattr(value, 'quantize'):
+            # Это Decimal объект - форматируем с точкой
+            return format(value, '.2f')
+        # Это строка или число - заменяем запятую на точку
+        value_str = str(value).strip()
+        # Заменяем запятую на точку
+        value_str = value_str.replace(',', '.')
+        return value_str
+    
+    def value_from_datadict(self, data, files, name):
+        """Получаем значение из формы и заменяем запятую на точку."""
+        value = data.get(name)
+        if value:
+            # Преобразуем в строку
+            value = str(value).strip()
+            # Заменяем запятую на точку
+            value = value.replace(',', '.')
+            # Удаляем все символы кроме цифр и точки (оставляем только одну точку)
+            import re
+            # Разделяем на части до и после точки
+            parts = value.split('.')
+            if len(parts) > 2:
+                # Если несколько точек, оставляем только первую
+                value = parts[0] + '.' + ''.join(parts[1:])
+            # Удаляем все нецифровые символы кроме точки
+            value = re.sub(r'[^\d.]', '', value)
+            return value
+        return value
+
+
+class AboutUsAdminForm(forms.ModelForm):
+    """Форма для админки AboutUs с кастомными виджетами для Decimal полей."""
+    
+    subtitle_margin_bottom = forms.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        required=False,
+        widget=DecimalDotWidget(attrs={'step': '0.01', 'min': '0', 'placeholder': '1.0'}),
+        localize=False
+    )
+    
+    paragraph_margin_bottom = forms.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        required=False,
+        widget=DecimalDotWidget(attrs={'step': '0.01', 'min': '0', 'placeholder': '0.75'}),
+        localize=False
+    )
+    
+    class Meta:
+        model = AboutUs
+        fields = '__all__'
+        field_classes = {
+            'subtitle_margin_bottom': forms.DecimalField,
+            'paragraph_margin_bottom': forms.DecimalField,
+        }
+
+
 @admin.register(AboutUs)
 class AboutUsAdmin(admin.ModelAdmin):
     """Админка для блока 'О нас'."""
+    
+    form = AboutUsAdminForm
     
     list_display = ('title', 'is_active', 'image_preview', 'created_at')
     list_filter = ('is_active', 'created_at')
     search_fields = ('title', 'description')
     
     fieldsets = (
+        ('Заголовки', {
+            'fields': ('title', 'subtitle'),
+            'description': 'Заголовок и подзаголовок, отображаемые на странице "О нас"'
+        }),
         ('Контент', {
-            'fields': ('title', 'description', 'image')
+            'fields': ('description', 'image')
+        }),
+        ('Отступы', {
+            'fields': ('subtitle_margin_bottom', 'paragraph_margin_bottom'),
+            'description': 'Настройка расстояний между элементами текста (в rem единицах). Используйте точку (.) в качестве разделителя, например: 1.0, 0.75'
         }),
         ('Настройки', {
             'fields': ('is_active',)

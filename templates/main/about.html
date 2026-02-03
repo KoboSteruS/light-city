@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load decimal_format %}
 
 {% block title %}О нас - Яркий Город{% endblock %}
 
@@ -23,11 +24,20 @@
             <!-- Левая колонка: Текст -->
             <div class="col-lg-6">
                 <div class="about-content-modern">
-                    <h1 class="about-title-modern">Яркий город</h1>
-                    <p class="about-tagline">Делаем ваш бизнес заметным в Петрозаводске</p>
+                    <h1 class="about-title-modern">{% if about and about.title %}{{ about.title }}{% else %}Яркий город{% endif %}</h1>
+                    {% if about and about.subtitle %}
+                    <p class="about-tagline" style="margin-bottom: {% if about.subtitle_margin_bottom %}{{ about.subtitle_margin_bottom|decimal_dot }}{% else %}1.00{% endif %}rem !important;">{{ about.subtitle }}</p>
+                    {% else %}
+                    <p class="about-tagline" style="margin-bottom: {% if about and about.subtitle_margin_bottom %}{{ about.subtitle_margin_bottom|decimal_dot }}{% else %}1.00{% endif %}rem !important;">Делаем ваш бизнес заметным в Петрозаводске</p>
+                    {% endif %}
                     
                     {% if about %}
-                    <div class="about-text-modern">
+                    <div class="about-text-modern" style="--paragraph-margin: {% if about.paragraph_margin_bottom %}{{ about.paragraph_margin_bottom|decimal_dot }}{% else %}0.75{% endif %}rem;">
+                        <style>
+                            .about-text-modern p {
+                                margin-bottom: {% if about.paragraph_margin_bottom %}{{ about.paragraph_margin_bottom|decimal_dot }}{% else %}0.75{% endif %}rem !important;
+                            }
+                        </style>
                         {{ about.description|safe }}
                     </div>
                     {% else %}

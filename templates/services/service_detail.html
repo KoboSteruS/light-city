@@ -55,19 +55,25 @@
                             {{ service.description|safe }}
                         </div>
                         
+                        {% if service.materials %}
                         <div class="service-materials">
                             <h4><i class="bi bi-tools"></i> Материалы:</h4>
-                            <p>влагоустойчивый пластик, алюминиевый профиль для каркаса, яркие светодиоды для подсветки.</p>
+                            <p>{{ service.materials }}</p>
                         </div>
+                        {% endif %}
                         
+                        {% if service.completion_time %}
                         <div class="service-timeline">
                             <h4><i class="bi bi-clock"></i> Сроки выполнения:</h4>
-                            <p>от 5 рабочих дней</p>
+                            <p>{{ service.completion_time }}</p>
                         </div>
+                        {% endif %}
                         
+                        {% if service.features %}
                         <div class="service-notes">
-                            <h4><i class="bi bi-star"></i> Привлекательная подсветка, надежная конструкция, любые формы. и размеры</h4>
+                            <h4><i class="bi bi-star"></i> {{ service.features }}</h4>
                         </div>
+                        {% endif %}
                     </div>
                     
                     <!-- Order Button -->

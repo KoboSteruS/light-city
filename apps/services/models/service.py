@@ -101,6 +101,28 @@ class Service(BaseModel):
         help_text='Отображать услугу на сайте'
     )
     
+    materials = models.TextField(
+        verbose_name='Материалы',
+        help_text='Список используемых материалов (например: влагоустойчивый пластик, алюминиевый профиль)',
+        blank=True,
+        null=True
+    )
+    
+    completion_time = models.CharField(
+        max_length=100,
+        verbose_name='Сроки выполнения',
+        help_text='Сроки выполнения работы (например: от 5 рабочих дней)',
+        blank=True,
+        null=True
+    )
+    
+    features = models.TextField(
+        verbose_name='Особенности',
+        help_text='Особенности и преимущества услуги',
+        blank=True,
+        null=True
+    )
+    
     class Meta:
         verbose_name = 'Услуга'
         verbose_name_plural = 'Услуги'

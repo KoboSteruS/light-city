@@ -21,7 +21,16 @@ class AboutUs(BaseModel):
     title = models.CharField(
         max_length=200,
         verbose_name='Заголовок',
+        help_text='Основной заголовок (например: Яркий город)',
         default='О нас'
+    )
+    
+    subtitle = models.CharField(
+        max_length=300,
+        verbose_name='Подзаголовок',
+        help_text='Подзаголовок под основным заголовком (например: Делаем ваш бизнес заметным в Петрозаводске)',
+        blank=True,
+        null=True
     )
     
     description = RichTextField(
@@ -40,6 +49,22 @@ class AboutUs(BaseModel):
         default=True,
         verbose_name='Активен',
         help_text='Отображать блок на сайте'
+    )
+    
+    subtitle_margin_bottom = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=1.0,
+        verbose_name='Отступ под подзаголовком (rem)',
+        help_text='Расстояние между подзаголовком и текстом (в rem, например: 0.5, 1.0, 1.5). Используйте точку (.) в качестве разделителя.'
+    )
+    
+    paragraph_margin_bottom = models.DecimalField(
+        max_digits=4,
+        decimal_places=2,
+        default=0.75,
+        verbose_name='Отступ между абзацами (rem)',
+        help_text='Расстояние между абзацами текста (в rem, например: 0.5, 0.75, 1.0). Используйте точку (.) в качестве разделителя.'
     )
     
     class Meta:

@@ -39,6 +39,10 @@ class ServiceAdmin(admin.ModelAdmin):
         ('Основная информация', {
             'fields': ('name', 'category', 'description')
         }),
+        ('Подробности об услуге', {
+            'fields': ('materials', 'completion_time', 'features'),
+            'description': 'Дополнительная информация об услуге, отображаемая на странице детального просмотра'
+        }),
         ('Изображения', {
             'fields': ('icon', 'image')
         }),
