@@ -18,86 +18,113 @@
      * Инициализация модального окна
      */
     function initPortfolioModal() {
+        console.log('Initializing portfolio modal...');
+        
         // Получаем данные из window.portfolioData (приоритет)
-        if (window.portfolioData && window.portfolioData.items && window.portfolioData.items.length > 0) {
+        if (window.portfolioData && window.portfolioData.items && Array.isArray(window.portfolioData.items) && window.portfolioData.items.length > 0) {
             portfolioItems = window.portfolioData.items;
+            console.log('Loaded from window.portfolioData:', portfolioItems.length, 'items');
         } else {
-            // Если данных нет, собираем их из DOM
-            // Поддерживаем оба формата: обычные карточки и grid-элементы
-            portfolioItems = Array.from(document.querySelectorAll('.portfolio-work-card')).map((card, index) => {
-                // Проверяем, это grid-элемент или обычная карточка
-                const isGridItem = card.classList.contains('portfolio-album-item');
-                let img, title, description, service, client;
-                
-                if (isGridItem) {
-                    // Для grid-элементов пытаемся найти данные в window.portfolioData по ID
-                    const portfolioId = parseInt(card.dataset.portfolioId);
-                    if (portfolioId && window.portfolioData && window.portfolioData.items) {
-                        const dataItem = window.portfolioData.items.find(item => item.id === portfolioId);
-                        if (dataItem) {
-                            title = dataItem.title || '';
-                            description = dataItem.description || '';
-                            service = dataItem.service || '';
-                            client = dataItem.client || '';
-                        }
-                    }
-                    img = card.querySelector('img');
-                } else {
-                    // Для обычных карточек берем из DOM
-                    img = card.querySelector('.portfolio-work-image img');
-                    title = card.querySelector('.portfolio-work-title')?.textContent.trim() || '';
-                    description = card.querySelector('.portfolio-work-description')?.textContent.trim() || '';
-                    service = card.querySelector('.portfolio-work-service')?.textContent.trim() || '';
-                    client = card.querySelector('.portfolio-work-client span')?.textContent.trim() || '';
-                }
-                
-                return {
-                    id: parseInt(card.dataset.portfolioId) || index,
-                    title: title,
-                    description: description,
-                    image: img ? img.src : '',
-                    service: service,
-                    client: client
-                };
-            });
+            console.log('window.portfolioData not found or empty');
+            return;
         }
 
         // Если работ нет, выходим
-        if (portfolioItems.length === 0) {
+        if (!portfolioItems || portfolioItems.length === 0) {
+            console.log('No portfolio items found');
             return;
         }
 
         const modal = document.getElementById('portfolioModal');
         if (!modal) {
+            console.error('Modal element not found');
             return;
         }
 
         // Обработчики для карточек
-        document.querySelectorAll('.portfolio-work-card').forEach((card, index) => {
+        const cards = document.querySelectorAll('.portfolio-work-card');
+        console.log('Found', cards.length, 'portfolio cards');
+        
+        cards.forEach((card, index) => {
             card.style.cursor = 'pointer';
+            
             card.addEventListener('click', function(e) {
+                console.log('=== CARD CLICKED ===');
+                console.log('Card:', this);
+                console.log('Target:', e.target);
+                console.log('Dataset:', this.dataset);
+                
                 // Не открываем модалку, если клик по ссылке внутри
                 if (e.target.tagName === 'A' || e.target.closest('a')) {
+                    console.log('Click on link, ignoring');
                     return;
                 }
                 
                 // Не открываем, если клик по кнопке или интерактивному элементу
                 if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                    console.log('Click on button, ignoring');
                     return;
                 }
                 
+                e.preventDefault();
+                e.stopPropagation();
+                
                 // Находим индекс работы в общем массиве portfolioData
-                const portfolioId = parseInt(this.dataset.portfolioId);
-                if (portfolioId && window.portfolioData && window.portfolioData.items) {
-                    // Ищем по ID в window.portfolioData
-                    currentIndex = window.portfolioData.items.findIndex(item => item.id === portfolioId);
-                    if (currentIndex === -1) {
-                        // Если не нашли по ID, пробуем по индексу
-                        currentIndex = parseInt(this.dataset.portfolioIndex) || index;
-                    }
-                } else {
-                    currentIndex = parseInt(this.dataset.portfolioIndex) || index;
+                // Сначала пробуем найти по ID
+                let portfolioId = null;
+                const portfolioIdAttr = this.getAttribute('data-portfolio-id');
+                if (portfolioIdAttr) {
+                    portfolioId = parseInt(portfolioIdAttr, 10);
                 }
+                
+                console.log('Portfolio ID from attribute:', portfolioIdAttr);
+                console.log('Portfolio ID parsed:', portfolioId);
+                console.log('Portfolio items count:', portfolioItems.length);
+                
+                // Если ID валидный, ищем по ID
+                if (portfolioId && !isNaN(portfolioId)) {
+                    currentIndex = portfolioItems.findIndex(item => {
+                        const itemId = typeof item.id === 'string' ? parseInt(item.id, 10) : item.id;
+                        return itemId === portfolioId;
+                    });
+                    console.log('Found index by ID:', currentIndex);
+                } else {
+                    currentIndex = -1;
+                    console.log('No valid ID, will use DOM index');
+                }
+                
+                // Если не нашли по ID, используем fallback - индекс в DOM
+                if (currentIndex === -1) {
+                    const allCards = Array.from(document.querySelectorAll('.portfolio-work-card'));
+                    const domIndex = allCards.indexOf(this);
+                    console.log('Not found by ID, DOM index:', domIndex);
+                    
+                    // Если индекс в DOM валидный и соответствует portfolioItems
+                    if (domIndex >= 0 && domIndex < portfolioItems.length) {
+                        currentIndex = domIndex;
+                        console.log('Using DOM index:', currentIndex);
+                    } else {
+                        // Последний fallback - используем 0
+                        currentIndex = 0;
+                        console.log('Using fallback index 0');
+                    }
+                }
+                
+                // Проверяем, что индекс валидный
+                if (currentIndex < 0 || currentIndex >= portfolioItems.length) {
+                    console.error('Invalid index:', currentIndex, 'Total items:', portfolioItems.length);
+                    // Попробуем открыть с индексом 0
+                    if (portfolioItems.length > 0) {
+                        console.log('Trying to open with index 0');
+                        currentIndex = 0;
+                    } else {
+                        return;
+                    }
+                }
+                
+                console.log('Final index:', currentIndex);
+                console.log('Item:', portfolioItems[currentIndex]);
+                console.log('Calling openModal...');
                 openModal(currentIndex);
             });
         });
@@ -138,7 +165,6 @@
         });
 
         // Обновление состояния стрелок при открытии модалки
-        const bsModal = new bootstrap.Modal(modal);
         modal.addEventListener('show.bs.modal', function() {
             updateNavigationButtons();
         });
@@ -153,12 +179,16 @@
      * Открытие модального окна с указанной работой
      */
     function openModal(index) {
+        console.log('openModal called with index:', index);
+        
         if (index < 0 || index >= portfolioItems.length) {
+            console.error('Invalid index in openModal:', index);
             return;
         }
 
         currentIndex = index;
         const item = portfolioItems[currentIndex];
+        console.log('Opening modal for item:', item);
 
         // Обновляем содержимое модалки
         const modalImage = document.getElementById('portfolioModalImage');
@@ -242,8 +272,32 @@
         // Открываем модалку
         const modal = document.getElementById('portfolioModal');
         if (modal) {
-            const bsModal = new bootstrap.Modal(modal);
-            bsModal.show();
+            console.log('Showing Bootstrap modal');
+            
+            // Проверяем, есть ли Bootstrap
+            if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
+                // Используем существующий экземпляр или создаем новый
+                let bsModal = bootstrap.Modal.getInstance(modal);
+                if (!bsModal) {
+                    bsModal = new bootstrap.Modal(modal, {
+                        backdrop: true,
+                        keyboard: true,
+                        focus: true
+                    });
+                }
+                bsModal.show();
+            } else {
+                // Fallback: открываем через классы
+                console.log('Bootstrap not found, using fallback');
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                document.body.classList.add('modal-open');
+                const backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            }
+        } else {
+            console.error('Modal element not found in openModal');
         }
 
         updateNavigationButtons();
@@ -388,10 +442,42 @@
     }
 
     // Инициализация при загрузке DOM
+    console.log('Portfolio modal script loaded');
+    
+    // Делаем функцию доступной глобально для вызова из inline-скрипта
+    window.initPortfolioModal = initPortfolioModal;
+    
+    // Уведомляем, что скрипт готов
+    window.dispatchEvent(new Event('portfolioModalReady'));
+    
+    // Также пробуем инициализировать автоматически
+    function initialize() {
+        console.log('Auto-initializing portfolio modal...');
+        console.log('Document ready state:', document.readyState);
+        console.log('Window portfolioData:', window.portfolioData);
+        
+        // Ждем немного, чтобы убедиться, что все готово
+        setTimeout(function() {
+            console.log('Starting auto-initialization after delay...');
+            if (window.portfolioData && window.portfolioData.items && window.portfolioData.items.length > 0) {
+                console.log('Portfolio data available:', window.portfolioData.items.length, 'items');
+            } else {
+                console.warn('Portfolio data not available, will try to collect from DOM');
+            }
+            initPortfolioModal();
+        }, 100);
+    }
+
+    // Проверяем состояние документа
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initPortfolioModal);
+        console.log('Document is loading, waiting for DOMContentLoaded...');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOMContentLoaded fired');
+            initialize();
+        });
     } else {
-        initPortfolioModal();
+        console.log('Document already loaded, auto-initializing...');
+        initialize();
     }
 
 })();

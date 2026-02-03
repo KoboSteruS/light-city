@@ -78,8 +78,7 @@
                         <div class="portfolio-album-grid portfolio-list-grid">
                             {% for work in album.works %}
                             <div class="portfolio-album-item portfolio-work-card" 
-                                 data-portfolio-id="{{ work.id }}"
-                                 data-portfolio-index="{{ forloop.counter0 }}"
+                                 {% if work.id %}data-portfolio-id="{{ work.id }}"{% endif %}
                                  data-service-slug="{{ album.slug }}">
                                 {% if work.image and work.image.name %}
                                 <img src="{{ work.image.url }}" 
@@ -208,6 +207,54 @@
 </section>
 {% endif %}
 
+<!-- Portfolio Data for JavaScript - ДОЛЖЕН БЫТЬ ПЕРЕД СКРИПТОМ -->
+<script>
+    // Передаем данные о работах в JavaScript
+    try {
+        (function() {
+            var items = [];
+            {% if not current_service %}
+                {% for album in portfolio_albums %}
+                    {% for item in album.works %}
+                    items.push({
+                        id: {{ item.id|default:0 }},
+                        title: "{{ item.title|default:''|escapejs }}",
+                        description: "{{ item.description|default:''|striptags|escapejs }}",
+                        image: "{% if item.image and item.image.name %}{{ item.image.url|escapejs }}{% endif %}",
+                        service: "{% if item.service and item.service.name %}{{ item.service.name|escapejs }}{% endif %}",
+                        client: "{{ item.client|default:''|escapejs }}"
+                    });
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                {% for item in portfolio_items %}
+                items.push({
+                    id: {{ item.id|default:0 }},
+                    title: {% if item.title %}"{{ item.title|escapejs }}"{% else %}""{% endif %},
+                    description: {% if item.description %}"{{ item.description|striptags|escapejs }}"{% else %}""{% endif %},
+                    image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
+                    service: {% if item.service and item.service.name %}"{{ item.service.name|escapejs }}"{% else %}""{% endif %},
+                    client: {% if item.client %}"{{ item.client|escapejs }}"{% else %}""{% endif %}
+                });
+                {% endfor %}
+            {% endif %}
+            
+            window.portfolioData = {
+                items: items,
+                currentIndex: 0
+            };
+            
+            console.log('Portfolio data set:', window.portfolioData.items.length, 'items');
+        })();
+    } catch (e) {
+        console.error('Error setting portfolio data:', e);
+        window.portfolioData = {
+            items: [],
+            currentIndex: 0
+        };
+    }
+</script>
+
 <!-- Portfolio Modal -->
 <div class="modal fade portfolio-modal" id="portfolioModal" tabindex="-1" aria-labelledby="portfolioModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl portfolio-modal-dialog">
@@ -242,41 +289,15 @@
     </div>
 </div>
 
-<!-- Portfolio Data for JavaScript -->
-<script>
-    // Передаем данные о работах в JavaScript
-    window.portfolioData = {
-        items: [
-            {% if not current_service %}
-                {% for album in portfolio_albums %}
-                    {% for item in album.works %}
-                    {
-                        id: {{ item.id }},
-                        title: "{{ item.title|escapejs }}",
-                        description: "{{ item.description|striptags|escapejs }}",
-                        image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
-                        service: "{{ item.service.name|default:''|escapejs }}",
-                        client: "{{ item.client|default:''|escapejs }}"
-                    }{% if not forloop.last or not forloop.parentloop.last %},{% endif %}
-                    {% endfor %}
-                {% endfor %}
-            {% else %}
-                {% for item in portfolio_items %}
-                {
-                    id: {{ item.id }},
-                    title: "{{ item.title|escapejs }}",
-                    description: "{{ item.description|striptags|escapejs }}",
-                    image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
-                    service: "{{ item.service.name|default:''|escapejs }}",
-                    client: "{{ item.client|default:''|escapejs }}"
-                }{% if not forloop.last %},{% endif %}
-                {% endfor %}
-            {% endif %}
-        ],
-        currentIndex: 0
-    };
-</script>
-
 <script src="{% static 'js/portfolio-modal.js' %}"></script>
+<script>
+    // Инициализируем модалку после загрузки скрипта
+    if (typeof initPortfolioModal === 'function') {
+        console.log('Calling initPortfolioModal from inline script');
+        initPortfolioModal();
+    } else {
+        console.error('initPortfolioModal function not found');
+    }
+</script>
 {% endblock %}
 
