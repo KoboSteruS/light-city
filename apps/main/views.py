@@ -4,10 +4,10 @@ Views для главной страницы.
 
 from django.views.generic import TemplateView
 from django.http import HttpResponse
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from django.template.loader import render_to_string
 from loguru import logger
-from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial
+from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial, Statistic
 from apps.services.models import Service
 from apps.portfolio.models import PortfolioItem
 
@@ -55,35 +55,35 @@ class HomeView(TemplateView):
             vyveski_works = PortfolioItem.objects.filter(
                 is_active=True,
                 service=vyveski_service
-            ).select_related('service', 'category')[:4] if vyveski_service else []
+            ).select_related('service')[:4] if vyveski_service else []
             
             # Альбом 2: Авто (Оклейка авто)
             avto_service = Service.objects.filter(slug='okleika-avto', is_active=True).first()
             avto_works = PortfolioItem.objects.filter(
                 is_active=True,
                 service=avto_service
-            ).select_related('service', 'category')[:4] if avto_service else []
+            ).select_related('service')[:4] if avto_service else []
             
             # Альбом 3: Неон
             neon_service = Service.objects.filter(slug='neon', is_active=True).first()
             neon_works = PortfolioItem.objects.filter(
                 is_active=True,
                 service=neon_service
-            ).select_related('service', 'category')[:4] if neon_service else []
+            ).select_related('service')[:4] if neon_service else []
             
             # Альбом 4: Интерьерные решения
             interior_service = Service.objects.filter(slug='interiernye-resheniia', is_active=True).first()
             interior_works = PortfolioItem.objects.filter(
                 is_active=True,
                 service=interior_service
-            ).select_related('service', 'category')[:4] if interior_service else []
+            ).select_related('service')[:4] if interior_service else []
             
             # Альбом 5: Холсты
             kholsty_service = Service.objects.filter(slug='kholsty', is_active=True).first()
             kholsty_works = PortfolioItem.objects.filter(
                 is_active=True,
                 service=kholsty_service
-            ).select_related('service', 'category')[:4] if kholsty_service else []
+            ).select_related('service')[:4] if kholsty_service else []
             
             # Формируем список альбомов
             context['portfolio_albums'] = [
@@ -138,6 +138,30 @@ class AboutView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['about'] = AboutUs.objects.filter(is_active=True).first()
+        # Получаем активную статистику, отсортированную по порядку
+        statistics = Statistic.objects.filter(
+            is_active=True
+        ).order_by('order')[:4]  # Максимум 4 элемента
+        context['statistics'] = statistics
+        
+        # Находим статистику с годами опыта для бейджа на фото
+        # Ищем среди тех же статистик, что отображаются в блоке
+        years_stat = None
+        for stat in statistics:
+            if 'лет' in stat.label.lower() or 'опыта' in stat.label.lower() or 'рынке' in stat.label.lower():
+                years_stat = stat
+                break
+        
+        # Если не нашли в основных, ищем во всех активных
+        if not years_stat:
+            years_stat = Statistic.objects.filter(
+                is_active=True
+            ).filter(
+                Q(label__icontains='лет') | Q(label__icontains='опыта') | Q(label__icontains='рынке')
+            ).order_by('order').first()
+        
+        context['years_stat'] = years_stat
+        
         return context
 
 

@@ -58,12 +58,21 @@
                     {% else %}
                     <img src="{% static 'img/About.jpg' %}" alt="Яркий город - наш цех" class="img-fluid">
                     {% endif %}
-                    <div class="about-image-badge">
-                        <div class="badge-content">
-                            <div class="badge-number">10+</div>
-                            <div class="badge-text">лет опыта</div>
+                    {% if years_stat %}
+                        <div class="about-image-badge">
+                            <div class="badge-content">
+                                <div class="badge-number" >{{ years_stat.number }}{{ years_stat.suffix }}</div>
+                                <div class="badge-text">лет опыта</div>
+                            </div>
                         </div>
-                    </div>
+                    {% else %}
+                        <div class="about-image-badge">
+                            <div class="badge-content">
+                                <div class="badge-number">10+</div>
+                                <div class="badge-text">лет опыта</div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -71,48 +80,25 @@
 </section>
 
 <!-- Stats Section -->
+{% if statistics %}
 <section class="stats-section">
     <div class="container">
         <div class="row g-4">
+            {% for stat in statistics %}
             <div class="col-lg-3 col-md-6">
                 <div class="stat-card">
                     <div class="stat-icon">
-                        <i class="bi bi-check-circle-fill"></i>
+                        <i class="bi {{ stat.icon_class }}"></i>
                     </div>
-                    <div class="stat-number" data-target="1500">0</div>
-                    <div class="stat-label">Проектов реализовано</div>
+                    <div class="stat-number" data-target="{{ stat.number }}" data-suffix="{{ stat.suffix|default:'' }}">0</div>
+                    <div class="stat-label">{{ stat.label }}</div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="bi bi-people-fill"></i>
-                    </div>
-                    <div class="stat-number" data-target="800">0</div>
-                    <div class="stat-label">Довольных клиентов</div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="bi bi-award-fill"></i>
-                    </div>
-                    <div class="stat-number" data-target="10">0</div>
-                    <div class="stat-label">Лет на рынке</div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="bi bi-lightning-charge-fill"></i>
-                    </div>
-                    <div class="stat-number" data-target="99">0</div>
-                    <div class="stat-label">% в срок</div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>
+{% endif %}
 
 
 
@@ -236,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         stats.forEach(stat => {
             const target = parseInt(stat.getAttribute('data-target'));
+            const suffix = stat.getAttribute('data-suffix') || '';
             const duration = 2000; // 2 seconds
             const increment = target / (duration / 16); // 60fps
             let current = 0;
@@ -243,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const timer = setInterval(() => {
                 current += increment;
                 if (current >= target) {
-                    stat.textContent = target + (stat.parentElement.querySelector('.stat-label').textContent.includes('%') ? '' : '+');
+                    stat.textContent = target + suffix;
                     clearInterval(timer);
                 } else {
                     stat.textContent = Math.floor(current);

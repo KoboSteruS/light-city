@@ -5,7 +5,7 @@ Views для приложения portfolio.
 from django.views.generic import ListView
 from django.db.models import Q
 from .models import PortfolioItem
-from apps.services.models import Service, ServiceCategory
+from apps.services.models import Service
 
 
 class PortfolioListView(ListView):
@@ -20,7 +20,7 @@ class PortfolioListView(ListView):
     
     def get_queryset(self):
         """Получение отфильтрованного списка работ."""
-        queryset = PortfolioItem.objects.filter(is_active=True).select_related('category', 'service')
+        queryset = PortfolioItem.objects.filter(is_active=True).select_related('service')
         
         # Фильтрация по услуге
         service_slug = self.request.GET.get('service')
@@ -74,7 +74,7 @@ class PortfolioListView(ListView):
                 works = PortfolioItem.objects.filter(
                     is_active=True,
                     service=service
-                ).select_related('service', 'category').order_by('-date_completed', '-created_at')[:6]  # Берем первые 6 работ
+                ).select_related('service').order_by('-date_completed', '-created_at')[:6]  # Берем первые 6 работ
                 
                 if works.exists():
                     portfolio_albums.append({

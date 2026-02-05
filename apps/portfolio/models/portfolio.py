@@ -5,7 +5,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 from apps.core.models import BaseModel
-from apps.services.models import ServiceCategory
 
 
 class PortfolioItem(BaseModel):
@@ -14,7 +13,6 @@ class PortfolioItem(BaseModel):
     
     Поля:
         title: Название работы
-        category: Категория
         description: Описание
         image: Главное изображение
         client: Клиент
@@ -27,14 +25,6 @@ class PortfolioItem(BaseModel):
         max_length=200,
         verbose_name='Название работы',
         help_text='Название проекта'
-    )
-    
-    category = models.ForeignKey(
-        ServiceCategory,
-        on_delete=models.PROTECT,
-        related_name='portfolio_items',
-        verbose_name='Категория',
-        help_text='Категория работы (из услуг)'
     )
     
     service = models.ForeignKey(

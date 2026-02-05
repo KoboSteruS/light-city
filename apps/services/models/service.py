@@ -39,16 +39,6 @@ class Service(BaseModel):
         blank=True
     )
     
-    category = models.ForeignKey(
-        'ServiceCategory',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='services',
-        verbose_name='Категория',
-        help_text='Категория для фильтрации'
-    )
-    
     icon = models.ImageField(
         upload_to='services/icons/%Y/%m/',
         verbose_name='Иконка',

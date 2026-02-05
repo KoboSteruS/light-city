@@ -55,8 +55,8 @@
                 <a href="{% url 'services:detail' service.slug %}" class="service-card-link">
                     <div class="service-card">
                         <div class="service-icon">
-                            {% if service.image %}
-                                <img src="{{ service.image.url }}" alt="{{ service.name }}">
+                            {% if service.icon %}
+                                <img src="{{ service.icon.url }}" alt="{{ service.name }}">
                             {% else %}
                                 <!-- Fallback иконки по названию услуги -->
                                 {% if "Вывески" in service.name or "вывеска" in service.name %}

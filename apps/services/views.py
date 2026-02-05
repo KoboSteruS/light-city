@@ -4,7 +4,7 @@ Views для приложения services.
 
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
-from .models import Service, ServiceCategory
+from .models import Service
 from apps.portfolio.models import PortfolioItem
 
 
@@ -22,11 +22,6 @@ class CatalogView(ListView):
         """Получение отфильтрованного списка услуг."""
         queryset = Service.objects.filter(is_active=True)
         
-        # Фильтрация по категории
-        category_slug = self.request.GET.get('category')
-        if category_slug and category_slug != 'all':
-            queryset = queryset.filter(category__slug=category_slug)
-        
         # Поиск по названию
         search_query = self.request.GET.get('search')
         if search_query:
@@ -35,20 +30,11 @@ class CatalogView(ListView):
                 Q(description__icontains=search_query)
             )
         
-        return queryset.select_related('category')
+        return queryset
     
     def get_context_data(self, **kwargs):
         """Добавление дополнительных данных в контекст."""
         context = super().get_context_data(**kwargs)
-        
-        # Все категории для фильтров
-        context['categories'] = ServiceCategory.objects.filter(
-            is_active=True
-        ).prefetch_related('services')
-        
-        # Текущая выбранная категория
-        category_slug = self.request.GET.get('category', 'all')
-        context['current_category'] = category_slug
         
         # Поисковый запрос
         context['search_query'] = self.request.GET.get('search', '')
@@ -69,7 +55,7 @@ class ServiceDetailView(DetailView):
     
     def get_queryset(self):
         """Получение услуги."""
-        return Service.objects.filter(is_active=True).select_related('category')
+        return Service.objects.filter(is_active=True)
     
     def get_context_data(self, **kwargs):
         """Добавление дополнительных данных в контекст."""
@@ -79,18 +65,12 @@ class ServiceDetailView(DetailView):
         context['portfolio_items'] = PortfolioItem.objects.filter(
             is_active=True,
             service=self.object  # Фильтруем только по текущей услуге
-        ).select_related('category', 'service')[:6]
+        ).select_related('service')[:6]
         
-        # Похожие услуги
-        if self.object.category:
-            context['related_services'] = Service.objects.filter(
-                category=self.object.category,
-                is_active=True
-            ).exclude(pk=self.object.pk)[:3]
-        else:
-            context['related_services'] = Service.objects.filter(
-                is_active=True
-            ).exclude(pk=self.object.pk)[:3]
+        # Похожие услуги (любые другие активные услуги)
+        context['related_services'] = Service.objects.filter(
+            is_active=True
+        ).exclude(pk=self.object.pk)[:3]
         
         return context
 

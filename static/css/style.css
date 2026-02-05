@@ -2850,7 +2850,7 @@ section {
 
 .stat-card {
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 2.5rem 2rem;
 }
 
 .stat-icon {
@@ -3550,7 +3550,7 @@ section {
     }
     
     .stat-card {
-        padding: 1.5rem 1rem;
+        padding: 2rem 1.5rem;
     }
     
     .stat-number {

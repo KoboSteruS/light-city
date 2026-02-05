@@ -5,7 +5,7 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
-from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial, TelegramChat
+from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial, TelegramChat, Statistic
 
 
 @admin.register(Slider)
@@ -253,3 +253,29 @@ class TestimonialAdmin(admin.ModelAdmin):
         )
     
     rating_display.short_description = 'Рейтинг'
+
+
+@admin.register(Statistic)
+class StatisticAdmin(admin.ModelAdmin):
+    """Админка для управления статистикой."""
+    
+    list_display = ('label', 'number_display', 'order', 'is_active', 'created_at')
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('label',)
+    list_editable = ('order', 'is_active')
+    ordering = ('order', '-created_at')
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('label', 'number', 'suffix', 'icon_class')
+        }),
+        ('Настройки отображения', {
+            'fields': ('order', 'is_active')
+        }),
+    )
+    
+    def number_display(self, obj):
+        """Отображение числа с суффиксом."""
+        return f"{obj.number}{obj.suffix}"
+    
+    number_display.short_description = 'Значение'

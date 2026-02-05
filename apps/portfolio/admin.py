@@ -12,10 +12,10 @@ class PortfolioItemAdmin(admin.ModelAdmin):
     """Админка для работ портфолио."""
     
     list_display = (
-        'title', 'category', 'client', 'date_completed',
+        'title', 'service', 'client', 'date_completed',
         'is_featured', 'is_active', 'image_preview'
     )
-    list_filter = ('is_active', 'is_featured', 'category', 'date_completed')
+    list_filter = ('is_active', 'is_featured', 'service', 'date_completed')
     search_fields = ('title', 'client', 'description')
     list_editable = ('is_featured', 'is_active')
     date_hierarchy = 'date_completed'
@@ -23,7 +23,7 @@ class PortfolioItemAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Основная информация', {
-            'fields': ('title', 'category', 'service', 'client', 'date_completed')
+            'fields': ('title', 'service', 'client', 'date_completed')
         }),
         ('Контент', {
             'fields': ('description', 'image')
