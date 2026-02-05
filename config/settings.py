@@ -137,6 +137,8 @@ CKEDITOR_CONFIGS = {
         ],
         'height': 300,
         'width': '100%',
+        # Отключаем предупреждение о версии
+        'versionCheck': False,
     },
 }
 

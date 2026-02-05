@@ -1,0 +1,8 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<!-- Скрываем предупреждение CKEditor -->
+<script src="{% static 'js/hide-ckeditor-warning.js' %}"></script>
+{% endblock %}
