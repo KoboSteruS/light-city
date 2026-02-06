@@ -31,14 +31,14 @@
             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                 <a href="{% url 'services:detail' service.slug %}" class="service-card-link">
                     <div class="service-card">
-                        {% if service.image %}
-                        <div class="service-card-image">
-                            <img src="{{ service.image.url }}" 
+                        {% if service.icon %}
+                        <div class="service-card-image service-card-icon">
+                            <img src="{{ service.icon.url }}" 
                                  alt="{{ service.name }}"
                                  loading="lazy">
                         </div>
                         {% else %}
-                        <div class="service-card-image">
+                        <div class="service-card-image service-card-icon">
                             <div class="service-icon-fallback">
                                 <!-- Fallback иконки по названию услуги -->
                                 {% if "Вывески" in service.name or "вывеска" in service.name %}

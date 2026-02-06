@@ -42,7 +42,7 @@ class Service(BaseModel):
     icon = models.ImageField(
         upload_to='services/icons/%Y/%m/',
         verbose_name='Иконка',
-        help_text='Иконка услуги для главной страницы',
+        help_text='Отображается на главной и в каталоге услуг',
         blank=True,
         null=True
     )
@@ -50,7 +50,7 @@ class Service(BaseModel):
     image = models.ImageField(
         upload_to='services/images/%Y/%m/',
         verbose_name='Изображение',
-        help_text='Главное изображение для каталога',
+        help_text='Отображается на странице самой услуги',
         blank=True,
         null=True
     )
