@@ -58,7 +58,10 @@ def send_telegram_message(message: str) -> bool:
         return False
 
 
-def format_contact_message(name: str, phone: str, email: str = '', message: str = '', is_callback: bool = False) -> str:
+def format_contact_message(
+    name: str, phone: str, email: str = '', message: str = '',
+    is_callback: bool = False, contact_preference: str = ''
+) -> str:
     """
     Форматирует сообщение о новой заявке для отправки в Telegram.
     
@@ -68,15 +71,21 @@ def format_contact_message(name: str, phone: str, email: str = '', message: str 
         email: Email (опционально)
         message: Текст сообщения (опционально)
         is_callback: Это заказ звонка?
+        contact_preference: Способ связи (call/message/any)
     
     Returns:
         Отформатированное сообщение
     """
     message_type = "📞 <b>Заказ звонка</b>" if is_callback else "✉️ <b>Новое сообщение</b>"
     
+    pref_labels = {'call': 'Звонок', 'message': 'Сообщение', 'any': 'Без разницы'}
+    pref_display = pref_labels.get(contact_preference, contact_preference or '—')
+    
     text = f"{message_type}\n\n"
     text += f"👤 <b>Имя:</b> {name}\n"
     text += f"📱 <b>Телефон:</b> {phone}\n"
+    if contact_preference:
+        text += f"📲 <b>Способ связи:</b> {pref_display}\n"
     
     if email:
         text += f"📧 <b>Email:</b> {email}\n"

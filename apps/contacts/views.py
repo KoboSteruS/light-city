@@ -20,7 +20,7 @@ class ContactFormView(CreateView):
     """
     
     model = ContactMessage
-    fields = ['name', 'phone', 'email', 'message']
+    fields = ['name', 'phone', 'email', 'message', 'contact_preference']
     template_name = 'contacts/contact_form.html'
     success_url = reverse_lazy('main:home')
     
@@ -55,6 +55,9 @@ class ContactFormView(CreateView):
             else:
                 form.instance.message = service_context
         
+        # Способ связи сохраняется в contact_preference
+        form.instance.contact_preference = self.request.POST.get('contact_preference', '') or None
+        
         # Сохраняем сообщение
         self.object = form.save()
         
@@ -75,7 +78,8 @@ class ContactFormView(CreateView):
                 phone=form.cleaned_data['phone'],
                 email=form.cleaned_data.get('email', ''),
                 message=form.instance.message,
-                is_callback=is_callback
+                is_callback=is_callback,
+                contact_preference=form.instance.contact_preference or ''
             )
             send_telegram_message(telegram_message)
         except Exception as e:

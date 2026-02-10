@@ -23,7 +23,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
     
     fieldsets = (
         ('Информация о клиенте', {
-            'fields': ('name', 'phone', 'email', 'message')
+            'fields': ('name', 'phone', 'email', 'message', 'contact_preference')
         }),
         ('Обработка', {
             'fields': ('status', 'is_read', 'admin_notes')

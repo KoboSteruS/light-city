@@ -181,7 +181,7 @@
                             
                             <li class="nav-item ms-lg-3">
                                 <button type="button" class="btn btn-primary btn-order" data-bs-toggle="modal" data-bs-target="#callbackModal">
-                                    Заказать звонок
+                                    Звонок
                                 </button>
                             </li>
                         </ul>
@@ -294,14 +294,32 @@
                         <div class="callback-icon">
                             <i class="bi bi-telephone-fill"></i>
                         </div>
-                        <h2 class="callback-title">Заказать звонок</h2>
-                        <p class="callback-subtitle">Оставьте свой номер телефона и мы свяжемся с вами в ближайшее время</p>
+                        <h2 class="callback-title">Звонок</h2>
+                        <p class="callback-subtitle">Оставьте свои контакты, и мы свяжемся с вами. Или позвоните нам по телефону 28-09-03</p>
                     </div>
                     
                     <form id="callbackForm" class="callback-form" method="post" action="{% url 'contacts:contact_form' %}">
                         {% csrf_token %}
                         <input type="hidden" name="is_callback" value="true">
                         <input type="hidden" name="service_context" id="serviceContext" value="">
+                        
+                        <div class="form-group mb-3">
+                            <label class="form-label">Способ связи *</label>
+                            <div class="callback-contact-preferences">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="contact_preference" id="prefCall" value="call" required>
+                                    <label class="form-check-label" for="prefCall">Звонок</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="contact_preference" id="prefMessage" value="message">
+                                    <label class="form-check-label" for="prefMessage">Сообщение</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="contact_preference" id="prefAny" value="any">
+                                    <label class="form-check-label" for="prefAny">Без разницы</label>
+                                </div>
+                            </div>
+                        </div>
                         
                         <div class="form-group mb-3">
                             <label for="callbackName" class="form-label">Ваше имя *</label>
@@ -355,6 +373,36 @@
         </div>
     </div>
 
+    <!-- Portfolio Modal (для страниц с портфолио) -->
+    <div class="modal fade portfolio-modal" id="portfolioModal" tabindex="-1" aria-labelledby="portfolioModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl portfolio-modal-dialog">
+            <div class="modal-content portfolio-modal-content">
+                <button type="button" class="btn-close portfolio-modal-close" data-bs-dismiss="modal" aria-label="Закрыть">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+                <div class="portfolio-modal-body">
+                    <div class="portfolio-modal-image-container">
+                        <img id="portfolioModalImage" src="" alt="" class="portfolio-modal-image">
+                        <button class="portfolio-modal-nav portfolio-modal-nav-prev" id="portfolioModalPrev" aria-label="Предыдущая работа">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <button class="portfolio-modal-nav portfolio-modal-nav-next" id="portfolioModalNext" aria-label="Следующая работа">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="portfolio-modal-info">
+                        <div class="portfolio-modal-header">
+                            <h3 id="portfolioModalTitle" class="portfolio-modal-title"></h3>
+                            <span id="portfolioModalService" class="portfolio-modal-service"></span>
+                        </div>
+                        <div id="portfolioModalDescription" class="portfolio-modal-description"></div>
+                        <div id="portfolioModalClient" class="portfolio-modal-client"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Cookie Consent Banner -->
     <div id="cookieConsent" class="cookie-consent">
         <div class="cookie-consent-content">
@@ -370,6 +418,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/portfolio-modal.js' %}"></script>
     
     <!-- Cookie Consent Script -->
     <script>
@@ -496,12 +545,13 @@
                     const modalTitle = callbackModal.querySelector('.callback-title');
                     const modalSubtitle = callbackModal.querySelector('.callback-subtitle');
                     
+                    const newSubtitle = 'Оставьте свои контакты, и мы свяжемся с вами. Или позвоните нам по телефону 28-09-03';
                     if (serviceTitle) {
-                        modalTitle.textContent = 'Заказать ' + serviceTitle.textContent.trim();
-                        modalSubtitle.textContent = 'Оставьте свои контакты, и наш менеджер свяжется с вами для уточнения деталей';
+                        modalTitle.textContent = serviceTitle.textContent.trim();
+                        modalSubtitle.textContent = newSubtitle;
                     } else {
-                        modalTitle.textContent = 'Заказать звонок';
-                        modalSubtitle.textContent = 'Оставьте свой номер телефона и мы свяжемся с вами в ближайшее время';
+                        modalTitle.textContent = 'Звонок';
+                        modalSubtitle.textContent = newSubtitle;
                     }
                 });
             }

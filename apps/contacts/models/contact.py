@@ -69,6 +69,19 @@ class ContactMessage(BaseModel):
         null=True
     )
     
+    contact_preference = models.CharField(
+        max_length=20,
+        verbose_name='Способ связи',
+        help_text='Предпочтительный способ связи: звонок, сообщение или без разницы',
+        blank=True,
+        null=True,
+        choices=[
+            ('call', 'Звонок'),
+            ('message', 'Сообщение'),
+            ('any', 'Без разницы'),
+        ]
+    )
+    
     status = models.CharField(
         max_length=20,
         choices=Status.choices,

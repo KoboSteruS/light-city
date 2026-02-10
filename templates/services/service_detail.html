@@ -99,7 +99,10 @@
             <div class="row g-4">
                 {% for item in portfolio_items %}
                 <div class="col-12 col-sm-6 col-md-4">
-                    <div class="portfolio-card">
+                    <div class="portfolio-card portfolio-work-card" 
+                         data-portfolio-id="{{ item.id }}"
+                         data-portfolio-index="{{ forloop.counter0 }}"
+                         style="cursor: pointer;">
                         {% if item.image %}
                         <div class="portfolio-card-image">
                             <img src="{{ item.image.url }}" 
@@ -107,8 +110,8 @@
                                  loading="lazy">
                             <div class="portfolio-card-overlay">
                                 <h3 class="portfolio-card-title">{{ item.title }}</h3>
-                                {% if item.price %}
-                                <p class="portfolio-card-price">от {{ item.price|floatformat:0 }} ₽</p>
+                                {% if item.service %}
+                                <p class="portfolio-card-price">{{ item.service.name }}</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -124,6 +127,24 @@
         </div>
     </div>
 </section>
+
+<script>
+(function() {
+    var items = [];
+    {% for item in portfolio_items %}
+    items.push({
+        id: {{ item.id|default:0 }},
+        title: {% if item.title %}"{{ item.title|escapejs }}"{% else %}""{% endif %},
+        description: {% if item.description %}"{{ item.description|striptags|escapejs }}"{% else %}""{% endif %},
+        image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
+        service: {% if item.service and item.service.name %}"{{ item.service.name|escapejs }}"{% else %}""{% endif %},
+        client: {% if item.client %}"{{ item.client|escapejs }}"{% else %}""{% endif %}
+    });
+    {% endfor %}
+    window.portfolioData = { items: items, currentIndex: 0 };
+    if (typeof initPortfolioModal === 'function') initPortfolioModal();
+})();
+</script>
 {% endif %}
 {% endblock %}
 

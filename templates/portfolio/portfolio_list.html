@@ -255,41 +255,6 @@
     }
 </script>
 
-<!-- Portfolio Modal -->
-<div class="modal fade portfolio-modal" id="portfolioModal" tabindex="-1" aria-labelledby="portfolioModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl portfolio-modal-dialog">
-        <div class="modal-content portfolio-modal-content">
-            <button type="button" class="btn-close portfolio-modal-close" data-bs-dismiss="modal" aria-label="Закрыть">
-                <i class="bi bi-x-lg"></i>
-            </button>
-            
-            <div class="portfolio-modal-body">
-                <div class="portfolio-modal-image-container">
-                    <img id="portfolioModalImage" src="" alt="" class="portfolio-modal-image">
-                    
-                    <!-- Navigation Arrows -->
-                    <button class="portfolio-modal-nav portfolio-modal-nav-prev" id="portfolioModalPrev" aria-label="Предыдущая работа">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button class="portfolio-modal-nav portfolio-modal-nav-next" id="portfolioModalNext" aria-label="Следующая работа">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                </div>
-                
-                <div class="portfolio-modal-info">
-                    <div class="portfolio-modal-header">
-                        <h3 id="portfolioModalTitle" class="portfolio-modal-title"></h3>
-                        <span id="portfolioModalService" class="portfolio-modal-service"></span>
-                    </div>
-                    <div id="portfolioModalDescription" class="portfolio-modal-description"></div>
-                    <div id="portfolioModalClient" class="portfolio-modal-client"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="{% static 'js/portfolio-modal.js' %}"></script>
 <script>
     // Инициализируем модалку после загрузки скрипта
     if (typeof initPortfolioModal === 'function') {
