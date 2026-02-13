@@ -15,11 +15,12 @@ class PortfolioItemAdmin(admin.ModelAdmin):
         'title', 'service', 'client', 'date_completed',
         'is_featured', 'is_active', 'image_preview'
     )
-    list_filter = ('is_active', 'is_featured', 'service', 'date_completed')
+    list_filter = ('service', 'is_active', 'is_featured', 'date_completed')
     search_fields = ('title', 'client', 'description')
     list_editable = ('is_featured', 'is_active')
     date_hierarchy = 'date_completed'
     ordering = ('-date_completed', '-created_at')
+    list_per_page = 24
     
     fieldsets = (
         ('Основная информация', {

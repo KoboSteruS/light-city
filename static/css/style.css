@@ -1712,8 +1712,12 @@ section {
 
 @media (max-width: 768px) {
     :root {
-        --section-padding: 50px 0;
+        --section-padding: 30px 0;
     }
+    
+    /* Уменьшаем отступы между рядами на мобильных */
+    .g-5 { --bs-gutter-x: 1.5rem; --bs-gutter-y: 1.5rem; }
+    .g-4 { --bs-gutter-x: 1rem; --bs-gutter-y: 1rem; }
     
     .hero-slider {
         height: 60vh;
@@ -1762,7 +1766,7 @@ section {
     }
     
     .footer {
-        padding: 3rem 0 1.5rem;
+        padding: 2rem 0 1rem;
     }
     
     /* Мобильная версия футера - центрирование */
@@ -2683,7 +2687,7 @@ section {
 
 @media (max-width: 768px) {
     .breadcrumbs {
-        padding: 80px 0 15px;
+        padding: 40px 0 12px;
     }
     
     .service-detail {
@@ -2813,7 +2817,6 @@ section {
 .about-image-badge {
     position: absolute;
     bottom: 30px;
-    right: 30px;
     width: 140px;
     height: 140px;
     background: linear-gradient(135deg, var(--primary-color), #ffd700);
@@ -2835,20 +2838,42 @@ section {
 }
 
 .badge-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     color: var(--black);
+    width: 100%;
+    padding: 0.4rem 0.25rem 0 0.25rem;
 }
 
 .badge-number {
     font-size: 2.5rem;
     font-weight: 800;
     line-height: 1;
+    width: 100%;
+    text-align: center;
 }
 
 .badge-text {
     font-size: 0.9rem;
     font-weight: 600;
     margin-top: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Позиции бейджа */
+.about-image-badge-center {
+    left: 50%;
+    margin-left: -70px; /* половина ширины 140px */
+}
+.about-image-badge-right {
+    right: 30px;
+}
+.about-image-badge-left {
+    left: 30px;
 }
 
 /* Stats Section */
@@ -3392,8 +3417,10 @@ section {
         width: 120px;
         height: 120px;
         bottom: 20px;
-        right: 20px;
     }
+    .about-image-badge-center { margin-left: -60px; }
+    .about-image-badge-right { right: 20px; }
+    .about-image-badge-left { left: 20px; }
     
     .badge-number {
         font-size: 2rem;
@@ -3466,7 +3493,7 @@ section {
     
     /* Modern About Page */
     .about-hero-modern {
-        padding: 60px 0;
+        padding: 35px 0;
     }
     
     .about-title-modern {
@@ -3481,8 +3508,10 @@ section {
         width: 100px;
         height: 100px;
         bottom: 15px;
-        right: 15px;
     }
+    .about-image-badge-center { margin-left: -50px; }
+    .about-image-badge-right { right: 15px; }
+    .about-image-badge-left { left: 15px; }
     
     .badge-number {
         font-size: 1.75rem;
@@ -3493,7 +3522,7 @@ section {
     }
     
     .stats-section {
-        padding: 50px 0;
+        padding: 35px 0;
     }
     
     .stat-number {
@@ -3507,7 +3536,7 @@ section {
     .why-us-modern,
     .process-section,
     .testimonials-modern {
-        padding: 60px 0;
+        padding: 35px 0;
     }
     
     .why-card,
@@ -3521,6 +3550,16 @@ section {
         font-size: 2rem;
         margin: 40px auto 1.5rem;
     }
+    
+    /* Уменьшение отступов секций на мобильных */
+    .about-section,
+    .contacts-section-modern {
+        padding: 35px 0 !important;
+    }
+    .portfolio-album-block {
+        margin-bottom: 40px;
+    }
+    .section-header.mb-5 { margin-bottom: 2rem !important; }
 }
 
 @media (max-width: 576px) {
@@ -3550,6 +3589,9 @@ section {
         width: 80px;
         height: 80px;
     }
+    .about-image-badge-center { margin-left: -40px; }
+    .about-image-badge-right { right: 15px; }
+    .about-image-badge-left { left: 15px; }
     
     .badge-number {
         font-size: 1.5rem;

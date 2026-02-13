@@ -67,6 +67,24 @@ class AboutUs(BaseModel):
         help_text='Расстояние между абзацами текста (в rem, например: 0.5, 0.75, 1.0). Используйте точку (.) в качестве разделителя.'
     )
     
+    show_badge = models.BooleanField(
+        default=True,
+        verbose_name='Показывать бейдж «лет опыта»',
+        help_text='Если выключено, жёлтый кружок на фото не отображается'
+    )
+    
+    badge_position = models.CharField(
+        max_length=20,
+        choices=[
+            ('right', 'Справа'),
+            ('center', 'По центру'),
+            ('left', 'Слева'),
+        ],
+        default='right',
+        verbose_name='Позиция бейджа',
+        help_text='Горизонтальное выравнивание бейджа на фото'
+    )
+    
     class Meta:
         verbose_name = 'О нас'
         verbose_name_plural = 'О нас'

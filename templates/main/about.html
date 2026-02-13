@@ -58,17 +58,14 @@
                     {% else %}
                     <img src="{% static 'img/About.jpg' %}" alt="Яркий город - наш цех" class="img-fluid">
                     {% endif %}
-                    {% if years_stat %}
-                        <div class="about-image-badge">
+                    {% if about and about.show_badge %}
+                        <div class="about-image-badge about-image-badge-{{ about.badge_position|default:'right' }}">
                             <div class="badge-content">
-                                <div class="badge-number" >{{ years_stat.number }}{{ years_stat.suffix }}</div>
-                                <div class="badge-text">лет опыта</div>
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="about-image-badge">
-                            <div class="badge-content">
+                                {% if years_stat %}
+                                <div class="badge-number">{{ years_stat.number }}{{ years_stat.suffix }}</div>
+                                {% else %}
                                 <div class="badge-number">10+</div>
+                                {% endif %}
                                 <div class="badge-text">лет опыта</div>
                             </div>
                         </div>

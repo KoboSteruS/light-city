@@ -133,6 +133,10 @@ class AboutUsAdmin(admin.ModelAdmin):
             'fields': ('subtitle_margin_bottom', 'paragraph_margin_bottom'),
             'description': 'Настройка расстояний между элементами текста (в rem единицах). Используйте точку (.) в качестве разделителя, например: 1.0, 0.75'
         }),
+        ('Бейдж «лет опыта» на фото', {
+            'fields': ('show_badge', 'badge_position'),
+            'description': 'Жёлтый кружок с годами опыта. Можно скрыть или изменить позицию (по центру, слева, справа).'
+        }),
         ('Настройки', {
             'fields': ('is_active',)
         }),
