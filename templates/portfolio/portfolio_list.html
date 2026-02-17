@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}Наши работы - Яркий Город{% endblock %}
 
@@ -81,10 +82,13 @@
                                  {% if work.id %}data-portfolio-id="{{ work.id }}"{% endif %}
                                  data-service-slug="{{ album.slug }}">
                                 {% if work.image and work.image.name %}
-                                <img src="{{ work.image.url }}" 
+                                {% thumbnail work.image "500x375" crop="center" quality=85 as thumb %}
+                                <img src="{{ thumb.url }}" 
                                      alt="{{ work.title }}"
                                      loading="lazy"
-                                     class="img-fluid">
+                                     class="img-fluid"
+                                     width="500" height="375">
+                                {% endthumbnail %}
                                 {% else %}
                                 <div class="portfolio-album-placeholder-item">
                                     <i class="bi bi-image"></i>
@@ -116,9 +120,12 @@
                          data-portfolio-index="{{ forloop.counter0 }}">
                         {% if item.image and item.image.name %}
                         <div class="portfolio-work-image">
-                            <img src="{{ item.image.url }}" 
+                            {% thumbnail item.image "500x375" crop="center" quality=85 as thumb %}
+                            <img src="{{ thumb.url }}" 
                                  alt="{{ item.title }}"
-                                 loading="lazy">
+                                 loading="lazy"
+                                 width="500" height="375">
+                            {% endthumbnail %}
                             <div class="portfolio-work-overlay">
                                 <div class="portfolio-work-info">
                                     {% if item.service %}

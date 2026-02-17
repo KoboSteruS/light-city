@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}Главная - Яркий Город | Рекламное агентство{% endblock %}
 
@@ -10,7 +11,7 @@
         <div class="swiper-wrapper">
             {% for slide in slides %}
             <div class="swiper-slide">
-                <div class="hero-slide"{% if slide.image %} style="background-image: url('{{ slide.image.url }}');"{% endif %}>
+                <div class="hero-slide"{% if slide.image %}{% thumbnail slide.image "1200x500" crop="center" quality=85 as im %} style="background-image: url('{{ im.url }}');"{% endthumbnail %}{% endif %}>
                     <div class="hero-overlay"></div>
                     <div class="container">
                         <div class="hero-content">
@@ -56,7 +57,9 @@
                     <div class="service-card">
                         <div class="service-icon">
                             {% if service.icon %}
-                                <img src="{{ service.icon.url }}" alt="{{ service.name }}">
+                                {% thumbnail service.icon "200x200" crop="center" quality=85 as icon_im %}
+                                <img src="{{ icon_im.url }}" alt="{{ service.name }}" width="200" height="200">
+                                {% endthumbnail %}
                             {% else %}
                                 <!-- Fallback иконки по названию услуги -->
                                 {% if "Вывески" in service.name or "вывеска" in service.name %}
@@ -119,7 +122,9 @@
             <div class="col-lg-6">
                 {% if about.image %}
                 <div class="about-image">
-                    <img src="{{ about.image.url }}" alt="{{ about.title }}" class="img-fluid rounded">
+                    {% thumbnail about.image "800x600" quality=85 as about_im %}
+                    <img src="{{ about_im.url }}" alt="{{ about.title }}" class="img-fluid rounded" loading="lazy">
+                    {% endthumbnail %}
                 </div>
                 {% endif %}
             </div>
@@ -151,11 +156,16 @@
                 
                 <!-- Правая колонка: Сетка работ -->
                 <div class="col-lg-7">
-                    <div class="portfolio-album-grid">
+                    <div class="portfolio-album-grid portfolio-list-grid">
                         {% for work in album.works %}
-                        <div class="portfolio-album-item">
+                        <div class="portfolio-album-item portfolio-work-card" 
+                             {% if work.id %}data-portfolio-id="{{ work.id }}"{% endif %}
+                             data-service-slug="{{ album.slug }}"
+                             style="cursor: pointer;">
                             {% if work.image and work.image.name %}
-                            <img src="{{ work.image.url }}" alt="{{ work.title }}" class="img-fluid">
+                            {% thumbnail work.image "500x375" crop="center" quality=85 as thumb %}
+                            <img src="{{ thumb.url }}" alt="{{ work.title }}" class="img-fluid" loading="lazy" width="500" height="375">
+                            {% endthumbnail %}
                             {% else %}
                             <div class="portfolio-album-placeholder-item">
                                 <i class="bi bi-image"></i>
@@ -183,6 +193,28 @@
         {% endfor %}
     </div>
 </section>
+
+{% if portfolio_albums %}
+<script>
+(function() {
+    var items = [];
+    {% for album in portfolio_albums %}
+        {% for work in album.works %}
+        items.push({
+            id: {{ work.id|default:0 }},
+            title: {% if work.title %}"{{ work.title|escapejs }}"{% else %}""{% endif %},
+            description: {% if work.description %}"{{ work.description|striptags|escapejs }}"{% else %}""{% endif %},
+            image: {% if work.image and work.image.name %}"{{ work.image.url|escapejs }}"{% else %}""{% endif %},
+            service: {% if work.service and work.service.name %}"{{ work.service.name|escapejs }}"{% elif album.service and album.service.name %}"{{ album.service.name|escapejs }}"{% else %}""{% endif %},
+            client: {% if work.client %}"{{ work.client|escapejs }}"{% else %}""{% endif %}
+        });
+        {% endfor %}
+    {% endfor %}
+    window.portfolioData = { items: items, currentIndex: 0 };
+    if (typeof initPortfolioModal === 'function') initPortfolioModal();
+})();
+</script>
+{% endif %}
 
 <!-- Contacts Section -->
 <section class="contacts-section-modern" id="contacts">

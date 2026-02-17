@@ -55,7 +55,7 @@ class Command(BaseCommand):
                 'email': 'yarko_ptz@mail.ru',
                 'address': 'г. Петрозаводск, Муезерская улица, 15Ак8',
                 'working_hours': 'Мы открыты с 10:00 до 19:00',
-                'telegram_link': 'https://t.me/yarkogorod',
+                'telegram_link': 'https://t.me/yarkiygorod',
                 'instagram_link': 'https://instagram.com/yarkogorod',
             }
         )

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}{{ service.name }} - Яркий Город{% endblock %}
 
@@ -26,9 +27,12 @@
                 <!-- Service Image -->
                 {% if service.image %}
                 <div class="service-detail-image">
-                    <img src="{{ service.image.url }}" 
+                    {% thumbnail service.image "800x600" quality=85 as svc_im %}
+                    <img src="{{ svc_im.url }}" 
                          alt="{{ service.name }}"
-                         class="img-fluid">
+                         class="img-fluid"
+                         loading="lazy">
+                    {% endthumbnail %}
                 </div>
                 {% endif %}
             </div>
@@ -105,9 +109,12 @@
                          style="cursor: pointer;">
                         {% if item.image %}
                         <div class="portfolio-card-image">
-                            <img src="{{ item.image.url }}" 
+                            {% thumbnail item.image "500x375" crop="center" quality=85 as thumb %}
+                            <img src="{{ thumb.url }}" 
                                  alt="{{ item.title }}"
-                                 loading="lazy">
+                                 loading="lazy"
+                                 width="500" height="375">
+                            {% endthumbnail %}
                             <div class="portfolio-card-overlay">
                                 <h3 class="portfolio-card-title">{{ item.title }}</h3>
                                 {% if item.service %}

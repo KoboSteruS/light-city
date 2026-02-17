@@ -124,6 +124,10 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
 
+# sorl-thumbnail — сжатие и уменьшение изображений для быстрой загрузки
+THUMBNAIL_QUALITY = 85
+THUMBNAIL_PRESERVE_FORMAT = True
+
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load decimal_format %}
+{% load thumbnail %}
 
 {% block title %}О нас - Яркий Город{% endblock %}
 
@@ -54,9 +55,11 @@
             <div class="col-lg-6">
                 <div class="about-image-modern">
                     {% if about and about.image %}
-                    <img src="{{ about.image.url }}" alt="Яркий город - наш цех" class="img-fluid">
+                    {% thumbnail about.image "800x600" quality=85 as about_im %}
+                    <img src="{{ about_im.url }}" alt="Яркий город - наш цех" class="img-fluid" loading="lazy">
+                    {% endthumbnail %}
                     {% else %}
-                    <img src="{% static 'img/About.jpg' %}" alt="Яркий город - наш цех" class="img-fluid">
+                    <img src="{% static 'img/About.jpg' %}" alt="Яркий город - наш цех" class="img-fluid" loading="lazy">
                     {% endif %}
                     {% if about and about.show_badge %}
                         <div class="about-image-badge about-image-badge-{{ about.badge_position|default:'right' }}">

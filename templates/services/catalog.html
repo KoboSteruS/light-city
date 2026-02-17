@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load thumbnail %}
 
 {% block title %}Каталог услуг - Яркий Город{% endblock %}
 
@@ -33,9 +34,12 @@
                     <div class="service-card">
                         {% if service.icon %}
                         <div class="service-card-image service-card-icon">
-                            <img src="{{ service.icon.url }}" 
+                            {% thumbnail service.icon "200x200" crop="center" quality=85 as icon_im %}
+                            <img src="{{ icon_im.url }}" 
                                  alt="{{ service.name }}"
-                                 loading="lazy">
+                                 loading="lazy"
+                                 width="200" height="200">
+                            {% endthumbnail %}
                         </div>
                         {% else %}
                         <div class="service-card-image service-card-icon">

@@ -248,11 +248,9 @@
             }
         }
 
-        // Бейдж услуги - показываем только если название услуги отличается от заголовка
+        // Бейдж услуги — показываем всегда, когда есть название услуги
         if (modalService) {
-            const titleText = modalTitle ? modalTitle.textContent : '';
-            // Показываем бейдж только если название услуги отличается от заголовка
-            if (item.service && item.service !== titleText) {
+            if (item.service) {
                 modalService.textContent = item.service;
                 modalService.style.display = 'inline-block';
             } else {
@@ -401,11 +399,9 @@
             }
         }
 
-        // Бейдж услуги - показываем только если название услуги отличается от заголовка
+        // Бейдж услуги — показываем всегда, когда есть название услуги
         if (modalService) {
-            const titleText = modalTitle ? modalTitle.textContent : '';
-            // Показываем бейдж только если название услуги отличается от заголовка
-            if (item.service && item.service !== titleText) {
+            if (item.service) {
                 modalService.textContent = item.service;
                 modalService.style.display = 'inline-block';
             } else {
