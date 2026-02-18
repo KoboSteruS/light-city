@@ -9,8 +9,8 @@
     <!-- Primary Meta Tags -->
     <title>{% block title %}Яркий Город — Рекламное агентство в Петрозаводске{% endblock %}</title>
     <meta name="title" content="{% block meta_title %}Яркий Город — Рекламное агентство в Петрозаводске{% endblock %}">
-    <meta name="description" content="{% block meta_description %}Рекламное агентство в Петрозаводске «Яркий Город» — полный цикл услуг. Вывески, наружная реклама, неон, световые буквы, оклейка авто, брендирование. Заказать рекламу в Петрозаводске.{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}рекламное агентство Петрозаводск, рекламное агентство в Петрозаводске, реклама Петрозаводск, наружная реклама Петрозаводск, вывески Петрозаводск, изготовление вывесок, световые буквы, неоновая реклама, оклейка авто, брендирование авто, реклама на заказ, заказать рекламу Петрозаводск{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, неоновые вывески, световые буквы, оклейка авто, брендинг.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}оклейка авто Петрозаводск, брендинг Петрозаводск, наружная реклама Карелия, неоновые вывески заказ, реклама на авто цена, пленка для оклейки машин Петрозаводск, изготовление неона Карелия, брендирование транспорта, вывески из неона Петрозаводск, промо материалы реклама Петрозаводск, оклейка авто под рекламу Петрозаводск, неоновые вывески для бизнеса Карелия, рекламное агентство Петрозаводск, наружная реклама Петрозаводск, световые буквы, заказать вывески, брендирование авто{% endblock %}">
     <meta name="author" content="Яркий Город">
     <meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
     <meta name="language" content="Russian">
@@ -23,7 +23,7 @@
     <meta property="og:type" content="{% block og_type %}website{% endblock %}">
     <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
     <meta property="og:title" content="{% block og_title %}Яркий Город — Рекламное агентство в Петрозаводске{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Рекламное агентство в Петрозаводске. Вывески, наружная реклама, неон, оклейка авто. Заказать рекламу в Петрозаводске — Яркий Город.{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, неоновые вывески, световые буквы, оклейка авто, брендинг.{% endblock %}">
     <meta property="og:image" content="{% block og_image %}{% if settings and settings.logo %}{{ request.scheme }}://{{ request.get_host }}{{ settings.logo.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/Logo.png' %}{% endif %}{% endblock %}">
     <meta property="og:locale" content="ru_RU">
     <meta property="og:site_name" content="Яркий Город">
@@ -35,7 +35,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{% block twitter_url %}{{ request.build_absolute_uri }}{% endblock %}">
     <meta name="twitter:title" content="{% block twitter_title %}Яркий Город — Рекламное агентство в Петрозаводске{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}Рекламное агентство в Петрозаводске. Вывески, наружная реклама, неон, оклейка авто. Заказать рекламу — Яркий Город.{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, неоновые вывески, световые буквы, оклейка авто, брендинг.{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}{% if settings and settings.logo %}{{ request.scheme }}://{{ request.get_host }}{{ settings.logo.url }}{% else %}{{ request.scheme }}://{{ request.get_host }}{% static 'img/Logo.png' %}{% endif %}{% endblock %}">
     
     <!-- Geo Tags -->
@@ -75,7 +75,7 @@
         "@type": "LocalBusiness",
         "name": "Яркий Город",
         "alternateName": "Рекламное агентство Яркий Город Петрозаводск",
-        "description": "Рекламное агентство в Петрозаводске. Изготовление вывесок, наружная реклама, неон, световые буквы, оклейка авто, брендирование. Заказать рекламу в Петрозаводске.",
+        "description": "Яркий Город - рекламное агентство полного цикла в Петрозаводске. Изготовление и монтаж наружной рекламы, неоновые вывески, световые буквы, оклейка авто, брендинг.",
         "url": "{{ request.scheme }}://{{ request.get_host }}",
         "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'img/Logo.png' %}",
         {% if settings %}
@@ -98,34 +98,16 @@
             "@type": "OfferCatalog",
             "name": "Услуги рекламного агентства",
             "itemListElement": [
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Наружная реклама"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Вывески"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Световые буквы"
-                    }
-                },
-                {
-                    "@type": "Offer",
-                    "itemOffered": {
-                        "@type": "Service",
-                        "name": "Оклейка авто"
-                    }
-                }
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Наружная реклама Карелия"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Неоновые вывески"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Вывески из неона"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Световые буквы"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Оклейка авто Петрозаводск"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Оклейка авто под рекламу"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Брендирование транспорта"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Брендинг"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Изготовление неона Карелия"}},
+                {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Промо материалы"}}
             ]
         }
     }

@@ -461,7 +461,7 @@ section {
 }
 
 .section-header {
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
 }
 
 .section-title {
@@ -568,12 +568,12 @@ section {
 /* ===== Portfolio Section ===== */
 .portfolio-section {
     background-color: var(--white);
-    padding: 0px 0;
+    padding: 40px 0 20px;
 }
 
 /* Блок альбома портфолио */
 .portfolio-album-block {
-    margin-bottom: 80px;
+    margin-bottom: 50px;
 }
 
 .portfolio-album-block:last-child {
@@ -583,6 +583,10 @@ section {
 /* Левая колонка: Текст */
 .portfolio-album-content {
     padding-right: 2rem;
+}
+
+.portfolio-section .section-header {
+    margin-bottom: 2rem;
 }
 
 .portfolio-album-title {
@@ -1151,7 +1155,7 @@ section {
 
 .footer-logo-image {
     height: 85px;
-    width: auto;
+    width: 94%;
     margin: 0;
     padding: 0;
     margin-bottom: 0.5rem;

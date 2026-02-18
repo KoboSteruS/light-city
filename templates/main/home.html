@@ -143,7 +143,7 @@
         
         {% for album in portfolio_albums %}
         <div class="portfolio-album-block">
-            <div class="row align-items-center g-5">
+            <div class="row align-items-center g-3 g-lg-4">
                 <!-- Левая колонка: Текст -->
                 <div class="col-lg-5">
                     <div class="portfolio-album-content">
@@ -156,7 +156,7 @@
                 
                 <!-- Правая колонка: Сетка работ -->
                 <div class="col-lg-7">
-                    <div class="portfolio-album-grid portfolio-list-grid">
+                    <div class="portfolio-album-grid">
                         {% for work in album.works %}
                         <div class="portfolio-album-item portfolio-work-card" 
                              {% if work.id %}data-portfolio-id="{{ work.id }}"{% endif %}
