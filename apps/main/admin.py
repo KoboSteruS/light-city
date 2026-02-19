@@ -168,8 +168,14 @@ class SiteSettingsAdmin(VersionAdmin, admin.ModelAdmin):
             'fields': ('site_name', 'phone', 'email', 'address', 'working_hours')
         }),
         ('Социальные сети', {
-            'fields': ('vk_link', 'instagram_link', 'telegram_link'),
-            'classes': ('collapse',)
+            'fields': (
+                'vk_link', 'show_vk',
+                'telegram_link', 'show_telegram',
+                'instagram_link', 'show_instagram',
+                'max_link', 'show_max',
+            ),
+            'classes': ('collapse',),
+            'description': 'Ссылки и галочки «Показывать» — отображение иконки в футере сайта.'
         }),
         ('Telegram бот', {
             'fields': ('telegram_bot_token',),

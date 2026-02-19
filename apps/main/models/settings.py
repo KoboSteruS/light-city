@@ -76,6 +76,34 @@ class SiteSettings(BaseModel):
         help_text='Ссылка на Telegram'
     )
     
+    max_link = models.URLField(
+        verbose_name='Макс (MAX)',
+        blank=True,
+        help_text='Ссылка на соцсеть Макс'
+    )
+    
+    # Флаги отображения соцсетей на сайте
+    show_vk = models.BooleanField(
+        verbose_name='Показывать VK',
+        default=True,
+        help_text='Отображать ссылку на VK в футере'
+    )
+    show_telegram = models.BooleanField(
+        verbose_name='Показывать Telegram',
+        default=True,
+        help_text='Отображать ссылку на Telegram в футере'
+    )
+    show_instagram = models.BooleanField(
+        verbose_name='Показывать Instagram',
+        default=True,
+        help_text='Отображать ссылку на Instagram в футере'
+    )
+    show_max = models.BooleanField(
+        verbose_name='Показывать Макс',
+        default=True,
+        help_text='Отображать ссылку на Макс в футере'
+    )
+    
     telegram_bot_token = models.CharField(
         max_length=200,
         blank=True,

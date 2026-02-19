@@ -1432,10 +1432,15 @@ section {
     background: linear-gradient(135deg, #25D366, #128C7E);
 }
 
+.social-max:hover::before {
+    background: linear-gradient(135deg, #6B4EFF, #9B7BFF);
+}
+
 .social-telegram:hover,
 .social-instagram:hover,
 .social-vk:hover,
-.social-whatsapp:hover {
+.social-whatsapp:hover,
+.social-max:hover {
     color: var(--white);
 }
 

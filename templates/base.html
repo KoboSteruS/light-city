@@ -231,24 +231,26 @@
                     {% if settings %}
                     
                     <div class="social-links mt-4">
-                        {% if settings.telegram_link %}
+                        {% if settings.telegram_link and settings.show_telegram %}
                         <a href="{{ settings.telegram_link }}" target="_blank" class="social-link social-telegram" aria-label="Telegram">
                             <i class="bi bi-telegram"></i>
                         </a>
                         {% endif %}
-                        {% if settings.instagram_link %}
-                        <!-- Instagram removed as requested -->
+                        {% if settings.instagram_link and settings.show_instagram %}
+                        <a href="{{ settings.instagram_link }}" target="_blank" class="social-link social-instagram" aria-label="Instagram">
+                            <i class="bi bi-instagram"></i>
+                        </a>
                         {% endif %}
-                        {% if settings.vk_link %}
+                        {% if settings.vk_link and settings.show_vk %}
                         <a href="{{ settings.vk_link }}" target="_blank" class="social-link social-vk" aria-label="VK">
                             <svg class="social-icon-vk" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.67 2 15.07 2zm3.39 14.66h-1.48c-.62 0-.81-.5-1.93-1.62-1-.93-1.43-1.06-1.68-1.06-.35 0-.45.1-.45.57v1.48c0 .4-.13.64-1.18.64-1.75 0-3.69-1.06-5.07-3.04-2.06-2.93-2.63-5.14-2.63-5.6 0-.25.1-.48.57-.48h1.48c.43 0 .6.2.76.65.86 2.43 2.29 4.56 2.88 4.56.22 0 .32-.1.32-.66v-2.56c-.07-1.12-.65-1.21-.65-1.61 0-.2.17-.4.43-.4h2.33c.36 0 .5.2.5.63v3.47c0 .36.16.5.27.5.22 0 .4-.14.82-.56 1.26-1.42 2.17-3.62 2.17-3.62.12-.25.32-.48.75-.48h1.48c.53 0 .65.27.53.63-.19.86-2.07 3.52-2.07 3.52-.18.3-.25.44 0 .77.18.25.79.77 1.2 1.24.74.82 1.31 1.5 1.46 1.98.15.47-.08.71-.56.71z"/>
                             </svg>
                         </a>
                         {% endif %}
-                        {% if settings.whatsapp_link %}
-                        <a href="{{ settings.whatsapp_link }}" target="_blank" class="social-link social-whatsapp" aria-label="WhatsApp">
-                            <i class="bi bi-whatsapp"></i>
+                        {% if settings.max_link and settings.show_max %}
+                        <a href="{{ settings.max_link }}" target="_blank" class="social-link social-max" aria-label="Макс">
+                            <i class="bi bi-chat-dots-fill"></i>
                         </a>
                         {% endif %}
                     </div>
