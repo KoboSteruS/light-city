@@ -6,7 +6,7 @@ from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
 from reversion.admin import VersionAdmin
-from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial, TelegramChat, Statistic
+from apps.main.models import Slider, AboutUs, SiteSettings, TelegramChat, Statistic
 
 
 @admin.register(Slider)
@@ -214,50 +214,6 @@ class TelegramChatAdmin(VersionAdmin, admin.ModelAdmin):
     def has_add_permission(self, request):
         """Запрещаем создание вручную - только через бота."""
         return False
-
-
-@admin.register(Testimonial)
-class TestimonialAdmin(VersionAdmin, admin.ModelAdmin):
-    """Админка для управления отзывами."""
-    
-    list_display = ('name', 'position', 'rating_display', 'order', 'is_active', 'avatar_preview', 'created_at')
-    list_filter = ('is_active', 'rating', 'created_at')
-    search_fields = ('name', 'position', 'text')
-    list_editable = ('order', 'is_active')
-    ordering = ('order', '-created_at')
-    
-    fieldsets = (
-        ('Информация о клиенте', {
-            'fields': ('name', 'position', 'avatar')
-        }),
-        ('Отзыв', {
-            'fields': ('rating', 'text')
-        }),
-        ('Настройки отображения', {
-            'fields': ('order', 'is_active')
-        }),
-    )
-    
-    def avatar_preview(self, obj):
-        """Превью аватара в списке."""
-        if obj.avatar:
-            return format_html(
-                '<img src="{}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;" />',
-                obj.avatar.url
-            )
-        return '-'
-    
-    avatar_preview.short_description = 'Фото'
-    
-    def rating_display(self, obj):
-        """Отображение рейтинга звездами."""
-        stars = '★' * obj.rating + '☆' * (5 - obj.rating)
-        return format_html(
-            '<span style="color: #F8D12C; font-size: 1.2em;">{}</span>',
-            stars
-        )
-    
-    rating_display.short_description = 'Рейтинг'
 
 
 @admin.register(Statistic)
