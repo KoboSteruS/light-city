@@ -16,6 +16,19 @@ from apps.main.sitemaps import StaticViewSitemap, ServiceSitemap, PortfolioSitem
 # Получаем кастомный URL для админки из настроек
 admin_url = config('ADMIN_URL', default='admin/')
 
+# Добавляем URL «Отменить последнее действие» в админку (до включения admin.site.urls)
+_original_admin_get_urls = admin.site.get_urls
+
+
+def _admin_get_urls():
+    from apps.core.views import admin_undo_last_action
+    return [
+        path('undo-last/', admin.site.admin_view(admin_undo_last_action), name='admin_undo_last'),
+    ] + _original_admin_get_urls()
+
+
+admin.site.get_urls = _admin_get_urls
+
 # Sitemaps
 sitemaps = {
     'static': StaticViewSitemap,
@@ -60,17 +73,4 @@ else:
 admin.site.site_header = 'Яркий Город - Административная панель'
 admin.site.site_title = 'Яркий Город Admin'
 admin.site.index_title = 'Управление контентом'
-
-# Добавляем URL «Отменить последнее действие» в админку
-_original_admin_get_urls = admin.site.get_urls
-
-
-def _admin_get_urls():
-    from apps.core.views import admin_undo_last_action
-    return [
-        path('undo-last/', admin.site.admin_view(admin_undo_last_action), name='admin_undo_last'),
-    ] + _original_admin_get_urls()
-
-
-admin.site.get_urls = _admin_get_urls
 
