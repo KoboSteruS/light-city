@@ -4,11 +4,12 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
+from reversion.admin import VersionAdmin
 from apps.contacts.models import ContactMessage
 
 
 @admin.register(ContactMessage)
-class ContactMessageAdmin(admin.ModelAdmin):
+class ContactMessageAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для обращений."""
     
     list_display = (

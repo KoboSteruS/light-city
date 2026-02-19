@@ -4,11 +4,12 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
+from reversion.admin import VersionAdmin
 from apps.services.models import Service
 
 
 @admin.register(Service)
-class ServiceAdmin(admin.ModelAdmin):
+class ServiceAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для управления услугами."""
     
     list_display = ('name', 'price_display', 'order', 'is_active', 'icon_preview', 'image_preview', 'created_at')

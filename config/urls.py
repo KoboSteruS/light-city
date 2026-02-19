@@ -61,3 +61,16 @@ admin.site.site_header = 'Яркий Город - Административна
 admin.site.site_title = 'Яркий Город Admin'
 admin.site.index_title = 'Управление контентом'
 
+# Добавляем URL «Отменить последнее действие» в админку
+_original_admin_get_urls = admin.site.get_urls
+
+
+def _admin_get_urls():
+    from apps.core.views import admin_undo_last_action
+    return [
+        path('undo-last/', admin.site.admin_view(admin_undo_last_action), name='admin_undo_last'),
+    ] + _original_admin_get_urls()
+
+
+admin.site.get_urls = _admin_get_urls
+

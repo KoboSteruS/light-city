@@ -5,11 +5,12 @@
 from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
+from reversion.admin import VersionAdmin
 from apps.main.models import Slider, AboutUs, SiteSettings, Testimonial, TelegramChat, Statistic
 
 
 @admin.register(Slider)
-class SliderAdmin(admin.ModelAdmin):
+class SliderAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для управления слайдером."""
     
     list_display = ('title', 'order', 'is_active', 'image_preview', 'created_at')
@@ -112,7 +113,7 @@ class AboutUsAdminForm(forms.ModelForm):
 
 
 @admin.register(AboutUs)
-class AboutUsAdmin(admin.ModelAdmin):
+class AboutUsAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для блока 'О нас'."""
     
     form = AboutUsAdminForm
@@ -155,7 +156,7 @@ class AboutUsAdmin(admin.ModelAdmin):
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
+class SiteSettingsAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для настроек сайта."""
     
     list_display = ('site_name', 'phone', 'email', 'is_active', 'updated_at')
@@ -188,7 +189,7 @@ class SiteSettingsAdmin(admin.ModelAdmin):
 
 
 @admin.register(TelegramChat)
-class TelegramChatAdmin(admin.ModelAdmin):
+class TelegramChatAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для управления Telegram чатами."""
     
     list_display = ('chat_id', 'username', 'first_name', 'is_active', 'created_at')
@@ -216,7 +217,7 @@ class TelegramChatAdmin(admin.ModelAdmin):
 
 
 @admin.register(Testimonial)
-class TestimonialAdmin(admin.ModelAdmin):
+class TestimonialAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для управления отзывами."""
     
     list_display = ('name', 'position', 'rating_display', 'order', 'is_active', 'avatar_preview', 'created_at')
@@ -260,7 +261,7 @@ class TestimonialAdmin(admin.ModelAdmin):
 
 
 @admin.register(Statistic)
-class StatisticAdmin(admin.ModelAdmin):
+class StatisticAdmin(VersionAdmin, admin.ModelAdmin):
     """Админка для управления статистикой."""
     
     list_display = ('label', 'number_display', 'order', 'is_active', 'created_at')

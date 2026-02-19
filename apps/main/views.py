@@ -49,41 +49,36 @@ class HomeView(TemplateView):
                 context['about'] = None
                 logger.warning('Блок "О нас" не найден')
             
-            # Получаем работы портфолио для 4 альбомов
-            # Альбом 1: Вывески
+            # Получаем работы портфолио для альбомов на главной.
+            # На главной показываем до 4 работ: сначала с галочкой «На главной» (is_featured), затем по полю «Порядок».
+            def get_main_page_works(service):
+                if not service:
+                    return []
+                qs = PortfolioItem.objects.filter(
+                    is_active=True,
+                    service=service
+                ).select_related('service').order_by('order', '-date_completed', '-created_at')
+                featured = list(qs.filter(is_featured=True)[:4])
+                if len(featured) >= 4:
+                    return featured[:4]
+                featured_pks = [w.pk for w in featured]
+                rest = list(qs.exclude(pk__in=featured_pks)[:4 - len(featured)])
+                return featured + rest
+            
             vyveski_service = Service.objects.filter(slug='vyveski', is_active=True).first()
-            vyveski_works = PortfolioItem.objects.filter(
-                is_active=True,
-                service=vyveski_service
-            ).select_related('service')[:4] if vyveski_service else []
+            vyveski_works = get_main_page_works(vyveski_service)
             
-            # Альбом 2: Авто (Оклейка авто)
             avto_service = Service.objects.filter(slug='okleika-avto', is_active=True).first()
-            avto_works = PortfolioItem.objects.filter(
-                is_active=True,
-                service=avto_service
-            ).select_related('service')[:4] if avto_service else []
+            avto_works = get_main_page_works(avto_service)
             
-            # Альбом 3: Неон
             neon_service = Service.objects.filter(slug='neon', is_active=True).first()
-            neon_works = PortfolioItem.objects.filter(
-                is_active=True,
-                service=neon_service
-            ).select_related('service')[:4] if neon_service else []
+            neon_works = get_main_page_works(neon_service)
             
-            # Альбом 4: Интерьерные решения
             interior_service = Service.objects.filter(slug='interiernye-resheniia', is_active=True).first()
-            interior_works = PortfolioItem.objects.filter(
-                is_active=True,
-                service=interior_service
-            ).select_related('service')[:4] if interior_service else []
+            interior_works = get_main_page_works(interior_service)
             
-            # Альбом 5: Холсты
             kholsty_service = Service.objects.filter(slug='kholsty', is_active=True).first()
-            kholsty_works = PortfolioItem.objects.filter(
-                is_active=True,
-                service=kholsty_service
-            ).select_related('service')[:4] if kholsty_service else []
+            kholsty_works = get_main_page_works(kholsty_service)
             
             # Формируем список альбомов
             context['portfolio_albums'] = [

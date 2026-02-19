@@ -63,10 +63,16 @@ class PortfolioItem(BaseModel):
         help_text='Когда был завершен проект'
     )
     
+    order = models.PositiveIntegerField(
+        default=0,
+        verbose_name='Порядок',
+        help_text='Чем меньше число, тем выше в списке. Можно менять в списке работ в админке.'
+    )
+    
     is_featured = models.BooleanField(
         default=False,
         verbose_name='На главной',
-        help_text='Показывать на главной странице'
+        help_text='Показывать в блоке из 4 работ на главной странице (в своей категории). Сначала выводятся работы с этой галочкой.'
     )
     
     is_active = models.BooleanField(
@@ -78,7 +84,7 @@ class PortfolioItem(BaseModel):
     class Meta:
         verbose_name = 'Работа'
         verbose_name_plural = 'Портфолио'
-        ordering = ['-date_completed', '-created_at']
+        ordering = ['order', '-date_completed', '-created_at']
     
     def __str__(self) -> str:
         return self.title

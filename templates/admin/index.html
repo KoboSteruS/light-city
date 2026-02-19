@@ -1,0 +1,43 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div class="admin-undo-block" style="margin-bottom: 1.5rem;">
+    <a href="{% url 'admin:admin_undo_last' %}" class="button">Отменить последнее действие</a>
+</div>
+{% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+{% endblock %}
+
+{% block sidebar %}
+{% translate 'Recent actions' %}
+{% translate 'My actions' %}
+{% load log %}
+{% get_admin_log 10 as admin_log for_user user %}
+{% if not admin_log %}
+{% translate 'None available' %}
+{% else %}
+{% for entry in admin_log %}
+{% if entry.is_addition %}{% translate 'Added:' %}{% elif entry.is_change %}{% translate 'Changed:' %}{% elif entry.is_deletion %}{% translate 'Deleted:' %}{% endif %}
+{% if entry.is_deletion or not entry.get_admin_url %}
+{{ entry.object_repr }}
+{% else %}
+{{ entry.object_repr }}
+{% endif %}
+{% if entry.content_type %}
+{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}
+{% else %}
+{% translate 'Unknown content' %}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endblock %}

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'sorl.thumbnail',
     'axes',
+    'reversion',
     
     # Local apps
     'apps.core',
@@ -53,6 +54,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'reversion.middleware.RevisionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'axes.middleware.AxesMiddleware',
