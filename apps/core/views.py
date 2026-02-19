@@ -30,12 +30,17 @@ def admin_undo_last_action(request):
         return redirect('admin:index')
 
     # Откатываемся к предпоследней ревизии (состояние до последнего сохранения)
-    previous_revision = revisions[1]
+    latest_revision = revisions[0]   # ту, что отменяем (55+)
+    previous_revision = revisions[1]  # к ней откатываемся (80+ или 13+)
 
     try:
         previous_revision.revert()
 
-        # Удаляем последнюю запись из «Последние действия», чтобы отменённое действие там не отображалось
+        # Удаляем отменённую ревизию из истории, иначе при следующем «Отменить»
+        # снова откатимся к ней (55+ → 80+ вместо 80+ → 13+).
+        latest_revision.delete()
+
+        # Удаляем последнюю запись из «Последние действия»
         from django.contrib.admin.models import LogEntry
         last_log = (
             LogEntry.objects.filter(user_id=request.user.pk)
