@@ -79,7 +79,7 @@
                         <div class="portfolio-album-grid portfolio-list-grid">
                             {% for work in album.works %}
                             <div class="portfolio-album-item portfolio-work-card" 
-                                 {% if work.id %}data-portfolio-id="{{ work.id }}"{% endif %}
+                                 data-portfolio-id="{{ work.pk }}"
                                  data-service-slug="{{ album.slug }}">
                                 {% if work.image and work.image.name %}
                                 {% thumbnail work.image "500x375" crop="center" quality=85 as thumb %}
@@ -222,7 +222,7 @@
             var items = [];
             {% for item in all_portfolio_works %}
             items.push({
-                id: {{ item.id|default:0 }},
+                id: "{{ item.pk }}",  // UUID primary key
                 title: {% if item.title %}"{{ item.title|escapejs }}"{% else %}""{% endif %},
                 description: {% if item.description %}"{{ item.description|striptags|escapejs }}"{% else %}""{% endif %},
                 image: {% if item.image and item.image.name %}"{{ item.image.url|escapejs }}"{% else %}""{% endif %},
