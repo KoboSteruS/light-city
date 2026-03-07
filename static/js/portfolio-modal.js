@@ -70,27 +70,27 @@
                 e.stopPropagation();
                 
                 // Находим индекс работы в общем массиве portfolioData
-                // Сначала пробуем найти по ID
+                // Сначала пробуем найти по ID (UUID)
                 let portfolioId = null;
                 const portfolioIdAttr = this.getAttribute('data-portfolio-id');
                 if (portfolioIdAttr) {
-                    portfolioId = parseInt(portfolioIdAttr, 10);
+                    portfolioId = portfolioIdAttr; // UUID — строка, не парсим как int
                 }
                 
                 console.log('Portfolio ID from attribute:', portfolioIdAttr);
-                console.log('Portfolio ID parsed:', portfolioId);
+                console.log('Portfolio ID:', portfolioId);
                 console.log('Portfolio items count:', portfolioItems.length);
                 
-                // Если ID валидный, ищем по ID
-                if (portfolioId && !isNaN(portfolioId)) {
+                // Если ID валидный, ищем по ID (сравниваем как строки, т.к. UUID)
+                if (portfolioId) {
                     currentIndex = portfolioItems.findIndex(item => {
-                        const itemId = typeof item.id === 'string' ? parseInt(item.id, 10) : item.id;
-                        return itemId === portfolioId;
+                        const itemId = String(item.id);
+                        return itemId === String(portfolioId);
                     });
                     console.log('Found index by ID:', currentIndex);
                 } else {
                     currentIndex = -1;
-                    console.log('No valid ID, will use DOM index');
+                    console.log('No valid ID');
                 }
                 
                 // Если не нашли по ID, используем fallback - индекс в DOM
