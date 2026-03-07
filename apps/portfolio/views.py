@@ -16,7 +16,7 @@ class PortfolioListView(ListView):
     model = PortfolioItem
     template_name = 'portfolio/portfolio_list.html'
     context_object_name = 'portfolio_items'
-    paginate_by = 12
+    paginate_by = 100  # Показываем все работы на одной странице для корректной навигации в модалке
     
     def get_queryset(self):
         """Получение отфильтрованного списка работ."""
@@ -74,7 +74,7 @@ class PortfolioListView(ListView):
                 works = PortfolioItem.objects.filter(
                     is_active=True,
                     service=service
-                ).select_related('service').order_by('-date_completed', '-created_at')[:6]  # Берем первые 6 работ
+                ).select_related('service').order_by('-date_completed', '-created_at')[:4]  # Берем первые 4 работы (как на главной)
                 
                 if works.exists():
                     portfolio_albums.append({
