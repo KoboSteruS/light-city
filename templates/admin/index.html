@@ -14,7 +14,15 @@
 {% block content %}
 <div id="content-main">
   <p style="margin-bottom: 1rem;">
-    <a href="{% url 'admin:admin_undo_last' %}" class="button">Отменить последнее действие</a>
+    <a href="{% url 'admin:admin_undo_last' %}" 
+       class="button"
+       title="Откатывает к состоянию ДО последнего сохранения (применяет предпоследнюю ревизию). Отменённое действие удаляется из истории. Работает только для ваших изменений."
+       style="position: relative;">
+      Отменить последнее действие
+    </a>
+    <span style="font-size: 0.9em; color: #666; margin-left: 1rem;">
+      ℹ️ Откат к предпоследней ревизии (до последнего сохранения)
+    </span>
   </p>
   {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
 </div>
