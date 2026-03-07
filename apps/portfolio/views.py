@@ -91,17 +91,25 @@ class PortfolioListView(ListView):
         # ВСЕ работы для модалки (зависит от фильтра)
         # - Если нет фильтра: передаём ВСЕ работы (листание по всем категориям подряд)
         # - Если есть фильтр: передаём только работы этой категории
+        # Сортировка СОВПАДАЕТ с сортировкой в альбомах (без order, чтобы порядок был одинаковый)
         if context['current_service']:
             # Фильтр активен → только работы этой категории
             context['all_portfolio_works'] = PortfolioItem.objects.filter(
                 is_active=True,
                 service=context['current_service']
-            ).select_related('service').order_by('order', '-date_completed', '-created_at')
+            ).select_related('service').order_by('-date_completed', '-created_at')
         else:
             # Фильтра нет → ВСЕ работы всех категорий
-            context['all_portfolio_works'] = PortfolioItem.objects.filter(
-                is_active=True
-            ).select_related('service').order_by('order', '-date_completed', '-created_at')
+            # Группируем по услугам в том же порядке, что и альбомы
+            all_works = []
+            for album in context.get('portfolio_albums', []):
+                # Берём ВСЕ работы услуги (не только 4), в том же порядке что в альбоме
+                service_all_works = PortfolioItem.objects.filter(
+                    is_active=True,
+                    service=album['service']
+                ).select_related('service').order_by('-date_completed', '-created_at')
+                all_works.extend(list(service_all_works))
+            context['all_portfolio_works'] = all_works
         
         return context
 
