@@ -4,6 +4,7 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
+from django.contrib import messages
 from reversion.admin import VersionAdmin
 from apps.portfolio.models import PortfolioItem
 
@@ -29,7 +30,8 @@ class PortfolioItemAdmin(VersionAdmin, admin.ModelAdmin):
             'fields': ('title', 'service', 'client', 'date_completed')
         }),
         ('Контент', {
-            'fields': ('description', 'image')
+            'fields': ('description', 'image'),
+            'description': '⚠️ Требования к изображению: максимум 25 MB, форматы jpg/png/webp. Рекомендуемый размер: 800x600px.'
         }),
         ('Настройки отображения', {
             'fields': ('order', 'is_featured', 'is_active'),
@@ -47,4 +49,16 @@ class PortfolioItemAdmin(VersionAdmin, admin.ModelAdmin):
         return '-'
     
     image_preview.short_description = 'Превью'
+    
+    def save_model(self, request, obj, form, change):
+        """Переопределяем сохранение для лучшей обработки ошибок."""
+        try:
+            super().save_model(request, obj, form, change)
+            if change:
+                messages.success(request, f'Работа "{obj.title}" успешно обновлена.')
+            else:
+                messages.success(request, f'Работа "{obj.title}" успешно добавлена.')
+        except Exception as e:
+            messages.error(request, f'Ошибка при сохранении: {str(e)}')
+            raise
 

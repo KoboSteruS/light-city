@@ -122,9 +122,10 @@ else:
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Лимит загрузки файлов (10 МБ) — для фото в портфолио, услугах и т.д.
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10 MB
+# Лимит загрузки файлов (25 МБ) — для фото в портфолио, услугах и т.д.
+# Увеличен с 10 до 25 MB, чтобы поддерживать фото с современных телефонов
+DATA_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024  # 25 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 25 * 1024 * 1024  # 25 MB
 
 # sorl-thumbnail — сжатие и уменьшение изображений для быстрой загрузки
 THUMBNAIL_QUALITY = 85
