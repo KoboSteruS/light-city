@@ -5,7 +5,23 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
+
+
+def yandex_verification(request):
+    """
+    Страница верификации Яндекс.Вебмастера.
+    Отдаёт HTML-файл по адресу /yandex_752238fed1c3f97d.html (код 200 OK).
+    """
+    html = """<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>Verification: 752238fed1c3f97d</body>
+</html>"""
+    return HttpResponse(html, content_type='text/html; charset=utf-8')
 
 
 @staff_member_required

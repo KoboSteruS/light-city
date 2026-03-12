@@ -12,6 +12,7 @@ from django.conf.urls.static import static
 from django.views.static import serve
 from decouple import config
 from apps.main.sitemaps import StaticViewSitemap, ServiceSitemap, PortfolioSitemap
+from apps.core.views import yandex_verification
 
 # Получаем кастомный URL для админки из настроек
 admin_url = config('ADMIN_URL', default='admin/')
@@ -37,6 +38,9 @@ sitemaps = {
 }
 
 urlpatterns = [
+    # Яндекс.Вебмастер: верификация сайта
+    path('yandex_752238fed1c3f97d.html', yandex_verification),
+    
     # Админка с кастомным URL
     path(admin_url, admin.site.urls),
     
