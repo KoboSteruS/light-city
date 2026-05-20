@@ -5,7 +5,7 @@
 import os
 from django.core.management.base import BaseCommand
 from django.core.files import File
-from apps.services.models import Service, ServiceCategory
+from apps.services.models import Service
 from loguru import logger
 
 
@@ -36,12 +36,6 @@ class Command(BaseCommand):
     def update_services(self):
         """Создание/обновление услуг."""
         base_path = 'static/img/'
-        
-        # Получаем или создаем категории
-        cat_vyveski, _ = ServiceCategory.objects.get_or_create(
-            slug='vyveski',
-            defaults={'name': 'Вывески', 'order': 1, 'is_active': True}
-        )
         
         services_data = [
             {
@@ -136,7 +130,6 @@ class Command(BaseCommand):
                 slug=slug,
                 defaults={
                     **service_data,
-                    'category': cat_vyveski,
                     'is_active': True
                 }
             )
@@ -148,14 +141,21 @@ class Command(BaseCommand):
                 service.is_active = True
                 service.save()
             
-            # Загружаем изображение, если его нет
-            if not service.image and os.path.exists(image_path):
+            # Загружаем изображение и иконку (каталог использует icon)
+            if os.path.exists(image_path):
                 try:
-                    with open(image_path, 'rb') as f:
-                        service.image.save(image_filename, File(f), save=True)
-                    self.stdout.write(f'  [OK] Изображение загружено для: {service.name}')
+                    if not service.image:
+                        with open(image_path, 'rb') as f:
+                            service.image.save(image_filename, File(f), save=False)
+                    if not service.icon:
+                        with open(image_path, 'rb') as f:
+                            service.icon.save(image_filename, File(f), save=False)
+                    service.save()
+                    self.stdout.write(f'  [OK] Изображения загружены для: {service.name}')
                 except Exception as e:
                     self.stdout.write(f'  [ERROR] Ошибка загрузки изображения для {service.name}: {e}')
+            else:
+                self.stdout.write(f'  [!] Файл не найден: {image_path}')
             
             action = 'Создана' if created else 'Обновлена'
             self.stdout.write(f'  [OK] {action} услуга: {service.name} (order: {service.order})')
