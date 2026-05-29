@@ -17,8 +17,12 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-produc
 DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
 
-# Telegram Bot Settings
+# Telegram Bot Settings (устарело — заявки уходят в VK)
 TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN', default='')
+
+# VK: уведомления о заявках (ключ сообщества, право «Сообщения сообщества»)
+VK_ACCESS_TOKEN = config('VK_ACCESS_TOKEN', default='')
+VK_API_VERSION = config('VK_API_VERSION', default='5.199')
 
 # Application definition
 INSTALLED_APPS = [

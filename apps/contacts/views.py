@@ -8,7 +8,8 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from loguru import logger
 from apps.contacts.models import ContactMessage
-from apps.main.utils.telegram import send_telegram_message, format_contact_message
+from apps.main.utils.vk import send_vk_message
+from apps.main.utils.notifications import format_contact_message
 
 
 class ContactFormView(CreateView):
@@ -71,19 +72,19 @@ class ContactFormView(CreateView):
         
         logger.info(log_message)
         
-        # Отправляем уведомление в Telegram
+        # Уведомление во ВКонтакте (получатели — в админке)
         try:
-            telegram_message = format_contact_message(
+            vk_message = format_contact_message(
                 name=form.cleaned_data['name'],
                 phone=form.cleaned_data['phone'],
                 email=form.cleaned_data.get('email', ''),
                 message=form.instance.message,
                 is_callback=is_callback,
-                contact_preference=form.instance.contact_preference or ''
+                contact_preference=form.instance.contact_preference or '',
             )
-            send_telegram_message(telegram_message)
+            send_vk_message(vk_message)
         except Exception as e:
-            logger.error(f'Ошибка отправки в Telegram: {e}')
+            logger.error(f'Ошибка отправки во ВКонтакте: {e}')
         
         # Если это AJAX запрос (модалка), возвращаем JSON
         if self.request.headers.get('X-Requested-With') == 'XMLHttpRequest':

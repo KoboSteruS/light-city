@@ -6,7 +6,7 @@ from django.contrib import admin
 from django import forms
 from django.utils.html import format_html
 from reversion.admin import VersionAdmin
-from apps.main.models import Slider, AboutUs, SiteSettings, TelegramChat, Statistic
+from apps.main.models import Slider, AboutUs, SiteSettings, TelegramChat, VkNotifyRecipient, Statistic
 
 
 @admin.register(Slider)
@@ -177,10 +177,13 @@ class SiteSettingsAdmin(VersionAdmin, admin.ModelAdmin):
             'classes': ('collapse',),
             'description': 'Ссылки и галочки «Показывать» — отображение иконки в футере сайта.'
         }),
-        ('Telegram бот', {
+        ('Уведомления о заявках', {
             'fields': ('telegram_bot_token',),
             'classes': ('collapse',),
-            'description': 'Токен бота для отправки уведомлений о новых заявках'
+            'description': (
+                'Заявки отправляются во ВКонтакте. Ключ VK_ACCESS_TOKEN — в файле .env. '
+                'Получатели — раздел «Получатели VK (заявки)». Поле Telegram ниже устарело.'
+            ),
         }),
         ('Настройки', {
             'fields': ('is_active',)
@@ -194,10 +197,31 @@ class SiteSettingsAdmin(VersionAdmin, admin.ModelAdmin):
         return super().has_add_permission(request)
 
 
+@admin.register(VkNotifyRecipient)
+class VkNotifyRecipientAdmin(VersionAdmin, admin.ModelAdmin):
+    """Получатели уведомлений о заявках во ВКонтакте."""
+
+    list_display = ('vk_peer_id', 'display_name', 'is_active', 'created_at')
+    list_filter = ('is_active',)
+    search_fields = ('vk_peer_id', 'display_name')
+    list_editable = ('is_active',)
+    ordering = ('display_name', 'vk_peer_id')
+
+    fieldsets = (
+        (None, {
+            'fields': ('vk_peer_id', 'display_name', 'is_active'),
+            'description': (
+                'VK peer_id для отправки через messages.send. Обычно это положительный user_id. '
+                'Ключ API — VK_ACCESS_TOKEN в .env (ключ сообщества с правом «Сообщения сообщества»).'
+            ),
+        }),
+    )
+
+
 @admin.register(TelegramChat)
 class TelegramChatAdmin(VersionAdmin, admin.ModelAdmin):
-    """Админка для управления Telegram чатами."""
-    
+    """Устарело: раньше использовался Telegram. Оставлено для истории."""
+
     list_display = ('chat_id', 'username', 'first_name', 'is_active', 'created_at')
     list_filter = ('is_active', 'created_at')
     search_fields = ('chat_id', 'username', 'first_name')
