@@ -19,7 +19,7 @@ from django.db import transaction
 from loguru import logger
 
 from apps.portfolio.models import PortfolioItem
-from apps.services.models import Service, ServiceCategory
+from apps.services.models import Service
 
 
 class Command(BaseCommand):
@@ -27,24 +27,12 @@ class Command(BaseCommand):
     
     help = 'Загружает фотографии из папок в портфолио'
     
-    # Маппинг папок на услуги и категории
+    # Маппинг папок на услуги (slug из update_home_services)
     FOLDERS_MAPPING = {
-        'авто': {
-            'service_slug': 'okleika-avto',
-            'category': 'Брендирование авто',
-        },
-        'вывески': {
-            'service_slug': 'vyveski',
-            'category': 'Вывески',
-        },
-        'неон': {
-            'service_slug': 'neon',
-            'category': 'Неон',
-        },
-        'инт': {
-            'service_slug': 'kholsty',
-            'category': 'Печать и полиграфия',
-        },
+        'авто': {'service_slug': 'okleika-avto'},
+        'вывески': {'service_slug': 'vyveski'},
+        'неон': {'service_slug': 'neon'},
+        'инт': {'service_slug': 'kholsty'},
     }
     
     def add_arguments(self, parser):
@@ -102,24 +90,7 @@ class Command(BaseCommand):
             
             folder_data = self.FOLDERS_MAPPING[folder_name]
             service_slug = folder_data['service_slug']
-            category_name = folder_data['category']
-            
-            # Находим категорию
-            try:
-                category = ServiceCategory.objects.get(name__icontains=category_name)
-                self.stdout.write(f'[OK] Найдена категория: {category.name}')
-            except ServiceCategory.DoesNotExist:
-                self.stdout.write(
-                    self.style.ERROR(f'[ERROR] Категория не найдена: {category_name}')
-                )
-                stats['errors'] += 1
-                continue
-            except ServiceCategory.MultipleObjectsReturned:
-                category = ServiceCategory.objects.filter(
-                    name__icontains=category_name
-                ).first()
-                self.stdout.write(f'[OK] Найдена категория: {category.name} (первая из нескольких)')
-            
+
             # Находим услугу
             try:
                 service = Service.objects.get(slug=service_slug, is_active=True)
@@ -183,11 +154,10 @@ class Command(BaseCommand):
                             django_file = File(f, name=filename)
                             
                             # Создаем запись в БД
-                            portfolio_item = PortfolioItem.objects.create(
+                            PortfolioItem.objects.create(
                                 title=f'{service.name} #{idx}',
                                 description=f'<p>Пример работы: {service.name}</p>',
                                 image=django_file,
-                                category=category,
                                 service=service,
                                 is_featured=False,
                                 is_active=True,
