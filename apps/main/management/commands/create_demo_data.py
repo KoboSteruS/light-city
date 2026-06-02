@@ -56,6 +56,8 @@ class Command(BaseCommand):
                 'address': 'г. Петрозаводск, Муезерская улица, 15Ак8',
                 'working_hours': 'Мы открыты с 10:00 до 19:00',
                 'telegram_link': 'https://t.me/yarkiygorod',
+                'vk_link': 'https://vk.com/im/convo/-108436256?entrypoint=community_page&tab=all',
+                'show_vk': True,
                 'instagram_link': 'https://instagram.com/yarkogorod',
             }
         )

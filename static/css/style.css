@@ -976,6 +976,12 @@ section {
     box-shadow: 0 4px 15px rgba(248, 209, 44, 0.3);
 }
 
+.contact-card-icon-vk {
+    width: 2rem;
+    height: 2rem;
+    display: block;
+}
+
 .contact-card:hover .contact-card-icon {
     transform: scale(1.1) rotate(10deg);
     box-shadow: 0 8px 25px rgba(248, 209, 44, 0.5);

@@ -61,7 +61,7 @@ class SiteSettings(BaseModel):
     vk_link = models.URLField(
         verbose_name='VK',
         blank=True,
-        help_text='Ссылка на VK'
+        help_text='Ссылка на VK (например, чат с сообществом: vk.com/im/convo/-ID...)'
     )
     
     instagram_link = models.URLField(
